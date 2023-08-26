@@ -58,7 +58,6 @@ export const Button = ({
 }: Props) => {
   // @ts-ignore
   const props = useRestyle(restyleFunctions, { ...rest, variant });
-
   const BaseButton = () => {
     return (
       <ButtonContainer {...props}>

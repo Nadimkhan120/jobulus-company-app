@@ -9,8 +9,8 @@ interface AuthState {
   logOut: () => void;
 }
 
-export const useAuth = create<AuthState>((set) => ({
-  status: 'signOut',
+export const useAuth = create<AuthState>(() => ({
+  status: 'signIn',
   token: null,
   login: () => {
     set({ status: 'signIn' });
