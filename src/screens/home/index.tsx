@@ -28,7 +28,7 @@ const DATA = Array(100)
   .fill(null)
   .map((_, idx) => ({
     id: idx,
-    title: 'Earn Miles',
+    title: 'tanveer',
     description: 'description',
     tags: ['travel', 'Enter'],
     text: [
