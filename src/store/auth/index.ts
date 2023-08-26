@@ -8,6 +8,6 @@ interface AuthState {
 }
 
 export const useAuth = create<AuthState>(() => ({
-  status: 'signOut',
+  status: 'signIn',
   token: null,
 }));
