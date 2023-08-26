@@ -10,6 +10,12 @@ export const icons = {
   apple: require('../images/apple.png'),
   research: require('../images/research.png'),
   finance: require('../images/finance.png'),
+  avatar: require('../images/avatar.png'),
+  indesign: require('../images/indesign.png'),
+  council: require('../images/council.png'),
+  cv: require('../images/cv.png'),
+  cover: require('../images/cover.png'),
+  button: require('../images/button.png'),
 };
 
 export type IconTypes = keyof typeof icons;
