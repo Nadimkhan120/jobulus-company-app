@@ -3,6 +3,7 @@ import {} from 'react-native';
 import { scale } from 'react-native-size-matters';
 
 import { ImageButton } from '@/components/image-button';
+import { openDrawer } from '@/store/app';
 import { View } from '@/ui';
 
 import { CompanyButton } from '../company-button';
@@ -28,7 +29,7 @@ export const TopHeader = ({ top = 0 }: { top: number }) => {
         <CompanyButton
           icon="google"
           backgroundColor={'error'}
-          onPress={() => null}
+          onPress={openDrawer}
         />
         <View flex={1} marginHorizontal={'medium'}>
           <SearchField placeholder="Start search here" />

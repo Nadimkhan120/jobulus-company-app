@@ -11,10 +11,11 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scale } from 'react-native-size-matters';
 
+import { PersonItem } from '@/components/person-item';
 //import { useTheme } from "@shopify/restyle";
 import { TopHeader } from '@/components/top-header';
 import { palette } from '@/theme';
-import { Text, View } from '@/ui';
+import { View } from '@/ui';
 
 import { HomeSliderContainer } from './home-slider';
 import { SegmentContainer } from './segment-container';
@@ -31,11 +32,6 @@ const DATA = Array(100)
     title: 'Earn Miles',
     description: 'description',
     tags: ['travel', 'Enter'],
-    text: [
-      'Premium cars - 1,000 Miles',
-      'Standard cars - 600 Miles',
-      ' Emirates Skywards Platinum or Gold members - 200 bonus Miles',
-    ],
   }));
 
 export const Home = () => {
@@ -68,7 +64,7 @@ export const Home = () => {
   });
 
   return (
-    <View flex={1}>
+    <View flex={1} backgroundColor={'white'}>
       <View style={styles.topHeader}>
         <TopHeader top={top} />
       </View>
@@ -90,12 +86,13 @@ export const Home = () => {
           marginTop: top,
         }}
         contentContainerStyle={{
-          paddingTop: HEADER_MAX_HEIGHT + scale(72),
+          paddingTop: HEADER_MAX_HEIGHT + scale(72) + scale(10),
+          paddingHorizontal: scale(16),
         }}
       >
         <View>
           {DATA?.map((element, index) => {
-            return <Text key={index}>{index}</Text>;
+            return <PersonItem key={index} />;
           })}
         </View>
       </Animated.ScrollView>
