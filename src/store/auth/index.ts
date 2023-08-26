@@ -13,10 +13,10 @@ export const useAuth = create<AuthState>(() => ({
   status: 'signIn',
   token: null,
   login: () => {
-    set({ status: 'signIn' });
+    // set({ status: "signIn" });
   },
   logOut: () => {
-    set({ status: 'signOut' });
+    // set({ status: "signOut" });
   },
 }));
 
