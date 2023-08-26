@@ -18,7 +18,7 @@ type ImageButtonProps = {
 
 export const CompanyButton = ({
   icon,
-  size = scale(40),
+  size = scale(36),
   imageSize = scale(18),
   onPress,
   backgroundColor,
@@ -38,6 +38,7 @@ export const CompanyButton = ({
           style={{
             height: imageSize,
             width: imageSize,
+            borderRadius: scale(8),
           }}
           resizeMode="contain"
         />

@@ -1,6 +1,7 @@
 import * as React from 'react';
-import {} from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { Drawer } from 'react-native-drawer-layout';
+import { scale } from 'react-native-size-matters';
 
 import { icons } from '@/assets/icons';
 import { closeDrawer, openDrawer, useApp } from '@/store/app';
@@ -8,6 +9,8 @@ import { PressableScale, Screen, Text, View } from '@/ui';
 
 import { Avatar } from '../avatar';
 import { CompanyButton } from '../company-button';
+
+const { width } = Dimensions.get('screen');
 
 type AppDrawer = {
   children: React.ReactNode;
@@ -21,6 +24,7 @@ export function AppDrawer({ children }: AppDrawer) {
       open={drawerStatus}
       onOpen={openDrawer}
       onClose={closeDrawer}
+      drawerStyle={{ width: width * 0.8 }}
       renderDrawerContent={() => {
         return (
           <Screen>
@@ -62,21 +66,42 @@ export function AppDrawer({ children }: AppDrawer) {
                 </Text>
               </View>
 
-              {[0, 1].map((item, index) => {
+              {['vFairs', 'Hr Executive'].map((item, index) => {
                 return (
                   <PressableScale key={index}>
                     <View
                       flexDirection={'row'}
                       alignItems={'center'}
-                      paddingHorizontal={'xLarge'}
+                      paddingHorizontal={'large'}
+                      //backgroundColor={"info"}
+                      paddingVertical={'small'}
+                      borderBottomColor={'grey500'}
+                      borderBottomWidth={StyleSheet.hairlineWidth * 2}
                     >
                       <View
                         flex={1}
                         flexDirection={'row'}
                         alignItems={'center'}
                       >
-                        <CompanyButton icon="finance" onPress={() => null} />
-                        <Text>{item}</Text>
+                        <CompanyButton
+                          backgroundColor={'black'}
+                          icon="finance"
+                          onPress={() => null}
+                          size={scale(48)}
+                          imageSize={scale(48)}
+                        />
+                        <View paddingLeft={'small'}>
+                          <Text variant={'semiBold14'} color={'black'}>
+                            {item}
+                          </Text>
+                          <Text
+                            variant={'regular12'}
+                            paddingTop={'tiny'}
+                            color={'black'}
+                          >
+                            {item}
+                          </Text>
+                        </View>
                       </View>
                       <View>
                         <Text>arrow</Text>
