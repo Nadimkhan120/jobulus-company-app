@@ -1,14 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from "react";
-import { StatusBar, StatusBarProps } from "react-native";
-import { useIsFocused } from "@react-navigation/native";
-import { SafeAreaView, SafeAreaViewProps } from "react-native-safe-area-context";
-import { Theme } from "@/theme";
-import { View } from "@/ui";
-import { useTheme } from "@shopify/restyle";
+import { useIsFocused } from '@react-navigation/native';
+import { useTheme } from '@shopify/restyle';
+import React from 'react';
+import type { StatusBarProps } from 'react-native';
+import { StatusBar } from 'react-native';
+import type { SafeAreaViewProps } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import type { Theme } from '@/theme';
+import { View } from '@/ui';
 
 export const FocusAwareStatusBar = ({
-  barStyle = "dark-content",
+  barStyle = 'dark-content',
   ...props
 }: StatusBarProps) => {
   const isFocused = useIsFocused();
@@ -19,22 +22,26 @@ export const FocusAwareStatusBar = ({
 
 type Props = {
   children: React.ReactNode;
-  statusBarColor?: StatusBarProps["backgroundColor"];
-  barStyle?: StatusBarProps["barStyle"];
-  translucent?: StatusBarProps["translucent"];
+  statusBarColor?: StatusBarProps['backgroundColor'];
+  barStyle?: StatusBarProps['barStyle'];
+  translucent?: StatusBarProps['translucent'];
+  backgroundColor?: string;
 } & SafeAreaViewProps;
 
 export const Screen = ({
   children,
   statusBarColor,
-  barStyle = "dark-content",
+  barStyle = 'dark-content',
   translucent = false,
+  backgroundColor = 'background',
   ...rest
 }: Props) => {
   let theme = useTheme<Theme>();
 
+  const bgColor = backgroundColor ?? theme?.colors.background;
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }} {...rest}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: bgColor }} {...rest}>
       <FocusAwareStatusBar
         backgroundColor={statusBarColor}
         barStyle={barStyle}

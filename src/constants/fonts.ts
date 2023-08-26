@@ -7,5 +7,3 @@ export const AppFonts = {
   APP_FONT_BOLD: 'Poppins_700Bold',
   APP_FONT_EXTRA_BOLD: 'Poppins_800ExtraBold',
 };
-
-console.log('hello');
