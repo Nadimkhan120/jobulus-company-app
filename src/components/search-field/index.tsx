@@ -27,7 +27,7 @@ export const SearchField = ({ icon, ...rest }: SearchFieldProps) => {
       backgroundColor={'white'}
     >
       <Image
-        source={icon ?? icons.research}
+        source={icon ?? icons.search}
         style={styles.icon}
         contentFit="contain"
       />

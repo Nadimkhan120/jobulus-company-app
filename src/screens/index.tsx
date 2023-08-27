@@ -2,7 +2,7 @@ export * from './add-post';
 export * from './applicants';
 export * from './candidates';
 export * from './company-information';
-export * from './home';
+export * from './home/home2';
 export * from './job-detail';
 export * from './login';
 export * from './onboarding';

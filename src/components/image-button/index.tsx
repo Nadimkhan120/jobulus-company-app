@@ -38,7 +38,6 @@ export const ImageButton = ({
           style={{
             height: imageSize,
             width: imageSize,
-            //borderRadius: imageSize / 2,
           }}
           resizeMode="contain"
         />

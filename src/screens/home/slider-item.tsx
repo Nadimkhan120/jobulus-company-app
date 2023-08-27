@@ -3,9 +3,8 @@ import {} from 'react-native';
 import { scale } from 'react-native-size-matters';
 
 import { AvatarGroup } from '@/components/avatar-group';
+import { avatarGroup } from '@/constants/avatar-group';
 import { Text, View } from '@/ui';
-
-let data = ['red', 'blue', 'pink'];
 
 export const HomeSliderItem = () => {
   return (
@@ -23,7 +22,7 @@ export const HomeSliderItem = () => {
       </Text>
 
       <View paddingTop={'small'}>
-        <AvatarGroup data={data} />
+        <AvatarGroup data={avatarGroup} />
       </View>
     </View>
   );

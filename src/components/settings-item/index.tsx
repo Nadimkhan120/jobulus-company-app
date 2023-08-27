@@ -37,9 +37,7 @@ const SettingsItem = ({ icon, title, onPress }: SettingsItemProps) => {
             </Text>
           </View>
         </View>
-        <View>
-          <Text>arrow</Text>
-        </View>
+        <Image source={icons['arrow-right']} style={styles.image} />
       </View>
     </PressableScale>
   );

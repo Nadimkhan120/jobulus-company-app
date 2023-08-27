@@ -29,6 +29,22 @@ export const icons = {
   pencl: require('../images/pencl.png'),
   delete: require('../images/delete.png'),
   message: require('../images/message-circle.png'),
+  'message-icon': require('../images/message.png'),
+  'arrow-left': require('../images/arrow-ios-left.png'),
+  'arrow-right': require('../images/arrow-ios-right.png'),
+  'avatar-2': require('../images/avatar-2.png'),
+  'avatar-3': require('../images/avatar-3.png'),
+  bell: require('../images/bell.png'),
+  close: require('../images/close.png'),
+  'company-page': require('../images/company-pag.png'),
+  company: require('../images/company.png'),
+  'credit-card': require('../images/credit-card.png'),
+  list: require('../images/list.png'),
+  'log-out': require('../images/log-out.png'),
+  'more-horizontal': require('../images/more-horizontal.png'),
+  search: require('../images/search.png'),
+  settings: require('../images/settings.png'),
+  'back-cover': require('../images/back-cover.png'),
 };
 
 export type IconTypes = keyof typeof icons;

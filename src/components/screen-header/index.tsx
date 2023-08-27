@@ -32,7 +32,7 @@ export const ScreenHeader = ({
     >
       <PressableScale onPress={goBack}>
         <Image
-          source={icons[icon] ?? icons.logo}
+          source={icons[icon] ?? icons['arrow-left']}
           style={styles.image}
           contentFit="contain"
         />

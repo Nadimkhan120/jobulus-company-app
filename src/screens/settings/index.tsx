@@ -1,9 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '@shopify/restyle';
+import { Image } from 'expo-image';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, useWindowDimensions } from 'react-native';
 import { scale } from 'react-native-size-matters';
 
+import { icons } from '@/assets/icons';
 import { CompanyButton } from '@/components/company-button';
 import SettingsItem from '@/components/settings-item';
 import type { Theme } from '@/theme';
@@ -13,11 +15,16 @@ export const Settings = () => {
   const { colors } = useTheme<Theme>();
   const navigation = useNavigation();
 
+  const { width } = useWindowDimensions();
+
   return (
     <Screen backgroundColor={colors.white} edges={['top']}>
       <View flex={1}>
-        <View height={scale(119)} backgroundColor={'error'}>
-          <Text>Cover here</Text>
+        <View height={scale(119)}>
+          <Image
+            source={icons['back-cover']}
+            style={{ height: scale(119), width: width }}
+          />
         </View>
 
         <View
@@ -28,7 +35,7 @@ export const Settings = () => {
           }}
         >
           <CompanyButton
-            icon="facebook"
+            icon="company"
             onPress={() => null}
             size={scale(86)}
             imageSize={scale(86)}
@@ -49,31 +56,53 @@ export const Settings = () => {
           backgroundColor={'grey500'}
         />
 
-        <View paddingHorizontal={'large'} gap={'medium'} paddingTop={'medium'}>
-          <SettingsItem
-            icon="facebook"
-            title="Hello"
-            onPress={() => navigation.navigate('Payments')}
-          />
-          <SettingsItem
-            icon="facebook"
-            title="Hello"
-            onPress={() => navigation.navigate('Payments')}
-          />
-          <SettingsItem
-            icon="facebook"
-            title="Hello"
-            onPress={() => navigation.navigate('Payments')}
-          />
-          <SettingsItem
-            icon="facebook"
-            title="Payments"
-            onPress={() => navigation.navigate('Payments')}
-          />
-        </View>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View
+            paddingHorizontal={'large'}
+            gap={'medium'}
+            paddingTop={'medium'}
+          >
+            <SettingsItem
+              icon="company-page"
+              title="Company Page"
+              onPress={() => navigation.navigate('Payments')}
+            />
+            <SettingsItem
+              icon="person"
+              title="User Management"
+              onPress={() => navigation.navigate('Payments')}
+            />
+            <SettingsItem
+              icon="person"
+              title="Recruitment Process"
+              onPress={() => navigation.navigate('Payments')}
+            />
+            <SettingsItem
+              icon="person"
+              title="JD Library"
+              onPress={() => navigation.navigate('Payments')}
+            />
+            <SettingsItem
+              icon="credit-card"
+              title="Payments"
+              onPress={() => navigation.navigate('Payments')}
+            />
+            <SettingsItem
+              icon="settings"
+              title="Settings"
+              onPress={() => navigation.navigate('Payments')}
+            />
+          </View>
+        </ScrollView>
       </View>
     </Screen>
   );
 };
+
+const styles = StyleSheet.create({
+  scrollContainer: {
+    paddingBottom: scale(60),
+  },
+});
 
 export default Settings;

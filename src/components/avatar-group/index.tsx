@@ -21,7 +21,7 @@ export const AvatarGroup = ({ data, ...rest }) => {
               zIndex: index,
             }}
           >
-            <Avatar source={icons.apple} size="small" {...rest} />
+            <Avatar source={icons[item.icon]} size="small" {...rest} />
           </View>
         );
       })}

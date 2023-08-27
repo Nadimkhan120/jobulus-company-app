@@ -27,7 +27,9 @@ export const TopHeader = ({ top = 0 }: { top: number }) => {
         alignItems={'center'}
       >
         <CompanyButton
-          icon="google"
+          icon="company"
+          size={scale(40)}
+          imageSize={scale(40)}
           backgroundColor={'error'}
           onPress={openDrawer}
         />
@@ -36,15 +38,15 @@ export const TopHeader = ({ top = 0 }: { top: number }) => {
         </View>
 
         <ImageButton
-          icon="eye"
-          size={scale(36)}
+          icon="message-icon"
+          size={scale(40)}
           backgroundColor={'black'}
           onPress={() => null}
         />
         <View width={scale(10)} />
         <ImageButton
-          icon="eye"
-          size={scale(36)}
+          icon="bell"
+          size={scale(40)}
           backgroundColor={'black'}
           onPress={() => null}
         />

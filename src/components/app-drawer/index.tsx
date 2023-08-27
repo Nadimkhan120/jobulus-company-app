@@ -35,7 +35,7 @@ export function AppDrawer({ children }: AppDrawer) {
                 paddingTop={'medium'}
                 alignItems={'center'}
               >
-                <Avatar source={icons.logo} size="medium" />
+                <Avatar source={icons.avatar} size="medium" />
                 <View>
                   <Text
                     variant={'medium16'}
@@ -66,6 +66,8 @@ export function AppDrawer({ children }: AppDrawer) {
                 </Text>
               </View>
 
+              <View marginTop={'small'} />
+
               {['vFairs', 'Hr Executive'].map((item, index) => {
                 return (
                   <PressableScale key={index}>
@@ -85,7 +87,7 @@ export function AppDrawer({ children }: AppDrawer) {
                       >
                         <CompanyButton
                           backgroundColor={'black'}
-                          icon="finance"
+                          icon="company"
                           onPress={() => null}
                           size={scale(48)}
                           imageSize={scale(48)}
