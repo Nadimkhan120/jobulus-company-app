@@ -7,11 +7,11 @@ import { Text, View } from '@/ui';
 
 const OverView = () => {
   return (
-    <View padding={'3xl'}>
+    <View paddingHorizontal={'large'} paddingTop={'medium'}>
       <Text variant={'heading'} color={'black'}>
         About
       </Text>
-      <Text variant={'medium14'} color={'black'} marginVertical={'large'}>
+      <Text variant={'regular14'} color={'grey200'} marginVertical={'large'}>
         I live and breathe SaaS! 💕I'm a two-times founder & bootstrapper in
         SaaS / marketing technology / social media marketing. Angel investor 😇
         connecting and sharing knowledge & war stories with fellow entrepreneurs

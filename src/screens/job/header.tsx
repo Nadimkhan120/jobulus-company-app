@@ -1,22 +1,19 @@
 import { Image } from 'expo-image';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { icons } from '@/assets/icons';
 import { Text, View } from '@/ui';
 const Header = () => {
   return (
-    <SafeAreaView>
+    <View>
       <View>
-        {/* Banner Image */}
         <Image
           source={require('src/assets/images/header.png')}
           style={styles.image}
           contentFit="contain"
         />
 
-        {/* Circular Avatar */}
         <View
           position={'absolute'}
           bottom={-20}
@@ -42,7 +39,7 @@ const Header = () => {
         <Text variant={'medium13'}>CEO at Walls.io, Founder at Swat.io</Text>
         <Text variant={'medium13'}>Lahore, Punjab, Pakistan</Text>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -129,7 +129,7 @@
 
 import { useTheme } from '@shopify/restyle';
 import type { Route } from '@showtime-xyz/tab-view';
-import { TabView } from '@showtime-xyz/tab-view';
+import { TabScrollView, TabView } from '@showtime-xyz/tab-view';
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
@@ -139,6 +139,9 @@ import { ScreenHeader } from '@/components/screen-header';
 import { TabFlashList } from '@/components/tab-flash-list';
 import type { Theme } from '@/theme';
 import { Screen } from '@/ui';
+
+import Header from './header';
+import OverView from './overview';
 
 const TabScene = ({ route }: any) => {
   return (
@@ -162,6 +165,14 @@ const TabScene = ({ route }: any) => {
         );
       }}
     />
+  );
+};
+
+const OverViewTab = ({ route }: any) => {
+  return (
+    <TabScrollView index={route?.index}>
+      <OverView />
+    </TabScrollView>
   );
 };
 
@@ -221,7 +232,7 @@ export function Job() {
       case 'like':
         return <TabScene route={route} index={0} />;
       case 'owner':
-        return <TabScene route={route} index={1} />;
+        return <OverViewTab route={route} index={1} />;
       case 'created':
         return <TabScene route={route} index={2} />;
 
@@ -238,13 +249,17 @@ export function Job() {
     }, 300);
   };
 
-  const renderHeader = () => (
-    <View style={{ height: 300, backgroundColor: '#000' }} />
-  );
+  const renderHeader = () => {
+    return (
+      <View style={{ height: 300 }}>
+        <Header />
+      </View>
+    );
+  };
 
   return (
     <Screen edges={['top']} backgroundColor={colors.white}>
-      <ScreenHeader />
+      <ScreenHeader showBorder={true} />
       <TabView
         onStartRefresh={onStartRefresh}
         isRefreshing={isRefreshing}
