@@ -7,11 +7,18 @@ import { useIsFirstTime } from '@/hooks';
 import { Onboarding } from '@/screens';
 import { useAuth } from '@/store/auth';
 
+import type { AppStackParamList } from './app-navigator';
 import { AppNavigator } from './app-navigator';
 import { AuthNavigator } from './auth-navigator';
 import { NavigationContainer } from './navigation-container';
 
-const Stack = createNativeStackNavigator();
+export type RootAppStackParamList = {
+  Onboarding: undefined;
+  Auth: undefined;
+  App: AppStackParamList;
+};
+
+const Stack = createNativeStackNavigator<RootAppStackParamList>();
 
 export const Root = () => {
   const status = useAuth((state) => state.status);

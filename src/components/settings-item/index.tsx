@@ -1,33 +1,39 @@
+import { Image } from 'expo-image';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { scale } from 'react-native-size-matters';
 
+import type { IconTypes } from '@/assets/icons';
+import { icons } from '@/assets/icons';
 import { PressableScale, Text, View } from '@/ui';
 
-import { CompanyButton } from '../company-button';
+type SettingsItemProps = {
+  icon: IconTypes;
+  title: string;
+  onPress: () => void;
+};
 
-const SettingsItem = () => {
+const SettingsItem = ({ icon, title, onPress }: SettingsItemProps) => {
   return (
-    <PressableScale>
+    <PressableScale onPress={onPress}>
       <View
         flexDirection={'row'}
         alignItems={'center'}
         paddingHorizontal={'large'}
-        paddingVertical={'small'}
-        borderBottomColor={'grey500'}
-        borderBottomWidth={StyleSheet.hairlineWidth * 2}
+        backgroundColor={'grey500'}
+        borderRadius={scale(8)}
+        height={scale(56)}
       >
         <View flex={1} flexDirection={'row'} alignItems={'center'}>
-          <CompanyButton
-            backgroundColor={'black'}
-            icon="finance"
-            onPress={() => null}
-            size={scale(48)}
-            imageSize={scale(48)}
+          <Image
+            source={icons[icon]}
+            style={styles.image}
+            contentFit="contain"
           />
+
           <View paddingLeft={'small'}>
-            <Text variant={'semiBold14'} color={'black'}>
-              settings
+            <Text variant={'medium14'} color={'grey200'}>
+              {title}
             </Text>
           </View>
         </View>
@@ -40,3 +46,7 @@ const SettingsItem = () => {
 };
 
 export default SettingsItem;
+
+const styles = StyleSheet.create({
+  image: { height: scale(24), width: scale(24) },
+});
