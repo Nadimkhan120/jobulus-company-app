@@ -14,7 +14,7 @@ export const BoxButton = ({ label, onPress }: TextButtonProps) => {
       <View
         width={scale(200)}
         height={scale(50)}
-        borderRadius={scale(10)}
+        borderRadius={scale(5)}
         borderColor={'primary'}
         borderWidth={1}
         alignItems={'center'}
