@@ -9052,6 +9052,13 @@ react-native-drawer-layout@^3.2.1:
   dependencies:
     use-latest-callback "^0.1.5"
 
+react-native-element-dropdown@^2.10.0:
+  version "2.10.0"
+  resolved "https://registry.npmjs.org/react-native-element-dropdown/-/react-native-element-dropdown-2.10.0.tgz#f4ec2310b37ff3ba64927286ab775c0ed28b681e"
+  integrity sha512-aFjw0JbUIKGkqklHxDm8aDCZW6Q1GICP7pIHc0sllvpWpEamItzOwAMV4G1mBIKxED77Mp+nkq9p0Dhsr/faVw==
+  dependencies:
+    lodash "^4.17.21"
+
 react-native-flash-message@^0.4.2:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/react-native-flash-message/-/react-native-flash-message-0.4.2.tgz#ed8ffe60c532bc1274c3b49a60dd0bd2fca59c50"

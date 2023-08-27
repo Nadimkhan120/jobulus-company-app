@@ -1,3 +1,4 @@
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ThemeProvider } from '@shopify/restyle';
 import React from 'react';
 import { StyleSheet } from 'react-native';
@@ -6,7 +7,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useAppFonts } from '@/hooks';
 import { NavigationContainer, Root } from '@/navigation';
 import { theme } from '@/theme';
-
 const App = () => {
   const appFontsLoaded = useAppFonts();
 
@@ -16,7 +16,9 @@ const App = () => {
     <GestureHandlerRootView style={styles.appContainer}>
       <ThemeProvider theme={theme}>
         <NavigationContainer>
-          <Root />
+          <BottomSheetModalProvider>
+            <Root />
+          </BottomSheetModalProvider>
         </NavigationContainer>
       </ThemeProvider>
     </GestureHandlerRootView>

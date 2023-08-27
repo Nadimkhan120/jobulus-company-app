@@ -5,7 +5,6 @@ import { VacanciesData } from '@/constants/vacancies-data';
 import { Screen, View } from '@/ui';
 
 import Header from './header';
-import OptionsHeader from './option-header';
 import VecanciesList from './vacancies-list';
 
 export const Vacancies = () => {
@@ -28,12 +27,14 @@ export const Vacancies = () => {
   return (
     <Screen>
       <Header />
-      <OptionsHeader />
-      <FlatList
-        data={VacanciesData}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderItem}
-      />
+      {/* <OptionsHeader /> */}
+      <View>
+        <FlatList
+          data={VacanciesData}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItem}
+        />
+      </View>
     </Screen>
   );
 };
