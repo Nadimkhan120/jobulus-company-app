@@ -1,15 +1,17 @@
+import type { TransitionConfig } from 'moti';
+import { MotiText } from 'moti';
 import * as React from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Text } from '@/ui';
+import { palette } from '@/theme';
 
-// import { MotiText, TransitionConfig } from "moti";
 import TabBarIcon from './tab-icon';
+// import * as Haptics from "expo-haptics";
 // import { scale } from "react-native-size-matters";
 
-// const Transition: TransitionConfig = { type: "timing", duration: 400 };
-// const fromAnimation = { opacity: 1, scale: 0.9 };
+const Transition: TransitionConfig = { type: 'timing', duration: 400 };
+const fromAnimation = { opacity: 1, scale: 0.9 };
 
 export function AppBottomTab({ state, descriptors, navigation }: any) {
   const insets = useSafeAreaInsets();
@@ -34,6 +36,7 @@ export function AppBottomTab({ state, descriptors, navigation }: any) {
           });
 
           if (!isFocused && !event.defaultPrevented) {
+            // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
             navigation.navigate(route.name);
           }
         };
@@ -58,10 +61,10 @@ export function AppBottomTab({ state, descriptors, navigation }: any) {
           >
             <View style={styles.tabStyle}>
               <TabBarIcon name={label.toLowerCase()} focused={isFocused} />
-              {/* <MotiText
+              <MotiText
                 style={[
                   isFocused ? styles.focusedLabelStyle : styles.labelStyle,
-                  { color: isFocused ? "black" : "grey" }, // Color change
+                  // { color: isFocused ? "black" : "grey" }, // Color change
                 ]}
                 from={fromAnimation}
                 animate={{
@@ -70,10 +73,10 @@ export function AppBottomTab({ state, descriptors, navigation }: any) {
                 transition={Transition}
               >
                 {label}
-              </MotiText> */}
-              <Text variant={'regular12'} fontWeight={'400'}>
+              </MotiText>
+              {/* <Text variant={'regular12'} fontWeight={'400'}>
                 {label}
-              </Text>
+              </Text> */}
             </View>
           </TouchableWithoutFeedback>
         );
@@ -107,11 +110,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 1,
   },
   labelStyle: {
+    color: palette.grey100,
     fontSize: 11,
     textTransform: 'uppercase',
     marginTop: 5,
   },
   focusedLabelStyle: {
+    color: palette.black,
     fontSize: 11,
     textTransform: 'uppercase',
     marginTop: 5,

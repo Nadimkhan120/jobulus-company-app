@@ -6,7 +6,6 @@ import { Screen, View } from '@/ui';
 
 import Header from './header';
 import VecanciesList from './vacancies-list';
-
 export const Vacancies = () => {
   const renderItem = ({ item }: any) => (
     <View>

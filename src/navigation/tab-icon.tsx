@@ -12,11 +12,11 @@ type TabBarIconProps = {
   size?: number;
 };
 
-const HOME = 'home';
-const Vacancies = 'vacancies';
-const AddPost = 'plus';
-const Candidates = 'candidates';
-const Settings = 'more';
+const HOME = 'Home';
+const Vacancies = 'Vacancies';
+const AddPost = 'AddPost';
+const Candidates = 'Candidates';
+const Settings = 'Settings';
 // get icon when tab is not focused
 const getIcon = (name) => {
   switch (name) {
@@ -35,23 +35,41 @@ const getIcon = (name) => {
   }
 };
 
-// get icon when tab is focused
+//get icon when tab is focused
 const getIconFocused = (name) => {
   switch (name) {
     case HOME:
-      return 'home';
+      return 'Home';
     case Vacancies:
-      return 'vacancies';
+      return 'Vacancies';
     case AddPost:
       return 'plus';
     case Candidates:
-      return 'candidates';
+      return 'Candidates';
     case Settings:
-      return 'more';
+      return 'More';
     default:
       break;
   }
 };
+
+// get icon when tab is focused
+// const getIconFocused = (name) => {
+//   switch (name) {
+//     case HOME:
+//       return "home";
+//     case Vacancies:
+//       return "vacancies";
+//     case AddPost:
+//       return "plus";
+//     case Candidates:
+//       return "candidates";
+//     case Settings:
+//       return "more";
+//     default:
+//       break;
+//   }
+// };
 
 const TabBarIcon = ({
   color,
@@ -59,6 +77,8 @@ const TabBarIcon = ({
   focused,
   size = scale(18),
 }: TabBarIconProps) => {
+  console.log(getIconFocused(name));
+
   return (
     <Image
       style={{
@@ -68,6 +88,7 @@ const TabBarIcon = ({
       }}
       // @ts-ignore
       source={focused ? icons[getIconFocused(name)] : icons[getIcon(name)]}
+      //   source={icons[focused ? getIconFocused(name) : getIcon(name)]}
       contentFit="contain"
     />
   );

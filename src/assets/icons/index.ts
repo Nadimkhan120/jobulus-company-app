@@ -28,6 +28,10 @@ export const icons = {
   person: require('../images/person.png'),
   pencl: require('../images/pencl.png'),
   delete: require('../images/delete.png'),
+  Home: require('../images/home-focused.png'),
+  Candidate: require('../images/candidate-focused.png'),
+  Vacanciie: require('../images/vacancie-focused.png'),
+  More: require('../images/more-focused.png'),
 };
 
 export type IconTypes = keyof typeof icons;
