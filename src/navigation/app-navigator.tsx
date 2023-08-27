@@ -3,7 +3,9 @@ import { Text } from 'moti';
 import * as React from 'react';
 
 import { Payments } from '@/screens';
+import Applicants from '@/screens/applicants';
 import { Job } from '@/screens/job';
+import JobDetail from '@/screens/job-detail';
 import { VStack } from '@/ui/atom';
 
 import { TabNavigator } from './tab-navigator';
@@ -21,6 +23,8 @@ export type AppStackParamList = {
   Details: { id: number };
   Job: undefined;
   Payments: undefined;
+  Applicants: undefined;
+  jobDetail: undefined;
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -34,9 +38,11 @@ export const AppNavigator = () => {
         }}
       >
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        <Stack.Screen name="Payments" component={Payments} />
         <Stack.Screen name="Details" component={Details} />
         <Stack.Screen name="Job" component={Job} />
-        <Stack.Screen name="Payments" component={Payments} />
+        <Stack.Screen name="jobDetail" component={JobDetail} />
+        <Stack.Screen name="Applicants" component={Applicants} />
       </Stack.Group>
     </Stack.Navigator>
   );

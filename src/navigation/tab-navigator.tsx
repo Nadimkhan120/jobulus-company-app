@@ -6,6 +6,8 @@ import * as React from 'react';
 import { AppDrawer } from '@/components/app-drawer';
 import { AddPost, Candidates, Home, Settings, Vacancies } from '@/screens';
 
+import { AppBottomTab } from './bottom-tab';
+
 type TabParamList = {
   Home: undefined;
   Vacancies: undefined;
@@ -24,7 +26,7 @@ export type TabList<T extends keyof TabParamList> = {
 export const TabNavigator = () => {
   return (
     <AppDrawer>
-      <Tab.Navigator>
+      <Tab.Navigator tabBar={(props) => <AppBottomTab {...props} />}>
         <Tab.Group
           screenOptions={{
             headerShown: false,

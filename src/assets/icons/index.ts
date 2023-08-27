@@ -16,6 +16,18 @@ export const icons = {
   cv: require('../images/cv.png'),
   cover: require('../images/cover.png'),
   button: require('../images/button.png'),
+  pencil: require('../images/pencil.png'),
+  dot: require('../images/3-dot.png'),
+  calendar: require('../images/calendar.png'),
+  plus: require('../images/plus-circle.png'),
+  home: require('../images/Home.png'),
+  vacancies: require('../images/Vacancies.png'),
+  more: require('../images/more.png'),
+  candidates: require('../images/candidates.png'),
+  pluss: require('../images/plus.png'),
+  person: require('../images/person.png'),
+  pencl: require('../images/pencl.png'),
+  delete: require('../images/delete.png'),
 };
 
 export type IconTypes = keyof typeof icons;
