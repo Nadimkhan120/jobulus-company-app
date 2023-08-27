@@ -22,7 +22,34 @@ export const IconBox = ({ icon, onPress }: IconButtonProps) => {
   );
 };
 
+export const MessageBox = ({ icon, onPress }: IconButtonProps) => {
+  return (
+    <PressableScale onPress={onPress}>
+      <View style={[styles.containermessage]}>
+        <Image
+          source={icons[icon]}
+          style={styles.imageMessage}
+          contentFit="contain"
+        />
+      </View>
+    </PressableScale>
+  );
+};
+
 const styles = StyleSheet.create({
+  containermessage: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: scale(50),
+    height: scale(50),
+    backgroundColor: 'black',
+    borderRadius: scale(8),
+  },
+  imageMessage: {
+    height: scale(30),
+    width: scale(30),
+    tintColor: 'white',
+  },
   container: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -34,6 +61,6 @@ const styles = StyleSheet.create({
   image: {
     height: scale(30),
     width: scale(30),
-    tintColor: 'grey',
+    tintColor: 'tint',
   },
 });
