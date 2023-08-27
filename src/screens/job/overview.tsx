@@ -1,9 +1,9 @@
-import { Image } from 'expo-image';
 import React from 'react';
-import {} from 'react-native';
 import { scale } from 'react-native-size-matters';
 
-import { Button, Text, View } from '@/ui';
+import { BoxButton } from '@/components/boxbutton';
+import { IconBox } from '@/components/iconbox';
+import { Text, View } from '@/ui';
 
 const OverView = () => {
   return (
@@ -17,21 +17,14 @@ const OverView = () => {
         connecting and sharing knowledge & war stories with fellow entrepreneurs
         (SaaS & beyond) worldwide. 🌍
       </Text>
-      <View top={170} flexDirection={'row'}>
-        <View width={scale(250)} marginRight={'small'}>
-          <Button
-            onPress={() => null}
-            variant="primary" // Set the variant to "outlined"
-            // backgroundColor="transparent" // Set the inner background to transparent
-            borderColor="primary"
-            borderWidth={1}
-            label="Schedule InterView"
-          />
-        </View>
-        <Image
-          source={require('src/assets/images/button.png')}
-          style={{ width: scale(50), height: scale(45) }}
-        />
+      <View
+        position={'relative'}
+        top={scale(190)}
+        flexDirection={'row'}
+        justifyContent={'space-evenly'}
+      >
+        <BoxButton label="Schedule Interview" onPress={() => null} />
+        <IconBox icon="message" onPress={() => null} />
       </View>
     </View>
   );

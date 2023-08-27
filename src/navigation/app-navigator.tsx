@@ -4,6 +4,7 @@ import * as React from 'react';
 
 import { Payments } from '@/screens';
 import Applicants from '@/screens/applicants';
+import CandidateProfile from '@/screens/candidate-profile';
 import { Job } from '@/screens/job';
 import JobDetail from '@/screens/job-detail';
 import { VStack } from '@/ui/atom';
@@ -25,6 +26,7 @@ export type AppStackParamList = {
   Payments: undefined;
   Applicants: undefined;
   jobDetail: undefined;
+  CandidateProfile: undefined;
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -43,6 +45,7 @@ export const AppNavigator = () => {
         <Stack.Screen name="Job" component={Job} />
         <Stack.Screen name="jobDetail" component={JobDetail} />
         <Stack.Screen name="Applicants" component={Applicants} />
+        <Stack.Screen name="CandidateProfile" component={CandidateProfile} />
       </Stack.Group>
     </Stack.Navigator>
   );
