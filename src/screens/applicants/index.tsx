@@ -1,36 +1,28 @@
 import React from 'react';
 import { FlatList } from 'react-native';
 
-import { VacanciesData } from '@/constants/vacancies-data';
+import { data } from '@/constants/applicant-list';
 import { Screen, View } from '@/ui';
 
-import Header from './header';
-import VecanciesList from './vacancies-list';
-
-export const Vacancies = () => {
+import ApplicantList from './applicants-list';
+const Applicants = () => {
   const renderItem = ({ item }: any) => (
     <View>
-      <VecanciesList
+      <ApplicantList
         title={item.title}
-        company={item.company}
+        detail={item.detail}
         address={item.address}
-        work={item.work}
-        applicant={item.applicant}
         status={item.status}
-        postedTime={item.postedTime}
-        expiryDate={item.expiryDate}
+        time={item.time}
         color={item.color}
       />
     </View>
   );
-
   return (
     <Screen>
-      <Header />
-      {/* <OptionsHeader /> */}
       <View>
         <FlatList
-          data={VacanciesData}
+          data={data}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
         />
@@ -38,3 +30,5 @@ export const Vacancies = () => {
     </Screen>
   );
 };
+
+export default Applicants;
