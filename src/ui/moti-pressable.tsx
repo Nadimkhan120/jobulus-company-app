@@ -5,8 +5,6 @@ import React, { useMemo } from 'react';
 type Props = ComponentProps<typeof MotiPressable>;
 
 export const PressableScale = ({ animate, ...props }: Props) => {
-  console.log('props', props);
-
   return (
     <MotiPressable
       {...props}
