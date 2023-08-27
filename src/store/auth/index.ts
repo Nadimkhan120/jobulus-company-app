@@ -10,7 +10,7 @@ interface AuthState {
 }
 
 export const useAuth = create<AuthState>((set) => ({
-  status: 'signOut',
+  status: 'signIn',
   token: null,
   login: () => {
     set({ status: 'signIn' });

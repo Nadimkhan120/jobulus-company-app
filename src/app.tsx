@@ -7,6 +7,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useAppFonts } from '@/hooks';
 import { NavigationContainer, Root } from '@/navigation';
 import { theme } from '@/theme';
+
 const App = () => {
   const appFontsLoaded = useAppFonts();
 
