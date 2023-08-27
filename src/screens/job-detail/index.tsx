@@ -9,52 +9,45 @@ import ApplicantList from '../applicants/applicants-list';
 import Footer from './footer-chart';
 import OverviewJob from './overview-job';
 import VacanciesStatus from './vacancy-status';
+
 const JobDetail = () => {
   const renderItem = ({ item }: any) => (
-    <View>
-      <ApplicantList
-        title={item.title}
-        detail={item.detail}
-        address={item.address}
-        status={item.status}
-        time={item.time}
-        color={item.color}
-      />
-    </View>
+    <ApplicantList
+      title={item.title}
+      detail={item.detail}
+      address={item.address}
+      status={item.status}
+      time={item.time}
+      color={item.color}
+    />
   );
+
   return (
-    <View>
-      <ScrollView>
-        <OverviewJob />
-        <VacanciesStatus />
-        <View
-          flexDirection={'row'}
-          justifyContent={'space-between'}
-          paddingHorizontal={'2xl'}
-          alignItems={'center'}
-          height={scale(40)}
-        >
-          <View flexDirection={'column'}>
-            <Text>High Matches</Text>
-          </View>
-          <View
-            flexDirection={'column'}
-            borderBottomWidth={1}
-            borderColor={'primary'}
-          >
-            <Text color={'primary'}>View All</Text>
-          </View>
+    <ScrollView style={{ flex: 1 }}>
+      <OverviewJob />
+      <VacanciesStatus />
+      <View
+        flexDirection={'row'}
+        justifyContent={'space-between'}
+        paddingHorizontal={'large'}
+        alignItems={'center'}
+        height={scale(40)}
+      >
+        <Text>High Matches</Text>
+
+        <View borderBottomWidth={1} borderColor={'primary'}>
+          <Text color={'primary'}>View All</Text>
         </View>
-        <View flexDirection={'row'}>
-          <FlatList
-            data={data}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderItem}
-          />
-        </View>
-        <Footer />
-      </ScrollView>
-    </View>
+      </View>
+
+      <FlatList
+        data={data}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderItem}
+      />
+
+      <Footer />
+    </ScrollView>
   );
 };
 

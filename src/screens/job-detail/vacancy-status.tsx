@@ -7,31 +7,25 @@ import { icons } from '@/assets/icons';
 import { Text, View } from '@/ui';
 
 import VerticalBarChart from './bar-chart';
+
 const VacanciesStatus = () => {
   return (
-    <View
-      flexDirection={'column'}
-      marginTop={'large'}
-      backgroundColor={'white'}
-      height={scale(310)}
-    >
+    <View backgroundColor={'white'}>
       <View
         flexDirection={'row'}
         justifyContent={'space-between'}
         paddingHorizontal={'medium'}
         paddingTop={'small'}
       >
-        <View flexDirection={'column'}>
-          <Text variant={'regular16'} fontWeight={'400'}>
-            Vacancy Status
-          </Text>
+        <View>
+          <Text variant={'regular16'}>Vacancy Status</Text>
         </View>
-        <View flexDirection={'column'} marginLeft={'4xl'} paddingLeft={'4xl'}>
+        <View>
           <View flexDirection={'row'}>
-            <View flexDirection={'column'} marginRight={'large'}>
+            <View>
               <Text>This Week</Text>
             </View>
-            <View flexDirection={'column'}>
+            <View>
               <Image source={icons.calendar} style={style.calendarImage} />
             </View>
           </View>
@@ -71,9 +65,8 @@ const VacanciesStatus = () => {
           </Text>
         </View>
       </View>
-      <View flexDirection={'row'} marginTop={'2xl'}>
-        <VerticalBarChart />
-      </View>
+
+      <VerticalBarChart />
     </View>
   );
 };

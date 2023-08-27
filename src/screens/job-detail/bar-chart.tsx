@@ -1,35 +1,48 @@
+import { useTheme } from '@shopify/restyle';
 import React from 'react';
-import { View } from 'react-native';
-import { BarChart } from 'react-native-chart-kit';
+import { useWindowDimensions } from 'react-native';
+import { VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
 
-const data = {
-  labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-  datasets: [
-    {
-      data: [80, 130, 180, 300, 25, 110, 50],
-    },
-  ],
-};
+import type { Theme } from '@/theme';
+import { View } from '@/ui';
 
-const chartConfig = {
-  backgroundGradientFrom: '#fff',
-  backgroundGradientTo: '#fff',
-  color: (opacity = 0) => `rgba(0, 0, 0, ${opacity})`,
-  strokeWidth: 2,
-};
+const data = [
+  { day: 'M', earnings: 50 },
+  { day: 'TU', earnings: 100 },
+  { day: 'W', earnings: 200 },
+  { day: 'TH', earnings: 300 },
+  { day: 'F', earnings: 150 },
+  { day: 'SA', earnings: 100 },
+  { day: 'SU', earnings: 250 },
+];
 
 const VerticalBarChart = () => {
+  const { width, height } = useWindowDimensions();
+  const { colors } = useTheme<Theme>();
+
   return (
-    <View>
-      <BarChart
-        data={data}
-        width={400}
-        height={200}
-        chartConfig={chartConfig}
-        fromZero={true}
-        yAxisLabel="" // Add an empty string for yAxisLabel
-        yAxisSuffix="" // Add an empty string for yAxisSuffix
-      />
+    <View width={width} marginTop={'medium'} flexDirection={'row'}>
+      {/* <View width={scale(4)} /> */}
+
+      <VictoryChart
+        width={width}
+        height={height * 0.3}
+        domainPadding={{ x: 20 }}
+        theme={VictoryTheme.material}
+      >
+        <VictoryBar
+          animate={{
+            duration: 2000,
+            onLoad: { duration: 1000 },
+          }}
+          barWidth={20}
+          data={data}
+          x="day"
+          y="earnings"
+          style={{ data: { fill: colors.primary } }}
+        />
+      </VictoryChart>
+      {/* </View> */}
     </View>
   );
 };

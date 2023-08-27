@@ -27,47 +27,39 @@ const ApplicantList = ({
       backgroundColor={'white'}
       justifyContent={'space-around'}
       paddingHorizontal={'small'}
-      //   margin={"small"}
       margin={'tiny'}
     >
-      <View flexDirection={'column'}>
+      <View>
         <Image source={icons.avatar} style={style.avatarImage} />
       </View>
-      <View flexDirection={'column'} marginRight={'2xl'}>
-        <Text variant={'semiBold14'} fontWeight={'600'}>
-          {/* Jhon Wick */}
-          {title}
-        </Text>
-        <Text variant={'regular13'} fontWeight={'400'} color={'grey100'}>
-          {/* User Experience Designer at Conrad labs */}
+      <View>
+        <Text variant={'semiBold14'}>{title}</Text>
+        <Text variant={'regular13'} color={'grey100'}>
           {detail}
         </Text>
-        <Text variant={'regular12'} fontWeight={'400'} color={'black'}>
+        <Text variant={'regular12'} color={'black'}>
           {address}
         </Text>
         <View flexDirection={'row'}>
-          <View flexDirection={'column'}>
-            <Text
-              variant={'regular12'}
-              fontWeight={'700'}
-              style={{ color: color }}
-            >
+          <View>
+            <Text variant={'regular12'} style={{ color: color }}>
               {status}
             </Text>
           </View>
-          <View flexDirection={'column'}>
-            <Text variant={'regular12'} fontWeight={'400'} color={'grey200'}>
+          <View>
+            <Text variant={'regular12'} color={'grey200'}>
               {time}
             </Text>
           </View>
         </View>
       </View>
-      <View flexDirection={'column'}>
-        <Image source={icons.dot} style={style.dot} resizeMode="contain" />
+      <View>
+        <Image source={icons.dot} style={style.dot} contentFit="contain" />
       </View>
     </View>
   );
 };
+
 const style = StyleSheet.create({
   avatarImage: {
     width: 50,
