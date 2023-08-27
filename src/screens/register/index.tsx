@@ -9,7 +9,7 @@ import { scale } from 'react-native-size-matters';
 import * as z from 'zod';
 
 import { icons } from '@/assets/icons';
-import { login } from '@/store/auth';
+import { ScreenHeader } from '@/components/screen-header';
 import type { Theme } from '@/theme';
 import {
   Button,
@@ -21,6 +21,9 @@ import {
 } from '@/ui';
 
 const schema = z.object({
+  fullName: z.string({
+    required_error: 'Full name is required',
+  }),
   email: z
     .string({
       required_error: 'Email is required',
@@ -33,37 +36,46 @@ const schema = z.object({
     .min(6, 'Password must be at least 6 characters'),
 });
 
-export type FormType = z.infer<typeof schema>;
+export type RegisterFormType = z.infer<typeof schema>;
 
-export const Login = () => {
+export const Register = () => {
   const { colors } = useTheme<Theme>();
   const { navigate } = useNavigation();
 
-  const { handleSubmit, control } = useForm<FormType>({
+  const { handleSubmit, control } = useForm<RegisterFormType>({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: FormType) => {
+  const onSubmit = (data: RegisterFormType) => {
     console.log('data', data);
 
-    login();
+    navigate('VerifyCode');
   };
 
   return (
     <Screen backgroundColor={colors.white}>
+      <ScreenHeader />
+
       <View flex={1} paddingHorizontal={'large'}>
         <View height={scale(72)} />
         <Image source={icons.logo} contentFit="contain" style={styles.logo} />
         <View paddingTop={'large'}>
           <Text variant={'semiBold24'} color={'black'}>
-            Welcome Back 👋
+            Registration 👍
           </Text>
           <Text variant={'regular14'} paddingTop={'small'} color={'grey100'}>
-            Let’s log in. Apply to jobs!
+            Let’s Register. Apply to jobs!
           </Text>
         </View>
 
         <View paddingTop={'large'}>
+          <ControlledInput
+            placeholder="Enter full name"
+            label="Full Name"
+            control={control}
+            name="fullName"
+          />
+          <View height={scale(8)} />
           <ControlledInput
             placeholder="Enter email address"
             label="Email"
@@ -80,7 +92,7 @@ export const Login = () => {
           />
         </View>
         <View height={scale(24)} />
-        <Button label="Log in" onPress={handleSubmit(onSubmit)} />
+        <Button label="Register" onPress={handleSubmit(onSubmit)} />
 
         <View flex={1} justifyContent={'center'} alignItems={'center'}>
           <PressableScale

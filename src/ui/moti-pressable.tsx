@@ -1,16 +1,19 @@
-import React, { ComponentProps, useMemo } from "react";
-import { MotiPressable, mergeAnimateProp } from "moti/interactions";
+import { mergeAnimateProp, MotiPressable } from 'moti/interactions';
+import type { ComponentProps } from 'react';
+import React, { useMemo } from 'react';
 
 type Props = ComponentProps<typeof MotiPressable>;
 
 export const PressableScale = ({ animate, ...props }: Props) => {
+  console.log('props', props);
+
   return (
     <MotiPressable
       {...props}
       animate={useMemo(
         () => (interaction) => {
           // useMemo has better TS support than useCallback
-          "worklet";
+          'worklet';
 
           const { hovered, pressed } = interaction;
 

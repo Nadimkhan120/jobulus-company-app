@@ -70,7 +70,11 @@ export const TextField = React.forwardRef<TextInput, NInputProps>(
             </PressableScale>
           ) : null}
         </View>
-        {error && <Text variant="medium24">{error}</Text>}
+        {error && (
+          <Text paddingTop={'small'} variant="regular14" color={'error'}>
+            {error}
+          </Text>
+        )}
       </View>
     );
   }
