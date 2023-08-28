@@ -13,9 +13,14 @@ import { View } from '@/ui';
 
 type SearchFieldProps = {
   icon?: IconTypes;
+  showBorder?: boolean;
 } & TextInputProps;
 
-export const SearchField = ({ icon, ...rest }: SearchFieldProps) => {
+export const SearchField = ({
+  icon,
+  showBorder,
+  ...rest
+}: SearchFieldProps) => {
   const { colors } = useTheme<Theme>();
 
   return (
@@ -25,6 +30,8 @@ export const SearchField = ({ icon, ...rest }: SearchFieldProps) => {
       paddingHorizontal={'small'}
       borderRadius={scale(8)}
       backgroundColor={'white'}
+      borderWidth={showBorder ? 1 : 0}
+      borderColor={'grey300'}
     >
       <Image
         source={icon ?? icons.search}

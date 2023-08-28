@@ -21,9 +21,7 @@ const VerticalBarChart = () => {
   const { colors } = useTheme<Theme>();
 
   return (
-    <View width={width} marginTop={'medium'} flexDirection={'row'}>
-      {/* <View width={scale(4)} /> */}
-
+    <View width={width} flexDirection={'row'}>
       <VictoryChart
         width={width}
         height={height * 0.3}
@@ -42,7 +40,6 @@ const VerticalBarChart = () => {
           style={{ data: { fill: colors.primary } }}
         />
       </VictoryChart>
-      {/* </View> */}
     </View>
   );
 };

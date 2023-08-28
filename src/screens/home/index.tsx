@@ -13,7 +13,7 @@ import { scale } from 'react-native-size-matters';
 
 import { PersonItem } from '@/components/person-item';
 //import { useTheme } from "@shopify/restyle";
-import { TopHeader } from '@/components/top-header';
+import { TopHeader } from '@/components/top-header/header-ios';
 import { palette } from '@/theme';
 import { View } from '@/ui';
 
@@ -98,24 +98,6 @@ export const Home = () => {
           })}
         </View>
       </Animated.ScrollView>
-      {/* <TopHeader />
-      <HomeSliderContainer />
-      <View flex={1} paddingHorizontal={"large"}>
-        <View paddingTop={"large"}>
-          <SegmentContainer
-            onChangeSegment={(index) => {
-              console.log(index);
-            }}
-          />
-        </View> */}
-      {/* {[0, 1, 3, 4, 5, 6].map((element, index) => {
-          return (
-            <View>
-              <Text>hello</Text>
-            </View>
-          );
-        })}
-      </View> */}
     </View>
   );
 };

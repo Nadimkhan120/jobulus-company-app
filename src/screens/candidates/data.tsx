@@ -63,7 +63,15 @@ export const experienceData = [
 export const educationData = [
   {
     name: 'Mansoura University',
-    location: 'Bachelor degree, in Computer Science',
+    location: 'Bachelor degree,',
+    in: 'in Computer Science',
+    time: 'April 2003 - Present',
+    profileImage: icons.indesign,
+  },
+  {
+    name: 'Mansoura University',
+    location: 'Bachelor degree,',
+    in: 'in Computer Science',
     time: 'April 2003 - Present',
     profileImage: icons.indesign,
   },

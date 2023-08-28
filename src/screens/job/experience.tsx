@@ -1,72 +1,79 @@
 import { Image } from 'expo-image';
 import React from 'react';
-import {
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet } from 'react-native';
+import { scale } from 'react-native-size-matters';
 
-import { Text, View } from '@/ui';
+import { PressableScale, Text, View } from '@/ui';
 
 import { experienceData } from '../candidates/data';
 
 const Experience = () => {
-  const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => null}>
-      <View
-        backgroundColor="white"
-        marginTop={'tiny'}
-        padding={'medium'}
-        width={'100%'}
-        flexDirection={'row'}
-      >
-        <Image source={item.profileImage} style={candidateStyles.image} />
-        <View marginLeft={'medium'}>
-          <Text variant="medium20" color="black">
-            {item.name}
-          </Text>
-          <Text variant="medium12" marginLeft={'tiny'}>
-            {item.location}
-          </Text>
-          <Text variant="medium12" marginLeft={'tiny'}>
-            {item.time}
-          </Text>
-          <View maxWidth={300}>
-            <Text
-              variant="medium13"
-              color={'grey100'}
-              textAlign={'justify'}
-              marginVertical={'tiny'}
-            >
-              {item.point1}
-            </Text>
-            <Text variant="medium13" color={'grey100'} textAlign={'justify'}>
-              {item.point2}
-            </Text>
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-
   return (
-    <ScrollView>
-      <View paddingTop={'medium'} backgroundColor={'grey400'}>
-        <View backgroundColor={'white'} width={'auto'} />
-        <FlatList
-          data={experienceData}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.name}
-        />
-      </View>
-    </ScrollView>
+    <>
+      {experienceData?.map((item, index) => {
+        return (
+          <PressableScale key={index} onPress={() => null}>
+            <View
+              backgroundColor="white"
+              flexDirection={'row'}
+              paddingVertical={'2xl'}
+              paddingHorizontal={'large'}
+              borderBottomColor={'grey500'}
+              borderBottomWidth={1}
+            >
+              <Image source={item.profileImage} style={styles.image} />
+              <View paddingHorizontal={'medium'} flex={1}>
+                <Text variant="medium14" color="black">
+                  {item.name}
+                </Text>
+                <Text
+                  variant="medium12"
+                  paddingVertical={'tiny'}
+                  marginLeft={'tiny'}
+                  color={'grey100'}
+                >
+                  {item.location}
+                </Text>
+                <Text
+                  paddingVertical={'tiny'}
+                  variant="regular12"
+                  color={'grey200'}
+                  marginLeft={'tiny'}
+                >
+                  {item.time}
+                </Text>
+                <View maxWidth={300} paddingVertical={'tiny'}>
+                  <Text
+                    textAlign={'justify'}
+                    paddingVertical={'tiny'}
+                    variant="regular10"
+                    color={'grey100'}
+                  >
+                    {item.point1}
+                  </Text>
+                  <Text
+                    variant="regular10"
+                    paddingVertical={'tiny'}
+                    color={'grey100'}
+                    textAlign={'justify'}
+                  >
+                    {item.point2}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </PressableScale>
+        );
+      })}
+    </>
   );
 };
+
 export default Experience;
-const candidateStyles = StyleSheet.create({
+
+const styles = StyleSheet.create({
   image: {
-    width: 60,
-    height: 60,
+    width: scale(72),
+    height: scale(72),
   },
 });

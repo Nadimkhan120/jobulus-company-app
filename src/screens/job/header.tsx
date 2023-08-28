@@ -1,72 +1,53 @@
 import { Image } from 'expo-image';
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { scale } from 'react-native-size-matters';
 
 import { icons } from '@/assets/icons';
+import { Avatar } from '@/components/avatar';
 import { Text, View } from '@/ui';
+
 const Header = () => {
   return (
     <View>
-      <View>
-        <Image
-          source={require('src/assets/images/header.png')}
-          style={styles.image}
-          contentFit="contain"
-        />
-
-        <View
-          position={'absolute'}
-          bottom={-20}
-          alignSelf={'center'}
-          backgroundColor={'white'}
-          width={40}
-          height={40}
-          borderRadius={25}
-          alignItems={'center'}
-          justifyContent={'center'}
-        >
-          <Image source={icons.avatar} style={styles.profile} />
-        </View>
+      <Image
+        source={require('src/assets/images/header.png')}
+        style={styles.image}
+        contentFit="contain"
+      />
+      <View
+        alignSelf={'center'}
+        style={{
+          marginTop: -scale(28),
+        }}
+      >
+        <Avatar source={icons['avatar-2']} size="large" />
       </View>
+
       <View
         justifyContent={'center'}
+        paddingVertical={'large'}
         alignItems={'center'}
-        marginVertical={'4xl'}
       >
-        <Text variant={'heading'} color={'black'}>
+        <Text variant={'medium20'} color={'black'}>
           Michael Kamleitner
         </Text>
-        <Text variant={'medium13'}>CEO at Walls.io, Founder at Swat.io</Text>
-        <Text variant={'medium13'}>Lahore, Punjab, Pakistan</Text>
+        <Text variant={'regular13'} paddingVertical={'tiny'} color={'grey100'}>
+          CEO at Walls.io, Founder at Swat.io
+        </Text>
+        <Text variant={'regular13'} color={'grey200'}>
+          Lahore, Punjab, Pakistan
+        </Text>
       </View>
     </View>
   );
 };
 
 export default Header;
+
 const styles = StyleSheet.create({
   image: {
     width: '100%',
-    height: 100,
-    contentFit: 'cover',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-
-  profile: {
-    width: 50,
-    height: 50,
-    borderRadius: 20,
-  },
-  tabBar: {
-    backgroundColor: 'transparent',
-    shadowColor: 'transparent',
-    height: 45,
-  },
-  indicatorStyle: {
-    height: 3,
-    borderRadius: 2,
-    backgroundColor: '#01C96C',
-    // marginHorizontal: 15,
+    height: scale(90),
   },
 });

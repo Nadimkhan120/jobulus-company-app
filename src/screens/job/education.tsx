@@ -1,11 +1,10 @@
 import React from 'react';
-import { FlatList } from 'react-native';
 import { scale } from 'react-native-size-matters';
 
-import { Screen, Text, View } from '@/ui';
+import { Text, View } from '@/ui';
 
 import { educationData } from '../candidates/data';
-import { educationItem } from './education-list';
+import { EducationItem } from './education-list';
 
 const skills = [
   { name: 'Industry Knowldge' },
@@ -15,48 +14,40 @@ const skills = [
 
 const Education = () => {
   return (
-    <Screen>
-      <View paddingTop={'small'} backgroundColor={'grey400'}>
-        <View backgroundColor={'white'} width={'auto'} />
-        <FlatList
-          data={educationData}
-          renderItem={educationItem}
-          keyExtractor={(item) => item.name}
-        />
+    <>
+      <View>
+        {educationData?.map((item, index) => {
+          return <EducationItem key={index} item={item} />;
+        })}
       </View>
-      <View marginTop={'small'}>
-        <Text
-          variant={'medium20'}
-          color={'black'}
-          paddingLeft={'small'}
-          marginVertical={'small'}
-          fontSize={22}
-        >
+      <View marginTop={'large'} paddingHorizontal={'large'}>
+        <Text variant={'medium20'} marginBottom={'large'} color={'black'}>
           Skills
         </Text>
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={skills}
-          keyExtractor={(item) => item.name}
-          renderItem={({ item }) => (
-            <View
-              backgroundColor={'transparent'}
-              borderRadius={scale(22)}
-              borderWidth={1}
-              paddingVertical={'small'}
-              paddingHorizontal={'medium'}
-              marginHorizontal={'tiny'}
-              alignSelf={'flex-start'}
-              marginLeft={'medium'}
-            >
-              <Text variant={'regular12'}>{item.name}</Text>
-            </View>
-          )}
-        />
-        {/* <SkillsList /> */}
+
+        <View flexDirection={'row'} rowGap={'small'} flexWrap={'wrap'}>
+          {skills?.map((element, index) => {
+            return (
+              <View
+                key={index}
+                borderRadius={scale(22)}
+                borderWidth={1}
+                height={scale(23)}
+                justifyContent={'center'}
+                alignItems={'center'}
+                paddingHorizontal={'medium'}
+                marginRight={'medium'}
+                borderColor={'grey300'}
+              >
+                <Text variant={'medium12'} color={'grey100'}>
+                  {element.name}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
       </View>
-    </Screen>
+    </>
   );
 };
 export default Education;

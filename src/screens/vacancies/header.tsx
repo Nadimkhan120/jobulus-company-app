@@ -17,7 +17,7 @@ const Header = () => {
       backgroundColor={'white'}
       paddingHorizontal={'large'}
       style={style.container}
-      borderBottomColor={'grey300'}
+      borderBottomColor={'grey500'}
       borderBottomWidth={1}
     >
       <View flexDirection={'column'}>
@@ -31,14 +31,15 @@ const Header = () => {
     </View>
   );
 };
+
 const style = StyleSheet.create({
   container: {
     height: scale(48),
-    shadowColor: '#171717',
-    shadowOffset: { width: 2, height: 0.5 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
+    // shadowColor: "#171717",
+    // shadowOffset: { width: 2, height: 0.5 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 3,
+    // elevation: 3,
   },
 });
 

@@ -1,82 +1,91 @@
 import { Image } from 'expo-image';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { scale } from 'react-native-size-matters';
 
 import { icons } from '@/assets/icons';
-import { Text, View } from '@/ui';
+import { PressableScale, Text, View } from '@/ui';
 
 import VerticalBarChart from './bar-chart';
 
+const data = [
+  {
+    id: 1,
+    text: 'Active job seekers',
+    precentage: '13.5%',
+  },
+  {
+    id: 2,
+    text: 'Applied',
+    precentage: '20',
+  },
+];
+
 const VacanciesStatus = () => {
   return (
-    <View backgroundColor={'white'}>
+    <View backgroundColor={'white'} paddingVertical={'large'}>
       <View
         flexDirection={'row'}
+        paddingHorizontal={'large'}
+        alignItems={'center'}
         justifyContent={'space-between'}
-        paddingHorizontal={'medium'}
-        paddingTop={'small'}
+        marginBottom={'medium'}
       >
-        <View>
-          <Text variant={'regular16'}>Vacancy Status</Text>
-        </View>
-        <View>
-          <View flexDirection={'row'}>
-            <View>
-              <Text>This Week</Text>
-            </View>
-            <View>
-              <Image source={icons.calendar} style={style.calendarImage} />
-            </View>
+        <Text variant={'medium16'} color={'black'}>
+          Vacancy Status
+        </Text>
+        <PressableScale>
+          <View flexDirection={'row'} alignItems={'center'}>
+            <Text color={'black'} marginRight={'small'} variant={'regular13'}>
+              This Week
+            </Text>
+            <Image source={icons.calendar} style={style.calendarImage} />
           </View>
-        </View>
+        </PressableScale>
       </View>
+
       <View
         flexDirection={'row'}
-        justifyContent={'space-around'}
-        marginTop={'medium'}
+        paddingHorizontal={'large'}
+        columnGap={'medium'}
       >
-        <View
-          flexDirection={'column'}
-          width={scale(150)}
-          height={scale(70)}
-          borderRadius={scale(8)}
-          justifyContent={'center'}
-          paddingHorizontal={'medium'}
-          style={style.item}
-        >
-          <Text>Active Job Seekers</Text>
-          <Text variant={'medium24'} marginTop={'small'}>
-            13.5%
-          </Text>
-        </View>
-        <View
-          flexDirection={'column'}
-          width={scale(150)}
-          height={scale(70)}
-          borderRadius={scale(8)}
-          justifyContent={'center'}
-          paddingHorizontal={'medium'}
-          style={style.item}
-        >
-          <Text>Applied</Text>
-          <Text marginTop={'small'} variant={'medium24'}>
-            320
-          </Text>
-        </View>
+        {data?.map((element, index) => {
+          return (
+            <Pressable style={style.button} key={index}>
+              <View
+                height={scale(88)}
+                borderRadius={scale(8)}
+                flex={1}
+                backgroundColor={'grey500'}
+                paddingHorizontal={'large'}
+              >
+                <Text variant={'regular14'} color={'black'} marginTop={'large'}>
+                  {element?.text}
+                </Text>
+                <Text variant={'medium24'} marginTop={'small'} color={'black'}>
+                  {element.precentage}
+                </Text>
+              </View>
+            </Pressable>
+          );
+        })}
       </View>
 
       <VerticalBarChart />
     </View>
   );
 };
+
 const style = StyleSheet.create({
   calendarImage: {
-    width: 20,
-    height: 20,
+    width: scale(20),
+    height: scale(20),
   },
-  item: {
-    backgroundColor: '#F2F2F3',
+
+  button: {
+    flex: 1,
+    height: scale(88),
+    borderRadius: scale(8),
   },
 });
 

@@ -9,10 +9,10 @@ import { View } from '@/ui';
 import { CompanyButton } from '../company-button';
 import { SearchField } from '../search-field';
 
-export const TopHeader = () => {
+export const TopHeader = ({ top = 0 }: { top: number }) => {
   return (
     <View
-      height={scale(72)}
+      height={scale(72) + scale(top - 10)}
       flexDirection={'row'}
       backgroundColor={'primary'}
       alignItems={'center'}
@@ -20,11 +20,9 @@ export const TopHeader = () => {
       paddingHorizontal={'large'}
     >
       <View
-        style={
-          {
-            //marginTop: scale(top - 10),
-          }
-        }
+        style={{
+          marginTop: scale(top - 10),
+        }}
         flexDirection={'row'}
         alignItems={'center'}
       >

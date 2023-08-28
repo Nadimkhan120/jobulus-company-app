@@ -1,3 +1,4 @@
+import { Image } from 'expo-image';
 import * as React from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
 import { Drawer } from 'react-native-drawer-layout';
@@ -105,9 +106,11 @@ export function AppDrawer({ children }: AppDrawer) {
                           </Text>
                         </View>
                       </View>
-                      <View>
-                        <Text>arrow</Text>
-                      </View>
+                      <Image
+                        source={icons['arrow-right']}
+                        style={{ height: scale(24), width: scale(24) }}
+                        contentFit="contain"
+                      />
                     </View>
                   </PressableScale>
                 );

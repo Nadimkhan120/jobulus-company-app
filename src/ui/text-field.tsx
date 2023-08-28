@@ -14,11 +14,12 @@ export interface NInputProps extends TextInputProps {
   disabled?: boolean;
   error?: string;
   isSecure?: boolean;
+  icon?: React.ReactElement;
 }
 
 export const TextField = React.forwardRef<TextInput, NInputProps>(
   (props, ref) => {
-    const { label, error, isSecure, ...inputProps } = props;
+    const { label, error, isSecure, icon, ...inputProps } = props;
 
     const theme = useTheme<Theme>();
 
@@ -69,6 +70,7 @@ export const TextField = React.forwardRef<TextInput, NInputProps>(
               />
             </PressableScale>
           ) : null}
+          {icon && icon}
         </View>
         {error && (
           <Text paddingTop={'small'} variant="regular14" color={'error'}>

@@ -1,34 +1,43 @@
-import React from 'react';
+import { useTheme } from '@shopify/restyle';
+import React, { useState } from 'react';
 import { FlatList } from 'react-native';
+import { scale } from 'react-native-size-matters';
 
+import { ScrollMenu } from '@/components/scroll-menu';
+import { SearchWithFilter } from '@/components/search-with-filter';
 import { VacanciesData } from '@/constants/vacancies-data';
+import type { Theme } from '@/theme';
 import { Screen, View } from '@/ui';
 
 import Header from './header';
 import VecanciesList from './vacancies-list';
 
+const data = ['All', 'Drafts', 'Closed', 'Published', 'Expiring'];
+
+const renderItem = ({ item }: any) => <VecanciesList data={item} />;
+
 export const Vacancies = () => {
-  const renderItem = ({ item }: any) => (
-    <View>
-      <VecanciesList
-        title={item.title}
-        company={item.company}
-        address={item.address}
-        work={item.work}
-        applicant={item.applicant}
-        status={item.status}
-        postedTime={item.postedTime}
-        expiryDate={item.expiryDate}
-        color={item.color}
-      />
-    </View>
-  );
+  const { colors } = useTheme<Theme>();
+
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   return (
-    <Screen>
+    <Screen edges={['top']} backgroundColor={colors.white}>
       <Header />
-      {/* <OptionsHeader /> */}
-      <View>
+
+      <SearchWithFilter onFilter={() => {}} />
+
+      <ScrollMenu
+        selectedIndex={selectedIndex}
+        data={data}
+        onChangeMenu={(index) => {
+          setSelectedIndex(index);
+        }}
+      />
+
+      <View height={scale(10)} backgroundColor={'grey500'} />
+
+      <View flex={1} backgroundColor={'grey500'}>
         <FlatList
           data={VacanciesData}
           keyExtractor={(item, index) => index.toString()}

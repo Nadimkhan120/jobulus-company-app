@@ -45,6 +45,9 @@ export const icons = {
   search: require('../images/search.png'),
   settings: require('../images/settings.png'),
   'back-cover': require('../images/back-cover.png'),
+  filter: require('../images/filter.png'),
+  swap: require('../images/swap.png'),
+  payment: require('../images/payment.png'),
 };
 
 export type IconTypes = keyof typeof icons;

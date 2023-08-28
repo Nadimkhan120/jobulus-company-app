@@ -30,7 +30,7 @@ type Props = {
 
 export const Screen = ({
   children,
-  statusBarColor,
+  statusBarColor = '#FFFFFF',
   barStyle = 'dark-content',
   translucent = false,
   backgroundColor = 'background',

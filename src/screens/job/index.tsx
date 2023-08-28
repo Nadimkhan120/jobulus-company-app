@@ -1,172 +1,21 @@
-// import { useNavigation } from "@react-navigation/native";
-// import React from "react";
-// import { StyleSheet, useWindowDimensions } from "react-native";
-// import { SceneMap, TabBar, TabView } from "react-native-tab-view";
-
-// import { translate } from "@/i18n";
-// import { PressableScale, Text, View } from "@/ui";
-
-// import Education from "./education";
-// import Experience from "./experience";
-// import Header from "./header";
-// import History from "./history";
-// import OverView from "./overview";
-
-// const FirstRoute = () => (
-//   <View flex={1}>
-//     <OverView />
-//   </View>
-// );
-
-// const SecondRoute = () => (
-//   <View flex={1}>
-//     <Experience />
-//   </View>
-// );
-
-// const ThirdRoute = () => (
-//   <View flex={1}>
-//     <Education />
-//   </View>
-// );
-
-// const FourthRoute = () => (
-//   <View flex={1}>
-//     <History />
-//   </View>
-// );
-
-// const renderScene = SceneMap({
-//   first: FirstRoute,
-//   second: SecondRoute,
-//   third: ThirdRoute,
-//   fourth: FourthRoute,
-// });
-
-// const renderTabBar = (props: any) => {
-//   const renderLabel = ({ focused, route }: { focused: boolean; route: { title: string } }) => {
-//     return (
-//       <Text
-//         color={focused ? "primary" : "grey300"}
-//         variant="heading"
-//         numberOfLines={1}
-//         backgroundColor="secondary"
-//       >
-//         {translate(route.title)}
-//       </Text>
-//     );
-//   };
-
-//   return (
-//     <TabBar
-//       {...props}
-//       style={styles.tabBar}
-//       inactiveColor={"black"}
-//       indicatorStyle={[styles.indicatorStyle]}
-//       //   indicatorContainerStyle={styles.indicatorContainerStyle}
-//       scrollEnabled={true}
-//       renderLabel={renderLabel}
-//       // tabStyle={{ width: width / 2 }}
-//     />
-//   );
-// };
-
-// export const Job = () => {
-//   const navigation = useNavigation();
-//   const layout = useWindowDimensions();
-
-//   const [index, setIndex] = React.useState(0);
-//   const [routes] = React.useState([
-//     { key: "first", title: "Overview" },
-//     { key: "second", title: "Experience" },
-//     { key: "third", title: "Education & Skills" },
-//     { key: "fourth", title: "History" },
-//   ]);
-
-//   return (
-//     <View flex={1} backgroundColor={"white"}>
-//       <PressableScale onPress={() => navigation.navigate("CandidateProfile")}>
-//         <Header />
-//       </PressableScale>
-//       <View flex={1} paddingTop={"small"}>
-//         <TabView
-//           renderTabBar={renderTabBar}
-//           navigationState={{ index, routes }}
-//           renderScene={renderScene}
-//           onIndexChange={setIndex}
-//           initialLayout={{ width: layout.width }}
-//           swipeEnabled={true}
-//         />
-//       </View>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   image: {
-//     width: "100%",
-//     height: 100,
-//     contentFit: "cover",
-//   },
-
-//   profile: {
-//     width: 50,
-//     height: 50,
-//     borderRadius: 20,
-//   },
-//   tabBar: {
-//     backgroundColor: "transparent",
-//     shadowColor: "transparent",
-//     height: 45,
-//   },
-//   indicatorStyle: {
-//     height: 3,
-//     borderRadius: 2,
-//     backgroundColor: "#01C96C",
-//     // marginHorizontal: 15,
-//   },
-// });
-
 import { useTheme } from '@shopify/restyle';
 import type { Route } from '@showtime-xyz/tab-view';
 import { TabScrollView, TabView } from '@showtime-xyz/tab-view';
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { StyleSheet, useWindowDimensions } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
+import { scale } from 'react-native-size-matters';
 import { TabBar } from 'react-native-tab-view';
 
 import { ScreenHeader } from '@/components/screen-header';
-import { TabFlashList } from '@/components/tab-flash-list';
 import type { Theme } from '@/theme';
-import { Screen } from '@/ui';
+import { Screen, Text, View } from '@/ui';
 
+import Education from './education';
+import Experience from './experience';
 import Header from './header';
+import History from './history';
 import OverView from './overview';
-
-const TabScene = ({ route }: any) => {
-  return (
-    <TabFlashList
-      index={route.index}
-      data={new Array(20).fill(0)}
-      estimatedItemSize={60}
-      renderItem={({ index }) => {
-        return (
-          <View
-            style={{
-              height: 60,
-              backgroundColor: '#fff',
-              marginBottom: 8,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Text>{`${route.title}-Item-${index}`}</Text>
-          </View>
-        );
-      }}
-    />
-  );
-};
 
 const OverViewTab = ({ route }: any) => {
   return (
@@ -176,39 +25,62 @@ const OverViewTab = ({ route }: any) => {
   );
 };
 
-const renderTabBar = (props: any) => {
-  const renderLabel = ({
-    focused,
-    route,
-  }: {
-    focused: boolean;
-    route: { title: string };
-  }) => {
-    console.log('focused', focused);
-
-    return (
-      <Text
-        //color={focused ? "primary" : "grey300"}
-        // variant="heading"
-        numberOfLines={1}
-        //backgroundColor="secondary"
-      >
-        {route.title}
-      </Text>
-    );
-  };
-
+const EducationTab = ({ route }: any) => {
   return (
-    <TabBar
-      {...props}
-      style={styles.tabBar}
-      inactiveColor={'black'}
-      // indicatorStyle={[styles.indicatorStyle]}
-      //   indicatorContainerStyle={styles.indicatorContainerStyle}
-      scrollEnabled={true}
-      renderLabel={renderLabel}
-      tabStyle={{ width: 100 }}
-    />
+    <TabScrollView index={route?.index}>
+      <Education />
+    </TabScrollView>
+  );
+};
+
+const ExperienceTab = ({ route }: any) => {
+  return (
+    <TabScrollView index={route?.index}>
+      <Experience />
+    </TabScrollView>
+  );
+};
+
+const HistoryTab = ({ route }: any) => {
+  return (
+    <TabScrollView index={route?.index}>
+      <History />
+    </TabScrollView>
+  );
+};
+
+const renderLabel = ({
+  focused,
+  route,
+}: {
+  focused: boolean;
+  route: { title: string };
+}) => {
+  return (
+    <Text
+      color={focused ? 'primary' : 'black'}
+      variant="medium14"
+      numberOfLines={1}
+    >
+      {route.title}
+    </Text>
+  );
+};
+
+const renderTabBar = (props: any) => {
+  return (
+    <View>
+      <TabBar
+        {...props}
+        style={styles.tabBar}
+        inactiveColor={'black'}
+        indicatorStyle={[styles.indicatorStyle]}
+        scrollEnabled={true}
+        renderLabel={renderLabel}
+        tabStyle={{ width: 120 }}
+      />
+      <View height={scale(4)} backgroundColor={'grey500'} />
+    </View>
   );
 };
 
@@ -218,9 +90,10 @@ export function Job() {
   const { width } = useWindowDimensions();
 
   const [routes] = useState<Route[]>([
-    { key: 'like', title: 'Like', index: 0 },
-    { key: 'owner', title: 'Owner', index: 1 },
-    { key: 'created', title: 'Created', index: 2 },
+    { key: 'Overview', title: 'Overview', index: 0 },
+    { key: 'Experience', title: 'Experience', index: 1 },
+    { key: 'Education & Skills', title: 'Education & Skills', index: 2 },
+    { key: 'History', title: 'History', index: 3 },
   ]);
 
   const [index, setIndex] = useState(0);
@@ -229,12 +102,14 @@ export function Job() {
 
   const renderScene = useCallback(({ route }: any) => {
     switch (route.key) {
-      case 'like':
-        return <TabScene route={route} index={0} />;
-      case 'owner':
-        return <OverViewTab route={route} index={1} />;
-      case 'created':
-        return <TabScene route={route} index={2} />;
+      case 'Overview':
+        return <OverViewTab route={route} index={0} />;
+      case 'Experience':
+        return <ExperienceTab route={route} index={1} />;
+      case 'Education & Skills':
+        return <EducationTab route={route} index={2} />;
+      case 'History':
+        return <HistoryTab route={route} index={2} />;
 
       default:
         return null;
@@ -251,15 +126,16 @@ export function Job() {
 
   const renderHeader = () => {
     return (
-      <View style={{ height: 300 }}>
+      <View>
         <Header />
+        <View height={scale(10)} backgroundColor={'grey500'} />
       </View>
     );
   };
 
   return (
     <Screen edges={['top']} backgroundColor={colors.white}>
-      <ScreenHeader showBorder={true} />
+      <ScreenHeader showBorder={true} icon="close" />
       <TabView
         onStartRefresh={onStartRefresh}
         isRefreshing={isRefreshing}
@@ -281,25 +157,12 @@ export function Job() {
 }
 
 const styles = StyleSheet.create({
-  image: {
-    width: '100%',
-    height: 100,
-    contentFit: 'cover',
-  },
-
-  profile: {
-    width: 50,
-    height: 50,
-    borderRadius: 20,
-  },
   tabBar: {
-    backgroundColor: 'red',
-    height: 45,
+    backgroundColor: 'white',
+    height: scale(40),
   },
   indicatorStyle: {
-    height: 3,
-    borderRadius: 2,
+    height: scale(3),
     backgroundColor: '#01C96C',
-    // marginHorizontal: 15,
   },
 });

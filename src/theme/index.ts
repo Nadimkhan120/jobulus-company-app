@@ -102,6 +102,10 @@ export const theme = createTheme({
       fontSize: 12,
       fontFamily: AppFonts.APP_FONT_REGULAR,
     },
+    regular10: {
+      fontSize: 10,
+      fontFamily: AppFonts.APP_FONT_REGULAR,
+    },
     medium28: {
       fontSize: 28,
       fontFamily: AppFonts.APP_FONT_MEDIUM,
@@ -206,7 +210,7 @@ export const theme = createTheme({
       justifyContent: 'center',
       backgroundColor: 'transparent',
       borderWidth: 1,
-      borderColor: 'secondary',
+      borderColor: 'primary',
     },
   },
 

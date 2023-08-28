@@ -65,22 +65,22 @@ export const Settings = () => {
             <SettingsItem
               icon="company-page"
               title="Company Page"
-              onPress={() => navigation.navigate('Payments')}
+              onPress={() => null}
             />
             <SettingsItem
               icon="person"
               title="User Management"
-              onPress={() => navigation.navigate('Payments')}
+              onPress={() => null}
             />
             <SettingsItem
               icon="person"
               title="Recruitment Process"
-              onPress={() => navigation.navigate('Payments')}
+              onPress={() => null}
             />
             <SettingsItem
               icon="person"
               title="JD Library"
-              onPress={() => navigation.navigate('Payments')}
+              onPress={() => null}
             />
             <SettingsItem
               icon="credit-card"
@@ -90,7 +90,7 @@ export const Settings = () => {
             <SettingsItem
               icon="settings"
               title="Settings"
-              onPress={() => navigation.navigate('Payments')}
+              onPress={() => null}
             />
           </View>
         </ScrollView>

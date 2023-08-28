@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '@shopify/restyle';
 import React from 'react';
 
@@ -12,6 +13,8 @@ import { Screen, View } from '@/ui';
 export const Payments = () => {
   const { colors } = useTheme<Theme>();
 
+  const { navigate } = useNavigation();
+
   return (
     <Screen backgroundColor={colors.white} edges={['top']}>
       <ScreenHeader title={'Payments'} showBorder={true} />
@@ -20,12 +23,12 @@ export const Payments = () => {
           <SettingsItem
             icon="credit-card"
             title="Payment Methods"
-            onPress={() => null}
+            onPress={() => navigate('PaymentMethods')}
           />
           <SettingsItem
             icon="list"
             title="Your Payments"
-            onPress={() => null}
+            onPress={() => navigate('MyPayments')}
           />
         </View>
 

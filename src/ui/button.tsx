@@ -62,9 +62,16 @@ export const Button = ({
     return (
       <ButtonContainer {...props}>
         {loading ? (
-          <ActivityIndicator size="small" color={'white'} />
+          <ActivityIndicator
+            size="small"
+            color={variant === 'primary' ? 'white' : 'primary'}
+          />
         ) : (
-          <Text {...buttonTextProps} color={'white'} variant={'medium16'}>
+          <Text
+            {...buttonTextProps}
+            color={variant === 'primary' ? 'white' : 'primary'}
+            variant={'medium16'}
+          >
             {label}
           </Text>
         )}

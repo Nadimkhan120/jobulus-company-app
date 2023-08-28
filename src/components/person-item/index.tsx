@@ -49,22 +49,7 @@ export const PersonItem = ({
           paddingTop={'small'}
         >
           {tags.map((item, index) => {
-            return (
-              <Tag key={index} name={item} icon="cv" />
-              // <View
-              //   backgroundColor={"grey500"}
-              //   key={index}
-              //   borderRadius={scale(16)}
-              //   height={scale(31)}
-              //   paddingHorizontal={"medium"}
-              //   justifyContent={"center"}
-              //   alignItems={"center"}
-              // >
-              //   <Text variant={"regular13"} color={"grey100"}>
-              //     {item}
-              //   </Text>
-              // </View>
-            );
+            return <Tag key={index} name={item} icon="cv" />;
           })}
         </View>
       </View>

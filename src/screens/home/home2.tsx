@@ -1,3 +1,4 @@
+import { useTheme } from '@shopify/restyle';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import Animated, {
@@ -12,10 +13,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scale } from 'react-native-size-matters';
 
 import { PersonItem } from '@/components/person-item';
-//import { useTheme } from "@shopify/restyle";
 import { TopHeader } from '@/components/top-header';
+import type { Theme } from '@/theme';
 import { palette } from '@/theme';
-import { View } from '@/ui';
+import { FocusAwareStatusBar, View } from '@/ui';
 
 import { HomeSliderContainer } from './home-slider';
 import { SegmentContainer } from './segment-container';
@@ -37,7 +38,7 @@ const DATA = Array(100)
   }));
 
 export const Home = () => {
-  // const { colors } = useTheme<Theme>();
+  const { colors } = useTheme<Theme>();
 
   const { top } = useSafeAreaInsets();
   const translationY = useSharedValue(0);
@@ -67,8 +68,12 @@ export const Home = () => {
 
   return (
     <View flex={1} backgroundColor={'white'}>
+      <FocusAwareStatusBar
+        barStyle="light-content"
+        backgroundColor={colors?.primary}
+      />
       <View style={styles.topHeader}>
-        <TopHeader top={top} />
+        <TopHeader />
       </View>
       <Animated.View style={[styles.maxHeader, stylez]}>
         <HomeSliderContainer />
@@ -98,24 +103,6 @@ export const Home = () => {
           })}
         </View>
       </Animated.ScrollView>
-      {/* <TopHeader />
-      <HomeSliderContainer />
-      <View flex={1} paddingHorizontal={"large"}>
-        <View paddingTop={"large"}>
-          <SegmentContainer
-            onChangeSegment={(index) => {
-              console.log(index);
-            }}
-          />
-        </View> */}
-      {/* {[0, 1, 3, 4, 5, 6].map((element, index) => {
-          return (
-            <View>
-              <Text>hello</Text>
-            </View>
-          );
-        })}
-      </View> */}
     </View>
   );
 };
@@ -130,7 +117,7 @@ const styles = StyleSheet.create({
   },
   maxHeader: {
     position: 'absolute',
-    top: scale(72) + scale(37),
+    top: scale(72),
     left: 0,
     right: 0,
     overflow: 'hidden',

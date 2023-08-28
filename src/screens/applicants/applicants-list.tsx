@@ -1,74 +1,89 @@
 import { Image } from 'expo-image';
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { scale } from 'react-native-size-matters';
 
 import { icons } from '@/assets/icons';
-import { Text, View } from '@/ui';
+import { Avatar } from '@/components/avatar';
+import { PressableScale, Text, View } from '@/ui';
 
 type ApplicantListProps = {
-  title: string;
-  detail: string;
-  address: string;
-  status: string;
-  time: string;
-  color: string;
+  data: {
+    title: string;
+    detail: string;
+    address: string;
+    status: string;
+    time: string;
+    color: string;
+  };
+  showStatus?: boolean;
+  onPress: () => void;
 };
-const ApplicantList = ({
-  title,
-  detail,
-  address,
-  status,
-  time,
-  color,
-}: ApplicantListProps) => {
+
+const ApplicantList = ({ data, showStatus, onPress }: ApplicantListProps) => {
   return (
-    <View
-      flexDirection={'row'}
-      backgroundColor={'white'}
-      justifyContent={'space-around'}
-      paddingHorizontal={'small'}
-      margin={'tiny'}
-    >
-      <View>
-        <Image source={icons.avatar} style={style.avatarImage} />
-      </View>
-      <View>
-        <Text variant={'semiBold14'}>{title}</Text>
-        <Text variant={'regular13'} color={'grey100'}>
-          {detail}
-        </Text>
-        <Text variant={'regular12'} color={'black'}>
-          {address}
-        </Text>
-        <View flexDirection={'row'}>
-          <View>
-            <Text variant={'regular12'} style={{ color: color }}>
-              {status}
+    <PressableScale onPress={onPress}>
+      <View
+        flexDirection={'row'}
+        paddingHorizontal={'large'}
+        borderBottomColor={'grey400'}
+        borderBottomWidth={StyleSheet.hairlineWidth}
+        backgroundColor={'white'}
+        paddingVertical={'medium'}
+      >
+        <View>
+          <Avatar source={icons.avatar} />
+        </View>
+
+        <View flex={1} paddingLeft={'medium'}>
+          <View
+            flexDirection={'row'}
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
+            <Text variant={'semiBold14'} color={'black'}>
+              {data?.title}
             </Text>
+            <PressableScale>
+              <Image
+                source={icons['more-horizontal']}
+                style={style.dot}
+                contentFit="contain"
+              />
+            </PressableScale>
           </View>
-          <View>
-            <Text variant={'regular12'} color={'grey200'}>
-              {time}
-            </Text>
-          </View>
+
+          <Text variant={'regular13'} marginVertical={'tiny'} color={'grey100'}>
+            {data?.detail}
+          </Text>
+          <Text variant={'regular12'} marginVertical={'tiny'} color={'black'}>
+            {data?.address}
+          </Text>
+
+          {showStatus ? (
+            <View flexDirection={'row'} marginVertical={'tiny'}>
+              <View>
+                <Text variant={'semiBold12'} style={{ color: data?.color }}>
+                  {data?.status}.{' '}
+                </Text>
+              </View>
+              <View>
+                <Text variant={'regular12'} color={'grey200'}>
+                  {data?.time}
+                </Text>
+              </View>
+            </View>
+          ) : null}
         </View>
       </View>
-      <View>
-        <Image source={icons.dot} style={style.dot} contentFit="contain" />
-      </View>
-    </View>
+    </PressableScale>
   );
 };
 
 const style = StyleSheet.create({
-  avatarImage: {
-    width: 50,
-    height: 50,
-  },
   dot: {
-    width: 20,
-    height: 20,
-    tintColor: '#95969D',
+    width: scale(24),
+    height: scale(24),
   },
 });
 export default ApplicantList;
