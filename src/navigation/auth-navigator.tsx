@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 
 import {
+  AgencyInformation,
   CompanyInformation,
   Login,
   Register,
@@ -17,6 +18,7 @@ export type AuthStackParamList = {
   VerifyCode: undefined;
   CompanyInformation: undefined;
   SendInvite: undefined;
+  AgencyInformation: undefined;
 };
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
@@ -63,6 +65,13 @@ export const AuthNavigator = () => {
       <Stack.Screen
         name="SendInvite"
         component={SendInvite}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AgencyInformation"
+        component={AgencyInformation}
         options={{
           headerShown: false,
         }}

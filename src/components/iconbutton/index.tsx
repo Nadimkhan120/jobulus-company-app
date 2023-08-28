@@ -30,6 +30,7 @@ export const IconButton = ({
   return (
     <PressableScale onPress={onPress} disabled={disabled}>
       <View
+        backgroundColor={color}
         style={[
           styles.container,
           // @ts-ignore
@@ -37,7 +38,7 @@ export const IconButton = ({
             height: size,
             width: size,
             borderRadius: size / 2,
-            backgroundColor: color,
+            // backgroundColor: color,
           },
         ]}
       >
@@ -46,7 +47,6 @@ export const IconButton = ({
           style={{
             height: imageSize,
             width: imageSize,
-            // borderRadius: imageSize / 2,
           }}
           contentFit="contain"
         />

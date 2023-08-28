@@ -9,6 +9,7 @@ import { scale } from 'react-native-size-matters';
 import * as z from 'zod';
 
 import { icons } from '@/assets/icons';
+import { IconButton } from '@/components';
 import { login } from '@/store/auth';
 import type { Theme } from '@/theme';
 import {
@@ -82,13 +83,38 @@ export const Login = () => {
         <View height={scale(24)} />
         <Button label="Log in" onPress={handleSubmit(onSubmit)} />
 
-        <View flex={1} justifyContent={'center'} alignItems={'center'}>
-          <PressableScale
-            onPress={() => {
-              navigate('RegisterOptions');
-            }}
-          >
-            <Text>Register</Text>
+        <View paddingVertical={'2xl'} alignSelf={'center'}>
+          <PressableScale onPress={() => null}>
+            <Text>Forgot password?</Text>
+          </PressableScale>
+        </View>
+
+        <Image
+          source={icons.continue}
+          style={{ height: scale(24), width: '100%' }}
+          contentFit="contain"
+        />
+
+        <View
+          flexDirection={'row'}
+          alignItems={'center'}
+          justifyContent={'center'}
+          gap={'medium'}
+          marginVertical={'large'}
+        >
+          <IconButton icon="apple" onPress={() => null} color={'grey500'} />
+          <IconButton icon="google" onPress={() => null} color={'grey500'} />
+          <IconButton icon="facebook" onPress={() => null} color={'grey500'} />
+        </View>
+
+        <View paddingVertical={'2xl'} alignSelf={'center'}>
+          <PressableScale onPress={() => navigate('RegisterOptions')}>
+            <Text variant={'regular14'} color={'grey200'}>
+              Haven’t an account?{' '}
+              <Text variant={'semiBold14'} color={'primary'}>
+                Register
+              </Text>
+            </Text>
           </PressableScale>
         </View>
       </View>

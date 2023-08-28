@@ -1,5 +1,6 @@
 export * from './add-payment-card';
 export * from './add-post';
+export * from './agency-information';
 export * from './applicants';
 export * from './candidates';
 export * from './company-information';

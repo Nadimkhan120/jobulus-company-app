@@ -8,6 +8,7 @@ import { scale } from 'react-native-size-matters';
 import { icons } from '@/assets/icons';
 import { IconButton } from '@/components';
 import { ScreenHeader } from '@/components/screen-header';
+import { setCompanyType } from '@/store/app';
 import type { Theme } from '@/theme';
 import { Screen, Text, View } from '@/ui';
 
@@ -37,9 +38,11 @@ export const RegisterOptions = () => {
     (element) => {
       if (element?.id === 1) {
         navigate('Register');
+        setCompanyType('company');
       }
 
       if (element?.id === 2) {
+        setCompanyType('recruiter');
         navigate('Register');
       }
     },

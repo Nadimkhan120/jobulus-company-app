@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
+import { Image } from 'expo-image';
 import React from 'react';
-import type { TextStyle, ViewStyle } from 'react-native';
+import type { ViewStyle } from 'react-native';
 import {
   Animated,
   StyleSheet,
@@ -8,6 +9,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+
+import { icons } from '@/assets/icons';
 
 import type { StepIndicatorProps } from './types';
 
@@ -62,8 +65,8 @@ const defaultStyles: DefaultStepIndicatorStyles = {
   stepStrokeCurrentColor: '#4aae4f',
   stepStrokeFinishedColor: '#4aae4f',
   stepStrokeUnFinishedColor: '#AFB0B6', //"#4aae4f",
-  separatorFinishedColor: 'pink',
-  separatorUnFinishedColor: 'red',
+  separatorFinishedColor: '#E0E0E0',
+  separatorUnFinishedColor: '#AFB0B6', // changed this
   stepIndicatorFinishedColor: '#4aae4f',
   stepIndicatorUnFinishedColor: '#a4d4a5',
   stepIndicatorCurrentColor: '#01C96C', //"", //"#ffffff",
@@ -266,7 +269,7 @@ const StepIndicator = ({
 
   const renderStep = (position: number) => {
     let stepStyle;
-    let indicatorLabelStyle: TextStyle = {};
+    //let indicatorLabelStyle: TextStyle = {};
     switch (getStepStatus(position)) {
       case STEP_STATUS.CURRENT: {
         stepStyle = {
@@ -278,29 +281,29 @@ const StepIndicator = ({
           borderRadius: 12, //borderRadiusAnim,
           overflow: 'hidden',
         };
-        indicatorLabelStyle = {
-          overflow: 'hidden',
-          fontSize: customStyles.currentStepIndicatorLabelFontSize,
-          color: customStyles.stepIndicatorLabelCurrentColor,
-        };
+        // indicatorLabelStyle = {
+        //   overflow: "hidden",
+        //   fontSize: customStyles.currentStepIndicatorLabelFontSize,
+        //   color: customStyles.stepIndicatorLabelCurrentColor,
+        // };
 
         break;
       }
       case STEP_STATUS.FINISHED: {
         stepStyle = {
-          backgroundColor: customStyles.stepIndicatorFinishedColor,
+          // backgroundColor: customStyles.stepIndicatorFinishedColor,
           borderWidth: customStyles.stepStrokeWidth,
           borderColor: customStyles.stepStrokeFinishedColor,
           height: 17, //staleSizeAnim,
-          width: 24, //staleSizeAnim,
-          borderRadius: 10, //customStyles.stepIndicatorSize / 2,
+          width: 17, //staleSizeAnim,
+          // borderRadius: 10, //customStyles.stepIndicatorSize / 2,
           overflow: 'hidden',
         };
-        indicatorLabelStyle = {
-          overflow: 'hidden',
-          fontSize: customStyles.stepIndicatorLabelFontSize,
-          color: customStyles.stepIndicatorLabelFinishedColor,
-        };
+        // indicatorLabelStyle = {
+        //   overflow: "hidden",
+        //   fontSize: customStyles.stepIndicatorLabelFontSize,
+        //   color: customStyles.stepIndicatorLabelFinishedColor,
+        // };
         break;
       }
 
@@ -314,19 +317,28 @@ const StepIndicator = ({
           borderRadius: 9, //customStyles.stepIndicatorSize / 2,
           overflow: 'hidden',
         };
-        indicatorLabelStyle = {
-          overflow: 'hidden',
-          fontSize: customStyles.stepIndicatorLabelFontSize,
-          color: customStyles.stepIndicatorLabelUnFinishedColor,
-        };
+        // indicatorLabelStyle = {
+        //   overflow: "hidden",
+        //   fontSize: customStyles.stepIndicatorLabelFontSize,
+        //   color: customStyles.stepIndicatorLabelUnFinishedColor,
+        // };
         break;
       }
       default:
     }
 
+    let finishedImage = getStepStatus(position);
+
     return (
       <Animated.View key={'step-indicator'} style={[styles.step, stepStyle]}>
-        <Text style={indicatorLabelStyle}>{`${position + 1}`}</Text>
+        {finishedImage === 'finished' ? (
+          <Image
+            source={icons['check-mark']}
+            style={{ height: 17, width: 17 }}
+            contentFit="contain"
+          />
+        ) : null}
+        {/* <Text style={indicatorLabelStyle}>{`${position + 1}`}</Text> */}
       </Animated.View>
     );
   };

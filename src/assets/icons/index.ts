@@ -53,6 +53,9 @@ export const icons = {
   'new-plus-circle': require('../images/new-plus-circle.png'),
   'candidates-focused': require('../images/cadidates-focused.png'),
   'vacancies-focused': require('../images/vacancies-focused.png'),
+  continue: require('../images/continue.png'),
+  'check-mark': require('../images/check-mark.png'),
+  'arrow-ios-down': require('../images/arrow-ios-down.png'),
 };
 
 export type IconTypes = keyof typeof icons;

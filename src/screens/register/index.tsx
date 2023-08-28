@@ -9,6 +9,7 @@ import { scale } from 'react-native-size-matters';
 import * as z from 'zod';
 
 import { icons } from '@/assets/icons';
+import { IconButton } from '@/components';
 import { ScreenHeader } from '@/components/screen-header';
 import type { Theme } from '@/theme';
 import {
@@ -57,7 +58,7 @@ export const Register = () => {
       <ScreenHeader />
 
       <View flex={1} paddingHorizontal={'large'}>
-        <View height={scale(72)} />
+        <View height={scale(24)} />
         <Image source={icons.logo} contentFit="contain" style={styles.logo} />
         <View paddingTop={'large'}>
           <Text variant={'semiBold24'} color={'black'}>
@@ -94,13 +95,32 @@ export const Register = () => {
         <View height={scale(24)} />
         <Button label="Register" onPress={handleSubmit(onSubmit)} />
 
-        <View flex={1} justifyContent={'center'} alignItems={'center'}>
-          <PressableScale
-            onPress={() => {
-              navigate('RegisterOptions');
-            }}
-          >
-            <Text>Register</Text>
+        <Image
+          source={icons.continue}
+          style={{ height: scale(24), width: '100%', marginTop: scale(24) }}
+          contentFit="contain"
+        />
+
+        <View
+          flexDirection={'row'}
+          alignItems={'center'}
+          justifyContent={'center'}
+          gap={'medium'}
+          marginVertical={'large'}
+        >
+          <IconButton icon="apple" onPress={() => null} color={'grey500'} />
+          <IconButton icon="google" onPress={() => null} color={'grey500'} />
+          <IconButton icon="facebook" onPress={() => null} color={'grey500'} />
+        </View>
+
+        <View paddingVertical={'2xl'} alignSelf={'center'}>
+          <PressableScale onPress={() => navigate('RegisterOptions')}>
+            <Text variant={'regular14'} color={'grey200'}>
+              Haven’t an account?{' '}
+              <Text variant={'semiBold14'} color={'primary'}>
+                Register
+              </Text>
+            </Text>
           </PressableScale>
         </View>
       </View>

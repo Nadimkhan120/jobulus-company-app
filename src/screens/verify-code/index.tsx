@@ -10,6 +10,7 @@ import * as z from 'zod';
 
 import { icons } from '@/assets/icons';
 import { ScreenHeader } from '@/components/screen-header';
+import { useApp } from '@/store/app';
 import type { Theme } from '@/theme';
 import { Button, ControlledInput, Screen, Text, View } from '@/ui';
 
@@ -27,6 +28,8 @@ export const VerifyCode = () => {
   const { colors } = useTheme<Theme>();
   const { navigate } = useNavigation();
 
+  const companyType = useApp((state) => state.companyType);
+
   const { handleSubmit, control } = useForm<VerifyCodeFormType>({
     resolver: zodResolver(schema),
   });
@@ -34,7 +37,11 @@ export const VerifyCode = () => {
   const onSubmit = (data: VerifyCodeFormType) => {
     console.log('data', data);
 
-    navigate('CompanyInformation');
+    if (companyType === 'company') {
+      navigate('CompanyInformation');
+    } else {
+      navigate('AgencyInformation');
+    }
   };
 
   return (
