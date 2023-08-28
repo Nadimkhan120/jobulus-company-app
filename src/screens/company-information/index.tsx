@@ -9,6 +9,7 @@ import * as z from 'zod';
 
 import StepIndicator from '@/components/indicator-2';
 import { ScreenHeader } from '@/components/screen-header';
+import { useSoftKeyboardEffect } from '@/hooks';
 import { useApp } from '@/store/app';
 import type { Theme } from '@/theme';
 import { Button, ControlledInput, Screen, Text, View } from '@/ui';
@@ -35,6 +36,8 @@ export type CompanyInformationFormType = z.infer<typeof schema>;
 export const CompanyInformation = () => {
   const { colors } = useTheme<Theme>();
   const { navigate } = useNavigation();
+
+  useSoftKeyboardEffect();
 
   const companyType = useApp((state) => state?.companyType);
 

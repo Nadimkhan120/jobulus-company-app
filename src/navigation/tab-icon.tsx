@@ -30,7 +30,7 @@ const getIcon = (name) => {
     case Candidates:
       return 'candidates';
     case Settings:
-      return 'more-focused';
+      return 'more';
     default:
       break;
   }

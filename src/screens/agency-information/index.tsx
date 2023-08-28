@@ -10,6 +10,7 @@ import * as z from 'zod';
 import StepIndicator from '@/components/indicator-2';
 import { RadioButton } from '@/components/radiobutton';
 import { ScreenHeader } from '@/components/screen-header';
+import { useSoftKeyboardEffect } from '@/hooks';
 import type { Theme } from '@/theme';
 import { Button, ControlledInput, Screen, Text, View } from '@/ui';
 import { DescriptionField } from '@/ui/description-field';
@@ -35,6 +36,8 @@ export type AgencyInformationFormType = z.infer<typeof schema>;
 export const AgencyInformation = () => {
   const { colors } = useTheme<Theme>();
   const { navigate } = useNavigation();
+
+  useSoftKeyboardEffect();
 
   const [isAgency, setIsAgency] = useState<boolean>(true);
   const [single, setSingle] = useState<boolean>(false);

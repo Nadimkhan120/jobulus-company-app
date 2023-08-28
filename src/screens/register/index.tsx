@@ -11,6 +11,7 @@ import * as z from 'zod';
 import { icons } from '@/assets/icons';
 import { IconButton } from '@/components';
 import { ScreenHeader } from '@/components/screen-header';
+import { useSoftKeyboardEffect } from '@/hooks';
 import type { Theme } from '@/theme';
 import {
   Button,
@@ -42,6 +43,7 @@ export type RegisterFormType = z.infer<typeof schema>;
 export const Register = () => {
   const { colors } = useTheme<Theme>();
   const { navigate } = useNavigation();
+  useSoftKeyboardEffect();
 
   const { handleSubmit, control } = useForm<RegisterFormType>({
     resolver: zodResolver(schema),
