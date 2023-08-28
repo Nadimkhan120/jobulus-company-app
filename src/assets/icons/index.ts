@@ -48,6 +48,11 @@ export const icons = {
   filter: require('../images/filter.png'),
   swap: require('../images/swap.png'),
   payment: require('../images/payment.png'),
+  'home-focused': require('../images/home-focused.png'),
+  'more-focused': require('../images/more-focused.png'),
+  'new-plus-circle': require('../images/new-plus-circle.png'),
+  'candidates-focused': require('../images/cadidates-focused.png'),
+  'vacancies-focused': require('../images/vacancies-focused.png'),
 };
 
 export type IconTypes = keyof typeof icons;
