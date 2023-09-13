@@ -57,21 +57,6 @@ export const UserItem = ({ data, onPress, onOptionPress }: UserItemProps) => {
           <Text variant={'regular13'} marginVertical={'tiny'} color={'grey100'}>
             nadeem@gmail.com
           </Text>
-
-          {/* {showStatus ? (
-            <View flexDirection={"row"} marginVertical={"tiny"}>
-              <View>
-                <Text variant={"semiBold12"} style={{ color: data?.color }}>
-                  {data?.status}.{" "}
-                </Text>
-              </View>
-              <View>
-                <Text variant={"regular12"} color={"grey200"}>
-                  {data?.time}
-                </Text>
-              </View>
-            </View>
-          ) : null} */}
         </View>
       </View>
     </PressableScale>
