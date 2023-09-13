@@ -5,7 +5,6 @@ import React from 'react';
 import { forwardRef } from 'react';
 
 import { BottomBackdrop } from './components/bottom-backdrop';
-import { BottomSheetHandle } from './components/bottom-sheet-handle';
 
 export const BottomModal = forwardRef(
   (
@@ -15,7 +14,7 @@ export const BottomModal = forwardRef(
     return (
       <BottomSheetModal
         ref={ref}
-        handleComponent={BottomSheetHandle}
+        // handleComponent={BottomSheetHandle}
         enablePanDownToClose
         keyboardBlurBehavior="restore"
         backdropComponent={BottomBackdrop}

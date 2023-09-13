@@ -18,7 +18,7 @@ const Header = () => {
       <View
         alignSelf={'center'}
         style={{
-          marginTop: -scale(28),
+          marginTop: -scale(30),
         }}
       >
         <Avatar source={icons['avatar-2']} size="large" />

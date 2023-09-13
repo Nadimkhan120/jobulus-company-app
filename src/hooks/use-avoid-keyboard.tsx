@@ -11,10 +11,10 @@ export const useSoftKeyboardEffect = () => {
     AvoidSoftInput.setShouldMimicIOSBehavior(true);
     AvoidSoftInput.setEnabled(true);
     // AvoidSoftInput.setAvoidOffset(30);
-    AvoidSoftInput.setShowAnimationDelay(0);
-    AvoidSoftInput.setShowAnimationDuration(150);
-    AvoidSoftInput.setHideAnimationDuration(150);
-    AvoidSoftInput.setHideAnimationDelay(0);
+    AvoidSoftInput.setShowAnimationDelay(600);
+    AvoidSoftInput.setShowAnimationDuration(600);
+    AvoidSoftInput.setHideAnimationDuration(600);
+    AvoidSoftInput.setHideAnimationDelay(600);
     return () => {
       AvoidSoftInput.setAvoidOffset(0);
       AvoidSoftInput.setEnabled(false);

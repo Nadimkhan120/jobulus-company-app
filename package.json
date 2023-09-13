@@ -58,6 +58,7 @@
     "react-native-step-indicator": "^1.0.3",
     "react-native-svg": "^13.12.0",
     "react-native-tab-view": "^3.5.2",
+    "rn-tinder-card": "^1.6.0",
     "victory-native": "^36.6.11",
     "yarn": "^1.22.19",
     "zod": "^3.22.2",

@@ -66,6 +66,7 @@ const JobDetail = () => {
                   key={index}
                   data={item}
                   onPress={() => navigate('Job')}
+                  onOptionPress={() => null}
                 />
               );
             })}

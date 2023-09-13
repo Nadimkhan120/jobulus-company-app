@@ -18,9 +18,15 @@ type ApplicantListProps = {
   };
   showStatus?: boolean;
   onPress: () => void;
+  onOptionPress: () => void;
 };
 
-const ApplicantList = ({ data, showStatus, onPress }: ApplicantListProps) => {
+const ApplicantList = ({
+  data,
+  showStatus,
+  onPress,
+  onOptionPress,
+}: ApplicantListProps) => {
   return (
     <PressableScale onPress={onPress}>
       <View
@@ -44,7 +50,7 @@ const ApplicantList = ({ data, showStatus, onPress }: ApplicantListProps) => {
             <Text variant={'semiBold14'} color={'black'}>
               {data?.title}
             </Text>
-            <PressableScale>
+            <PressableScale onPress={() => onOptionPress?.()}>
               <Image
                 source={icons['more-horizontal']}
                 style={style.dot}

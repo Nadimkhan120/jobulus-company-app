@@ -38,7 +38,7 @@ export const Root = () => {
     >
       {isFirstTime ? (
         <Stack.Screen name="Onboarding" component={Onboarding} />
-      ) : status === 'signOut' ? (
+      ) : status === 'signIn' ? (
         <Stack.Screen name="Auth" component={AuthNavigator} />
       ) : (
         <Stack.Screen name="App" component={AppNavigator} />

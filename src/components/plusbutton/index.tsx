@@ -42,7 +42,7 @@ const PlusButton = () => {
             <Image
               source={icons.pluss}
               style={style.image}
-              resizeMode="contain"
+              contentFit="contain"
             />
           </View>
           <View flexDirection={'column'}>

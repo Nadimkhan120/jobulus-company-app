@@ -65,22 +65,23 @@ export const Settings = () => {
             <SettingsItem
               icon="company-page"
               title="Company Page"
-              onPress={() => null}
+              onPress={() => navigation.navigate('CompanyDetail')}
             />
             <SettingsItem
               icon="person"
               title="User Management"
-              onPress={() => null}
+              onPress={() => navigation.navigate('Users')}
             />
-            <SettingsItem
-              icon="person"
-              title="Recruitment Process"
-              onPress={() => null}
-            />
+            {/* <SettingsItem icon="person" title="Recruitment Process" onPress={() => null} /> */}
             <SettingsItem
               icon="person"
               title="JD Library"
-              onPress={() => null}
+              onPress={() => navigation.navigate('JdLibrary')}
+            />
+            <SettingsItem
+              icon="person"
+              title="My Account"
+              onPress={() => navigation.navigate('MyAccount')}
             />
             <SettingsItem
               icon="credit-card"
@@ -90,7 +91,7 @@ export const Settings = () => {
             <SettingsItem
               icon="settings"
               title="Settings"
-              onPress={() => null}
+              onPress={() => navigation.navigate('UserSettings')}
             />
           </View>
         </ScrollView>
@@ -101,7 +102,7 @@ export const Settings = () => {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    paddingBottom: scale(60),
+    paddingBottom: scale(160),
   },
 });
 

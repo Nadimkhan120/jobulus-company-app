@@ -16,6 +16,7 @@ type TRule = Omit<
 >;
 
 export type RuleType<T> = { [name in keyof T]: TRule };
+
 export type InputControllerType<T extends FieldValues> = {
   name: Path<T>;
   control: Control<T>;

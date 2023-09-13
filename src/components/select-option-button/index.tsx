@@ -13,6 +13,7 @@ type SelectOptionButtonProps = {
   icon: IconTypes;
   selectedText: string;
   onPress: () => void;
+  error?: string;
 };
 
 export const SelectOptionButton = ({
@@ -21,6 +22,7 @@ export const SelectOptionButton = ({
   icon,
   selectedText,
   onPress,
+  error,
 }: SelectOptionButtonProps) => {
   return (
     <View>
@@ -49,6 +51,12 @@ export const SelectOptionButton = ({
           <Image source={icons[icon]} style={styles.icon} />
         </View>
       </PressableScale>
+
+      {error && (
+        <Text variant={'regular14'} paddingTop={'small'} color={'error'}>
+          {error}
+        </Text>
+      )}
     </View>
   );
 };

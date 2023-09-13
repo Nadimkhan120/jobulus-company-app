@@ -18,9 +18,10 @@ type VecanciesListProps = {
     expiryDate: string;
     color: string;
   };
+  onOptionPress: () => void;
 };
 
-const VecanciesList = ({ data }: VecanciesListProps) => {
+const VecanciesList = ({ data, onOptionPress }: VecanciesListProps) => {
   const navigation = useNavigation();
 
   const goToJobDetail = () => {
@@ -44,10 +45,12 @@ const VecanciesList = ({ data }: VecanciesListProps) => {
           <Text variant={'medium14'} color={'black'}>
             {data?.title}
           </Text>
-          <Image
-            source={icons['more-horizontal']}
-            style={{ height: scale(24), width: scale(24) }}
-          />
+          <PressableScale onPress={() => onOptionPress?.()}>
+            <Image
+              source={icons['more-horizontal']}
+              style={{ height: scale(24), width: scale(24) }}
+            />
+          </PressableScale>
         </View>
         <View flexDirection={'row'} paddingTop={'tiny'} alignItems={'center'}>
           <Text variant={'medium12'} color={'grey200'}>

@@ -121,14 +121,12 @@ const StepIndicator = ({
     setCustomStyles({ ...customStyles, ...customStylesFromProps });
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(effectCustomStyles, [customStylesFromProps]);
 
   const effectCurrentPosition = () => {
     onCurrentPositionChanged(currentPosition);
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(effectCurrentPosition, [currentPosition, progressBarSize]);
 
   const renderProgressBarBackground = () => {

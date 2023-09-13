@@ -4,12 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Text } from '@/ui';
 
-// import { MotiText, TransitionConfig } from "moti";
 import TabBarIcon from './tab-icon';
-// import { scale } from "react-native-size-matters";
-
-// const Transition: TransitionConfig = { type: "timing", duration: 400 };
-// const fromAnimation = { opacity: 1, scale: 0.9 };
 
 export function AppBottomTab({ state, descriptors, navigation }: any) {
   const insets = useSafeAreaInsets();
@@ -34,7 +29,11 @@ export function AppBottomTab({ state, descriptors, navigation }: any) {
           });
 
           if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
+            if (route?.name === 'AddPost') {
+              navigation.navigate('Postjob');
+            } else {
+              navigation.navigate(route.name);
+            }
           }
         };
 
@@ -58,19 +57,6 @@ export function AppBottomTab({ state, descriptors, navigation }: any) {
           >
             <View style={styles.tabStyle}>
               <TabBarIcon name={label.toLowerCase()} focused={isFocused} />
-              {/* <MotiText
-                style={[
-                  isFocused ? styles.focusedLabelStyle : styles.labelStyle,
-                  { color: isFocused ? "black" : "grey" }, // Color change
-                ]}
-                from={fromAnimation}
-                animate={{
-                  scale: isFocused ? 1 : 0.9,
-                }}
-                transition={Transition}
-              >
-                {label}
-              </MotiText> */}
               <Text variant={'regular12'} fontWeight={'400'}>
                 {label}
               </Text>
@@ -117,5 +103,3 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 });
-
-// AppBottomTab.js

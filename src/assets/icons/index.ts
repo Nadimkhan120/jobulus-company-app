@@ -56,6 +56,8 @@ export const icons = {
   continue: require('../images/continue.png'),
   'check-mark': require('../images/check-mark.png'),
   'arrow-ios-down': require('../images/arrow-ios-down.png'),
+  'master-card': require('../images/master-card.png'),
+  'success-icon': require('../images/success-icon.png'),
 };
 
 export type IconTypes = keyof typeof icons;

@@ -54,18 +54,13 @@ const getIconFocused = (name) => {
   }
 };
 
-const TabBarIcon = ({
-  color,
-  name,
-  focused,
-  size = scale(18),
-}: TabBarIconProps) => {
+const TabBarIcon = ({ name, focused, size = scale(18) }: TabBarIconProps) => {
   return (
     <Image
       style={{
         width: size,
         height: size,
-        tintColor: color,
+        //tintColor: color,
       }}
       // @ts-ignore
       source={focused ? icons[getIconFocused(name)] : icons[getIcon(name)]}

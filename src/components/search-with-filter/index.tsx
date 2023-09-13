@@ -1,5 +1,4 @@
 import React from 'react';
-import {} from 'react-native';
 
 import { SearchField } from '@/components/search-field';
 import { View } from '@/ui';
@@ -30,7 +29,7 @@ export const SearchWithFilter = ({
 
       <ImageButton icon="filter" backgroundColor={'black'} onPress={onFilter} />
       {onSwap ? (
-        <ImageButton icon="swap" backgroundColor={'black'} onPress={onFilter} />
+        <ImageButton icon="swap" backgroundColor={'black'} onPress={onSwap} />
       ) : null}
     </View>
   );

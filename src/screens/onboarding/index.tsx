@@ -1,3 +1,4 @@
+import { useTheme } from '@shopify/restyle';
 import { Image } from 'expo-image';
 import React, { useCallback, useRef, useState } from 'react';
 import {} from 'react-native';
@@ -5,6 +6,7 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import { scale } from 'react-native-size-matters';
 
 import { useIsFirstTime } from '@/hooks';
+import type { Theme } from '@/theme';
 import { Button, Screen, Text, View } from '@/ui';
 
 import { Slides } from './slides';
@@ -63,8 +65,10 @@ const _renderPagination = (activeIndex) => {
 };
 
 export const Onboarding = () => {
+  const { colors } = useTheme<Theme>();
   const [_, setIsFirstTime] = useIsFirstTime();
   const [activeIndex, setActiveIndex] = useState<number>(0);
+
   const ref = useRef(undefined);
 
   const handleButtonPress = useCallback(() => {
@@ -77,7 +81,7 @@ export const Onboarding = () => {
   }, [activeIndex, setIsFirstTime]);
 
   return (
-    <Screen>
+    <Screen edges={['top']} backgroundColor={colors.white}>
       <View
         paddingHorizontal={'large'}
         paddingTop={'4xl'}

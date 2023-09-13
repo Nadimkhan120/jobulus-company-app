@@ -3,6 +3,7 @@ import { FlatList } from 'react-native';
 import { scale } from 'react-native-size-matters';
 
 import { Text, View } from '@/ui';
+
 const skills = [
   { name: 'MongoDB' },
   { name: 'ReactJs' },
@@ -10,6 +11,7 @@ const skills = [
   { name: 'My SQL' },
   { name: 'My SQL' },
 ];
+
 const Tags = () => {
   return (
     <FlatList
