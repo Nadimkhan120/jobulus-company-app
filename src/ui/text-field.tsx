@@ -24,7 +24,7 @@ export const TextField = React.forwardRef<TextInput, NInputProps>(
     const theme = useTheme<Theme>();
 
     const [isFocussed, setIsFocussed] = React.useState(false);
-    const [showPassword, setShowPassword] = React.useState(false);
+    const [showPassword, setShowPassword] = React.useState(isSecure);
 
     const onBlur = React.useCallback(() => setIsFocussed(false), []);
     const onFocus = React.useCallback(() => setIsFocussed(true), []);

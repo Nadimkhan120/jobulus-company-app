@@ -10,6 +10,7 @@ import {
   EditCompany,
   JdLibrary,
   JdLibraryDetail,
+  JobDescription,
   JobPosted,
   LoginAndSecurity,
   MyAccount,
@@ -35,10 +36,10 @@ import { TabNavigator } from './tab-navigator';
 export type AppStackParamList = {
   TabNavigator: undefined;
   Details: { id: number };
-  Job: undefined;
+  Job: { id: string };
   Payments: undefined;
-  Applicants: undefined;
-  jobDetail: undefined;
+  Applicants: { data: any };
+  jobDetail: { id: null };
   CandidateProfile: undefined;
   PaymentMethods: undefined;
   MyPayments: undefined;
@@ -61,6 +62,7 @@ export type AppStackParamList = {
   AddUser: undefined;
   Roles: undefined;
   AddRole: undefined;
+  JobDescription: undefined;
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -103,6 +105,7 @@ export const AppNavigator = () => {
         <Stack.Screen name="AddUser" component={AddUser} />
         <Stack.Screen name="Roles" component={Roles} />
         <Stack.Screen name="AddRole" component={AddRole} />
+        <Stack.Screen name="JobDescription" component={JobDescription} />
       </Stack.Group>
     </Stack.Navigator>
   );

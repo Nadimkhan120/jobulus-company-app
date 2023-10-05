@@ -12,6 +12,7 @@ import { icons } from '@/assets/icons';
 import { IconButton } from '@/components';
 import { ScreenHeader } from '@/components/screen-header';
 import { useSoftKeyboardEffect } from '@/hooks';
+import { useRegisterCompany } from '@/services/api/auth/register-company';
 import type { Theme } from '@/theme';
 import {
   Button,
@@ -21,11 +22,14 @@ import {
   Text,
   View,
 } from '@/ui';
+import { showErrorMessage } from '@/utils';
 
 const schema = z.object({
-  fullName: z.string({
-    required_error: 'Full name is required',
-  }),
+  fullName: z
+    .string({
+      required_error: 'Full name is required',
+    })
+    .min(6, 'Full name must be at least 6 characters'),
   email: z
     .string({
       required_error: 'Email is required',
@@ -35,7 +39,10 @@ const schema = z.object({
     .string({
       required_error: 'Password is required',
     })
-    .min(6, 'Password must be at least 6 characters'),
+    .regex(
+      /^(?=.*[0-9])(?=.*\W)(?!.* ).{10,16}$/,
+      'Password must be at least 10 characters and one specail character'
+    ),
 });
 
 export type RegisterFormType = z.infer<typeof schema>;
@@ -43,16 +50,42 @@ export type RegisterFormType = z.infer<typeof schema>;
 export const Register = () => {
   const { colors } = useTheme<Theme>();
   const { navigate } = useNavigation();
+
   useSoftKeyboardEffect();
+
+  const { mutate: registerApi, isLoading } = useRegisterCompany();
 
   const { handleSubmit, control } = useForm<RegisterFormType>({
     resolver: zodResolver(schema),
   });
 
   const onSubmit = (data: RegisterFormType) => {
-    console.log('data', data);
+    registerApi(
+      {
+        email: data?.email,
+        password: data?.password,
+        password_confirmation: data?.password,
+        full_name: data?.fullName,
+      },
+      {
+        onSuccess: (responseData) => {
+          console.log('data', JSON.stringify(responseData, null, 2));
 
-    navigate('VerifyCode');
+          if (responseData?.response?.status === 200) {
+            navigate('VerifyCode', {
+              email: data?.email,
+              password: data?.password,
+            });
+          } else {
+            showErrorMessage(responseData.response.message);
+          }
+        },
+        onError: (error) => {
+          //@ts-ignore
+          showErrorMessage(error?.response?.data?.message);
+        },
+      }
+    );
   };
 
   return (
@@ -95,7 +128,11 @@ export const Register = () => {
           />
         </View>
         <View height={scale(24)} />
-        <Button label="Register" onPress={handleSubmit(onSubmit)} />
+        <Button
+          label="Register"
+          onPress={handleSubmit(onSubmit)}
+          loading={isLoading}
+        />
 
         <Image
           source={icons.continue}

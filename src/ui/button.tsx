@@ -58,18 +58,31 @@ export const Button = ({
 }: Props) => {
   // @ts-ignore
   const props = useRestyle(restyleFunctions, { ...rest, variant });
+
   const BaseButton = () => {
     return (
       <ButtonContainer {...props}>
         {loading ? (
           <ActivityIndicator
             size="small"
-            color={variant === 'primary' ? 'white' : 'primary'}
+            color={
+              variant === 'primary'
+                ? 'white'
+                : variant === 'error'
+                ? 'error'
+                : 'primary'
+            }
           />
         ) : (
           <Text
             {...buttonTextProps}
-            color={variant === 'primary' ? 'white' : 'primary'}
+            color={
+              variant === 'primary'
+                ? 'white'
+                : variant === 'error'
+                ? 'error'
+                : 'primary'
+            }
             variant={'medium16'}
           >
             {label}
@@ -80,7 +93,7 @@ export const Button = ({
   };
 
   return (
-    <PressableScale onPress={onPress}>
+    <PressableScale onPress={onPress} disabled={loading}>
       <BaseButton />
     </PressableScale>
   );

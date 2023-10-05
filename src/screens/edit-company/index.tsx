@@ -1,9 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '@shopify/restyle';
 import { Image } from 'expo-image';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-//import { useNavigation } from "@react-navigation/native";
 import { ScrollView, StyleSheet, useWindowDimensions } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import * as z from 'zod';
@@ -12,9 +12,13 @@ import { icons } from '@/assets/icons';
 import { CompanyButton } from '@/components/company-button';
 import { ScreenHeader } from '@/components/screen-header';
 import { useSoftKeyboardEffect } from '@/hooks';
+import { queryClient } from '@/services/api/api-provider';
+import { useCompanies, useEditCompany } from '@/services/api/company';
+import { useUser } from '@/store/user';
 import type { Theme } from '@/theme';
 import { Button, ControlledInput, Screen, View } from '@/ui';
 import { DescriptionField } from '@/ui/description-field';
+import { showErrorMessage, showSuccessMessage } from '@/utils';
 
 const schema = z.object({
   companyName: z.string({
@@ -28,24 +32,93 @@ const schema = z.object({
   phone: z.string({
     required_error: 'phone is required',
   }),
+
+  website: z.string({
+    required_error: 'Website is required',
+  }),
+  bio: z.string({
+    required_error: 'Bio is required',
+  }),
+  employees: z.string().optional(),
+  wage: z.string().optional(),
+  address: z.string().optional(),
+  city: z.string().optional(),
+  country: z.string().optional(),
+  postalCode: z.string().optional(),
+  location: z.string().optional(),
+  facebook: z.string().optional(),
+  instgram: z.string().optional(),
+  whatsapp: z.string().optional(),
 });
 
 export type EditCompanyFormType = z.infer<typeof schema>;
 
 export const EditCompany = () => {
   const { colors } = useTheme<Theme>();
-  //const navigation = useNavigation();
+  const { goBack } = useNavigation();
 
   const { width } = useWindowDimensions();
 
   useSoftKeyboardEffect();
 
+  const company = useUser((state) => state?.company);
+
+  const { mutate: editCompanyApi, isLoading } = useEditCompany();
+
   const { handleSubmit, control } = useForm<EditCompanyFormType>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      companyName: company?.name,
+      email: company?.email,
+    },
   });
 
   const onSubmit = (data: EditCompanyFormType) => {
-    console.log('data', data);
+    editCompanyApi(
+      {
+        name: data?.companyName,
+        email: data?.email,
+        contact_number: data?.phone,
+        no_of_employees: parseInt(data?.employees),
+        start_time: '9 am',
+        end_time: '6 pm',
+        average_wage: parseInt(data?.wage),
+        languages: [1, 2],
+        categories: [1, 2],
+        company_id: company?.id,
+        short_description: data?.bio,
+        locations: {
+          address_1: data?.address,
+          address_2: '',
+          city_id: '1',
+          country_id: '1',
+          phone: data?.phone,
+          email: data?.email,
+          website: data?.website,
+          web_location: '',
+          longitude: '0.00000',
+          latitude: '0.0000',
+          google_location: data?.location,
+        },
+      },
+      {
+        onSuccess: (responseData) => {
+          console.log('responseData', JSON.stringify(responseData, null, 2));
+
+          if (responseData?.status === 200) {
+            showSuccessMessage(responseData?.message ?? '');
+            queryClient.invalidateQueries(useCompanies.getKey());
+            goBack();
+          } else {
+            showErrorMessage(responseData?.message ?? '');
+          }
+        },
+        onError: (error) => {
+          //@ts-ignore
+          showErrorMessage(error?.response?.data?.message ?? '');
+        },
+      }
+    );
   };
 
   return (
@@ -93,12 +166,12 @@ export const EditCompany = () => {
             name="email"
           />
 
-          <ControlledInput
+          {/* <ControlledInput
             placeholder="Enter email address"
             label="Email"
             control={control}
             name="email"
-          />
+          /> */}
 
           <ControlledInput
             placeholder="Enter contact number"
@@ -110,78 +183,82 @@ export const EditCompany = () => {
             placeholder="Enter website"
             label="Website"
             control={control}
-            name="phone"
+            name="website"
           />
           <DescriptionField
             placeholder="Enter bio"
             label="Bio"
             control={control}
-            name="phone"
+            name="bio"
           />
           <ControlledInput
             placeholder="Enter how many employees you have."
             label="Number Employess"
             control={control}
-            name="phone"
+            name="employees"
           />
           <ControlledInput
             placeholder="Enter average wage"
             label="Average"
             control={control}
-            name="phone"
+            name="wage"
           />
           <ControlledInput
             placeholder="Enter address"
             label="Address"
             control={control}
-            name="phone"
+            name="address"
           />
           <ControlledInput
             placeholder="Enter city"
             label="City"
             control={control}
-            name="phone"
+            name="city"
           />
           <ControlledInput
             placeholder="Enter country"
             label="Country"
             control={control}
-            name="phone"
+            name="country"
           />
           <ControlledInput
             placeholder="Enter postal code"
             label="Postal code"
             control={control}
-            name="phone"
+            name="postalCode"
           />
           <ControlledInput
             placeholder="Enter location."
             label="Location"
             control={control}
-            name="phone"
+            name="location"
           />
           <ControlledInput
             placeholder="Enter facebook"
             label="Facebook"
             control={control}
-            name="phone"
+            name="facebook"
           />
           <ControlledInput
             placeholder="Enter instagram"
             label="Instgram"
             control={control}
-            name="phone"
+            name="instgram"
           />
           <ControlledInput
             placeholder="Enter whatsapp."
             label="Whatsapp"
             control={control}
-            name="phone"
+            name="whatsapp"
           />
         </View>
         <View height={scale(24)} />
         <View flex={1} justifyContent={'flex-end'} paddingHorizontal={'large'}>
-          <Button label="Update" onPress={handleSubmit(onSubmit)} />
+          <Button
+            label="Update"
+            onPress={handleSubmit(onSubmit)}
+            loading={isLoading}
+          />
         </View>
       </ScrollView>
     </Screen>

@@ -6,19 +6,7 @@ import { scale } from 'react-native-size-matters';
 import { palette } from '@/theme';
 import { Text, View } from '@/ui';
 
-const data = [
-  { label: 'Item 1', value: '1' },
-  { label: 'Item 2', value: '2' },
-  { label: 'Item 3', value: '3' },
-  { label: 'Item 4', value: '4' },
-  { label: 'Item 5', value: '5' },
-  { label: 'Item 6', value: '6' },
-  { label: 'Item 7', value: '7' },
-  { label: 'Item 8', value: '8' },
-];
-
-const SelectionBox = ({ placeholder, label }: any) => {
-  const [value, setValue] = useState<string | null>(null);
+const SelectionBox = ({ placeholder, label, data, onChange }: any) => {
   const [isFocus, setIsFocus] = useState(false);
 
   return (
@@ -35,17 +23,21 @@ const SelectionBox = ({ placeholder, label }: any) => {
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
           iconStyle={styles.iconStyle}
-          data={data}
+          data={data ?? []}
           maxHeight={300}
-          labelField="label"
-          valueField="value"
+          //@ts-ignore
+          labelField="name"
+          //@ts-ignore
+          valueField="id"
           dropdownPosition="auto"
           placeholder={!isFocus ? placeholder : '...'}
-          value={value}
+          //value={value}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
           onChange={(item) => {
-            setValue(item.value);
+            //@ts-ignore
+
+            onChange?.(item);
             setIsFocus(false);
           }}
         />

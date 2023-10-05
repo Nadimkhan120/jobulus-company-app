@@ -1,30 +1,37 @@
 import type { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { BottomSheetFooter, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
+import { FlashList } from '@shopify/flash-list';
 import { useTheme } from '@shopify/restyle';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import React, { useCallback, useMemo, useRef } from 'react';
+import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scale } from 'react-native-size-matters';
 
+import ActivityIndicator from '@/components/activity-indicator';
 import { BottomModal } from '@/components/bottom-modal';
 import SelectionBox from '@/components/drop-down';
-import { ScrollMenu } from '@/components/scroll-menu';
 import { SearchWithFilter } from '@/components/search-with-filter';
-import { data } from '@/constants/applicant-list';
+import { useCandidates } from '@/services/api/candidate';
+import { useUser } from '@/store/user';
 import type { Theme } from '@/theme';
 import { Button, Screen, Text, View } from '@/ui';
 
-import ApplicantList from '../applicants/applicants-list';
-
-const menu = ['All', 'Recent', 'Step1', 'Step2', 'Hired'];
+import PersonItem from './candidate-item';
 
 export const Candidates = () => {
   const { colors } = useTheme<Theme>();
   const { navigate } = useNavigation();
   const { bottom } = useSafeAreaInsets();
 
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const company = useUser((state) => state?.company);
+
+  const { data, isLoading } = useCandidates({
+    variables: {
+      id: company?.id,
+      statusId: 1,
+    },
+  });
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -45,16 +52,17 @@ export const Candidates = () => {
     console.log('index', index);
   }, []);
 
-  const renderItem = ({ item }: any) => (
-    <ApplicantList
-      onPress={() => navigate('Job')}
-      showStatus={false}
-      data={item}
-      onOptionPress={() => null}
-    />
-  );
+  const renderItem = ({ item }) => {
+    return (
+      <PersonItem
+        data={item}
+        onPress={() => navigate('Job', { id: item?.unique_id })}
+        onOptionPress={handlePresentModalPress}
+      />
+    );
+  };
 
-  // renders
+  // render footer
   const renderFooter = useCallback(
     (props) => (
       <BottomSheetFooter {...props} bottomInset={bottom}>
@@ -94,22 +102,33 @@ export const Candidates = () => {
         onSwap={() => navigate('CandidateProfile')}
       />
 
-      <ScrollMenu
-        selectedIndex={selectedIndex}
-        data={menu}
-        onChangeMenu={(index) => {
-          setSelectedIndex(index);
-        }}
-      />
-
-      <View height={scale(10)} backgroundColor={'grey500'} />
-      <View flex={1} backgroundColor={'grey500'}>
-        <FlatList
-          data={data}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItem}
-        />
-      </View>
+      {isLoading ? (
+        <View
+          flex={1}
+          height={scale(300)}
+          justifyContent={'center'}
+          alignItems={'center'}
+        >
+          <ActivityIndicator size={'large'} />
+        </View>
+      ) : (
+        <View flex={1} backgroundColor={'white'} paddingTop={'large'}>
+          <FlashList
+            data={data?.response?.data?.data}
+            renderItem={renderItem}
+            estimatedItemSize={150}
+            ListEmptyComponent={
+              <View
+                height={scale(300)}
+                justifyContent={'center'}
+                alignItems={'center'}
+              >
+                <Text>No Cadidates Found</Text>
+              </View>
+            }
+          />
+        </View>
+      )}
 
       <BottomModal
         ref={bottomSheetModalRef}

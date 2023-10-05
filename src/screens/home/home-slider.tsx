@@ -2,11 +2,21 @@ import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { scale } from 'react-native-size-matters';
 
+import { useTopVacancies } from '@/services/api/vacancies';
+import { useUser } from '@/store/user';
 import { PressableScale, Text, View } from '@/ui';
 
 import { HomeSliderItem } from './slider-item';
 
 export const HomeSliderContainer = ({}) => {
+  const company = useUser((state) => state?.company);
+
+  const { data } = useTopVacancies({
+    variables: {
+      id: company?.id,
+    },
+  });
+
   return (
     <View backgroundColor={'secondary'} paddingTop={'large'}>
       <View
@@ -34,8 +44,8 @@ export const HomeSliderContainer = ({}) => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.container}
       >
-        {[0, 1, 2, 3, 4, 5].map((element, index) => {
-          return <HomeSliderItem key={index} />;
+        {data?.response?.data?.map((element, index) => {
+          return <HomeSliderItem data={element} key={index} />;
         })}
       </ScrollView>
     </View>

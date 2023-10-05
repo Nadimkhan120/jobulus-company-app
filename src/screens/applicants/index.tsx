@@ -4,9 +4,9 @@ import {
   BottomSheetFooter,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from '@shopify/restyle';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scale } from 'react-native-size-matters';
@@ -14,16 +14,14 @@ import { scale } from 'react-native-size-matters';
 import { BottomModal } from '@/components/bottom-modal';
 import SelectionBox from '@/components/drop-down';
 import { ScreenHeader } from '@/components/screen-header';
-import { ScrollMenu } from '@/components/scroll-menu';
 import { SearchWithFilter } from '@/components/search-with-filter';
 import { SelectModalItem } from '@/components/select-modal-item';
-import { data } from '@/constants/applicant-list';
 import type { Theme } from '@/theme';
 import { Button, Screen, Text, View } from '@/ui';
 
 import ApplicantList from './applicants-list';
 
-const menu = ['All', 'Recent', 'Step1', 'Step2', 'Hired'];
+//const menu = ['All', 'Recent', 'Step1', 'Step2', 'Hired'];
 
 const data2 = [
   {
@@ -41,7 +39,9 @@ const Applicants = () => {
   const { navigate } = useNavigation();
   const { bottom } = useSafeAreaInsets();
 
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const route = useRoute();
+
+  //const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const bottomSheetOptionsModalRef = useRef<BottomSheetModal>(null);
@@ -89,7 +89,7 @@ const Applicants = () => {
 
   const renderApplicantsItem = ({ item }: any) => (
     <ApplicantList
-      onPress={() => navigate('Job')}
+      onPress={() => navigate('Job', { id: item?.unique_id })}
       showStatus={true}
       data={item}
       onOptionPress={handlePresentOptionsModalPress}
@@ -121,23 +121,23 @@ const Applicants = () => {
       <ScreenHeader title="Applicants" showBorder={true} />
       <SearchWithFilter onFilter={handlePresentModalPress} />
 
-      <ScrollMenu
+      {/* <ScrollMenu
         selectedIndex={selectedIndex}
         data={menu}
         onChangeMenu={(index) => {
           setSelectedIndex(index);
         }}
-      />
+      /> */}
 
-      <View height={scale(10)} backgroundColor={'grey500'} />
+      {/* <View height={scale(10)} backgroundColor={"grey500"} /> */}
       <View flex={1} backgroundColor={'grey500'}>
         <FlatList
-          data={data}
+          // @ts-ignore
+          data={route?.params?.data}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderApplicantsItem}
         />
       </View>
-
       <BottomModal
         ref={bottomSheetOptionsModalRef}
         index={0}

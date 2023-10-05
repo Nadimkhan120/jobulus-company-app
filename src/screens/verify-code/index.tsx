@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from '@shopify/restyle';
 import { Image } from 'expo-image';
 import React from 'react';
@@ -10,9 +10,12 @@ import * as z from 'zod';
 
 import { icons } from '@/assets/icons';
 import { ScreenHeader } from '@/components/screen-header';
+import { useVerifyEmail } from '@/services/api/auth/verify-email';
 import { useApp } from '@/store/app';
+import { setUserToken } from '@/store/auth';
 import type { Theme } from '@/theme';
 import { Button, ControlledInput, Screen, Text, View } from '@/ui';
+import { showErrorMessage } from '@/utils';
 
 const schema = z.object({
   code: z
@@ -27,21 +30,43 @@ export type VerifyCodeFormType = z.infer<typeof schema>;
 export const VerifyCode = () => {
   const { colors } = useTheme<Theme>();
   const { navigate } = useNavigation();
+  const route = useRoute<any>();
 
   const companyType = useApp((state) => state.companyType);
+
+  const { mutate: verifyEmailApi, isLoading } = useVerifyEmail();
 
   const { handleSubmit, control } = useForm<VerifyCodeFormType>({
     resolver: zodResolver(schema),
   });
 
   const onSubmit = (data: VerifyCodeFormType) => {
-    console.log('data', data);
-
-    if (companyType === 'company') {
-      navigate('CompanyInformation');
-    } else {
-      navigate('AgencyInformation');
-    }
+    verifyEmailApi(
+      {
+        email: route?.params?.email,
+        verification_code: data?.code,
+        password: route?.params?.password,
+      },
+      {
+        onSuccess: (data) => {
+          console.log('data', JSON.stringify(data, null, 2));
+          if (data?.response?.status === 200) {
+            setUserToken(data?.response?.data?.token);
+            if (companyType === 'company') {
+              navigate('CompanyInformation');
+            } else {
+              navigate('AgencyInformation');
+            }
+          } else {
+            showErrorMessage(data.response.message);
+          }
+        },
+        onError: (error) => {
+          // An error happened!
+          console.log(`rolling back optimistic update with id ${error}`);
+        },
+      }
+    );
   };
 
   return (
@@ -69,7 +94,7 @@ export const VerifyCode = () => {
               color={'grey100'}
             >
               Enter your verification code from your email that we’ve sent at:{' '}
-              <Text color={'primary'}>rifat.ux@gmail.com</Text>
+              <Text color={'primary'}>{route?.params?.email}</Text>
             </Text>
           </View>
         </View>
@@ -86,7 +111,11 @@ export const VerifyCode = () => {
           <View height={scale(8)} />
         </View>
         <View height={scale(24)} />
-        <Button label="Verify" onPress={handleSubmit(onSubmit)} />
+        <Button
+          label="Verify"
+          onPress={handleSubmit(onSubmit)}
+          loading={isLoading}
+        />
       </View>
     </Screen>
   );

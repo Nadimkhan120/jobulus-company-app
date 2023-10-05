@@ -1,28 +1,49 @@
-import { NetWorkService } from "@/services/apinetworkservice";
+import type { AxiosError } from 'axios';
+import { createMutation } from 'react-query-kit';
 
-type Login = {
+import { NetWorkService } from '@/services/apinetworkservice';
+
+type Variables = {
   email: string;
-  password: number;
 };
 
-/**
- * Network request used to login
- * @param email user email
- * @param password user password
- * @returns user
- */
-const login = ({ email, password }: Login) => {
-  return new Promise((resolve, reject) => {
+type Variables2 = {
+  email: string;
+  password: string;
+  password_confirmation: string;
+  token: string;
+};
+
+type Response = {
+  response: {
+    message: string;
+    status: number;
+    token: string;
+  };
+};
+
+export const useForgotPassword = createMutation<
+  Response,
+  Variables,
+  AxiosError
+>({
+  mutationFn: async (variables) =>
     NetWorkService.Post({
-      url: "login",
-      body: {
-        email,
-        password,
-      },
-    })
-      .then((res) => resolve(res))
-      .catch((error) => reject(error));
-  });
-};
+      url: 'reset-password-request',
+      body: variables,
+      // @ts-ignore
+    }).then((response) => response?.data),
+});
 
-export { login };
+export const useChangePassword = createMutation<
+  Response,
+  Variables2,
+  AxiosError
+>({
+  mutationFn: async (variables) =>
+    NetWorkService.Post({
+      url: 'change-password',
+      body: variables,
+      // @ts-ignore
+    }).then((response) => response?.data),
+});

@@ -4,9 +4,16 @@ import { scale } from 'react-native-size-matters';
 
 import { AvatarGroup } from '@/components/avatar-group';
 import { avatarGroup } from '@/constants/avatar-group';
+import type { Job } from '@/services/api/vacancies';
 import { Text, View } from '@/ui';
 
-export const HomeSliderItem = () => {
+type HomeSliderItemProps = {
+  data: Job;
+};
+
+export const HomeSliderItem = ({ data }: HomeSliderItemProps) => {
+  //console.log("data", JSON.stringify(data, null, 2));
+
   return (
     <View
       marginRight={'medium'}
@@ -16,9 +23,9 @@ export const HomeSliderItem = () => {
       height={scale(119)}
       width={scale(256)}
     >
-      <Text variant={'medium17'}>Jr. Front-End Designer</Text>
+      <Text variant={'medium17'}>{data?.job_titles}</Text>
       <Text variant={'regular13'} color={'primary'} paddingTop={'small'}>
-        25 new applicants
+        {data?.applicants?.length} new applicants
       </Text>
 
       <View paddingTop={'small'}>

@@ -10,7 +10,9 @@ import * as z from 'zod';
 
 import { icons } from '@/assets/icons';
 import { IconButton } from '@/components';
+import { useLogin } from '@/services/api/auth/login';
 import { login } from '@/store/auth';
+import { setUserData } from '@/store/user';
 import type { Theme } from '@/theme';
 import {
   Button,
@@ -20,6 +22,7 @@ import {
   Text,
   View,
 } from '@/ui';
+import { showErrorMessage } from '@/utils';
 
 const schema = z.object({
   email: z
@@ -40,14 +43,32 @@ export const Login = () => {
   const { colors } = useTheme<Theme>();
   const { navigate } = useNavigation();
 
+  const { mutate: loginApi, isLoading } = useLogin();
+
   const { handleSubmit, control } = useForm<FormType>({
     resolver: zodResolver(schema),
   });
 
   const onSubmit = (data: FormType) => {
-    console.log('data', data);
+    loginApi(
+      { email: data?.email, password: data?.password },
+      {
+        onSuccess: (data) => {
+          // console.log("data?.response?.data", JSON.stringify(data?.response?.data, null, 2));
 
-    login();
+          if (data?.response?.status === 200) {
+            login(data?.response?.data?.token);
+            setUserData(data?.response?.data);
+          } else {
+            showErrorMessage(data.response.message);
+          }
+        },
+        onError: (error) => {
+          // An error happened!
+          console.log(`error`, error?.response?.data);
+        },
+      }
+    );
   };
 
   return (
@@ -81,10 +102,14 @@ export const Login = () => {
           />
         </View>
         <View height={scale(24)} />
-        <Button label="Log in" onPress={handleSubmit(onSubmit)} />
+        <Button
+          label="Log in"
+          onPress={handleSubmit(onSubmit)}
+          loading={isLoading}
+        />
 
         <View paddingVertical={'2xl'} alignSelf={'center'}>
-          <PressableScale onPress={() => null}>
+          <PressableScale onPress={() => navigate('ForgotPassword')}>
             <Text>Forgot password?</Text>
           </PressableScale>
         </View>
@@ -128,126 +153,3 @@ const styles = StyleSheet.create({
     width: scale(98),
   },
 });
-
-// import { Button, Screen } from "@/ui";
-// import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
-// import { useBottomSheetDynamicSnapPoints } from "@gorhom/bottom-sheet";
-// import { useFocusEffect } from "@react-navigation/native";
-// import * as React from "react";
-// import { StyleSheet, Text, TextInput } from "react-native";
-// import { AvoidSoftInput } from "react-native-avoid-softinput";
-// import { SafeAreaView } from "react-native-safe-area-context";
-// import { View } from "@/ui";
-// import { BottomBackdrop } from "@/components/bottom-modal/components/bottom-backdrop";
-
-// const SNAP_POINTS = ["CONTENT_HEIGHT"];
-
-// const Backdrop: React.FC = () => <View style={styles.backdrop} />;
-
-// export const Login: React.FC = () => {
-//   const bottomSheetModalRef = React.useRef<BottomSheetModal>(null);
-
-//   function dismissBottomSheet() {
-//     bottomSheetModalRef.current?.dismiss();
-//   }
-
-//   function presentBottomSheet() {
-//     bottomSheetModalRef.current?.present();
-//   }
-
-//   const {
-//     animatedContentHeight,
-//     animatedHandleHeight,
-//     animatedSnapPoints,
-//     handleContentLayout,
-//   } = useBottomSheetDynamicSnapPoints(SNAP_POINTS);
-
-//   const onFocusEffect = React.useCallback(() => {
-//     AvoidSoftInput.setShouldMimicIOSBehavior(true);
-//     AvoidSoftInput.setEnabled(true);
-//     AvoidSoftInput.setEasing("easeOut");
-//     AvoidSoftInput.setHideAnimationDelay(600);
-//     AvoidSoftInput.setHideAnimationDuration(600);
-//     AvoidSoftInput.setShowAnimationDelay(600);
-//     AvoidSoftInput.setShowAnimationDuration(600);
-//     return () => {
-//       AvoidSoftInput.setEasing("linear");
-//       AvoidSoftInput.setHideAnimationDelay();
-//       AvoidSoftInput.setHideAnimationDuration();
-//       AvoidSoftInput.setShowAnimationDelay();
-//       AvoidSoftInput.setShowAnimationDuration();
-//       AvoidSoftInput.setEnabled(false);
-//       AvoidSoftInput.setShouldMimicIOSBehavior(false);
-//     };
-//   }, []);
-
-//   useFocusEffect(onFocusEffect);
-
-//   return (
-//     <Screen edges={["top"]}>
-//       <View flex={1}>
-//         <Button onPress={presentBottomSheet} label="Open bottom sheet" />
-//         <BottomSheetModal
-//           ref={bottomSheetModalRef}
-//           backdropComponent={BottomBackdrop}
-//           contentHeight={animatedContentHeight}
-//           enableDismissOnClose
-//           enablePanDownToClose
-//           handleHeight={animatedHandleHeight}
-//           index={0}
-//           snapPoints={animatedSnapPoints}
-//         >
-//           <BottomSheetView onLayout={handleContentLayout} style={styles.bottomSheet}>
-//             <SafeAreaView edges={["left", "right"]} style={styles.bottomSheet}>
-//               <Text style={styles.header}>Header</Text>
-//               <TextInput placeholderTextColor="#2E8555" style={styles.input} />
-//               <TextInput placeholderTextColor="#2E8555" style={styles.input} />
-//               <TextInput placeholderTextColor="#2E8555" style={styles.input} />
-//               <TextInput placeholderTextColor="#2E8555" style={styles.input} />
-//               <TextInput placeholderTextColor="#2E8555" style={styles.input} />
-//               <View style={styles.submitButtonContainer}>
-//                 <Button onPress={dismissBottomSheet} label="Submit" />
-//               </View>
-//             </SafeAreaView>
-//           </BottomSheetView>
-//         </BottomSheetModal>
-//       </View>
-//     </Screen>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   backdrop: {
-//     ...StyleSheet.absoluteFillObject,
-//     backgroundColor: "rgba(0,0,0,0.5)",
-//   },
-//   bottomSheet: {
-//     alignItems: "center",
-//     alignSelf: "stretch",
-//     backgroundColor: "white",
-//   },
-//   header: {
-//     color: "black",
-//     fontSize: 28,
-//     fontWeight: "bold",
-//     paddingBottom: 40,
-//     paddingTop: 30,
-//   },
-//   input: {
-//     marginHorizontal: 50,
-//     alignSelf: "stretch",
-//     backgroundColor: "white",
-//     borderColor: "black",
-//     borderRadius: 10,
-//     borderWidth: 1,
-//     color: "black",
-//     fontSize: 18,
-//     height: 60,
-//     marginBottom: 30,
-//     padding: 10,
-//   },
-//   submitButtonContainer: {
-//     alignSelf: "stretch",
-//     marginBottom: 30,
-//   },
-// });

@@ -10,29 +10,30 @@ import { FlatList, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { scale } from 'react-native-size-matters';
 
+import ActivityIndicator from '@/components/activity-indicator';
 import { BottomModal } from '@/components/bottom-modal';
 import SelectionBox from '@/components/drop-down';
 import { ScrollMenu } from '@/components/scroll-menu';
 import { SearchWithFilter } from '@/components/search-with-filter';
 import { SelectModalItem } from '@/components/select-modal-item';
-import { VacanciesData } from '@/constants/vacancies-data';
+import { useRefreshOnFocus } from '@/hooks';
+import { useJobStatuses, useVacancies } from '@/services/api/vacancies';
+import { useUser } from '@/store/user';
 import type { Theme } from '@/theme';
 import { Button, Screen, Text, View } from '@/ui';
 
 import Header from './header';
 import VecanciesList from './vacancies-list';
 
-const data = ['All', 'Drafts', 'Closed', 'Published', 'Expiring'];
-
 const data2 = [
   {
     icon: 'eye',
     title: 'View Details',
   },
-  {
-    icon: 'pencl',
-    title: 'Edit Job',
-  },
+  // {
+  //   icon: "pencl",
+  //   title: "Edit Job",
+  // },
   {
     icon: 'delete',
     title: 'Delete Job',
@@ -46,7 +47,11 @@ const data2 = [
 export const Vacancies = () => {
   const { colors } = useTheme<Theme>();
   const { bottom } = useSafeAreaInsets();
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+
+  const company = useUser((state) => state?.company);
+
+  const [selectedIndex, setSelectedIndex] = useState<number>(1);
+  const [selectedStatus, setSelectedStatus] = useState<string>('Published');
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const bottomSheetOptionsModalRef = useRef<BottomSheetModal>(null);
@@ -54,6 +59,17 @@ export const Vacancies = () => {
   // variables
   const snapPoints = useMemo(() => ['85%'], []);
   const snapPoints2 = useMemo(() => ['35%'], []);
+
+  const { data: statuses, isLoading, refetch } = useJobStatuses();
+  const { data: vacancies } = useVacancies({
+    enabled: statuses?.length ? true : false,
+    variables: {
+      id: company?.id,
+      status: selectedStatus,
+    },
+  });
+
+  useRefreshOnFocus(refetch);
 
   // callbacks
   const handlePresentModalPress = useCallback(() => {
@@ -104,13 +120,20 @@ export const Vacancies = () => {
       <SelectModalItem
         title={item?.title}
         icon={item?.icon}
-        onPress={(data) => {
-          console.log('data', data);
+        onPress={() => {
           handleDismissOptionsModalPress();
         }}
       />
     );
   }, []);
+
+  const RenderLoader = () => {
+    return (
+      <View flex={1} justifyContent={'center'} alignItems={'center'}>
+        <ActivityIndicator size={'large'} />
+      </View>
+    );
+  };
 
   const renderVacancyItem = ({ item }: any) => (
     <VecanciesList data={item} onOptionPress={handlePresentOptionsModalPress} />
@@ -122,23 +145,39 @@ export const Vacancies = () => {
 
       <SearchWithFilter onFilter={handlePresentModalPress} />
 
-      <ScrollMenu
-        selectedIndex={selectedIndex}
-        data={data}
-        onChangeMenu={(index) => {
-          setSelectedIndex(index);
-        }}
-      />
+      {isLoading ? (
+        <RenderLoader />
+      ) : (
+        <>
+          <ScrollMenu
+            selectedIndex={selectedIndex}
+            data={statuses}
+            onChangeMenu={(data) => {
+              setSelectedIndex(data?.id);
+              setSelectedStatus(data?.name);
+            }}
+          />
 
-      <View height={scale(10)} backgroundColor={'grey500'} />
+          <View height={scale(10)} backgroundColor={'grey500'} />
 
-      <View flex={1} backgroundColor={'grey500'}>
-        <FlatList
-          data={VacanciesData}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderVacancyItem}
-        />
-      </View>
+          <View flex={1} backgroundColor={'grey500'}>
+            <FlatList
+              data={vacancies?.response?.data?.data}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={renderVacancyItem}
+              ListEmptyComponent={
+                <View
+                  height={scale(300)}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                >
+                  <Text>No Jobs Found</Text>
+                </View>
+              }
+            />
+          </View>
+        </>
+      )}
 
       <BottomModal
         ref={bottomSheetOptionsModalRef}

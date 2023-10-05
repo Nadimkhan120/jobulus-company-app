@@ -8,14 +8,16 @@ import { scale } from 'react-native-size-matters';
 import { icons } from '@/assets/icons';
 import { CompanyButton } from '@/components/company-button';
 import SettingsItem from '@/components/settings-item';
+import { useUser } from '@/store/user';
 import type { Theme } from '@/theme';
 import { Screen, Text, View } from '@/ui';
 
 export const Settings = () => {
   const { colors } = useTheme<Theme>();
   const navigation = useNavigation();
-
   const { width } = useWindowDimensions();
+
+  const company = useUser((state) => state?.company);
 
   return (
     <Screen backgroundColor={colors.white} edges={['top']}>
@@ -43,11 +45,15 @@ export const Settings = () => {
         </View>
 
         <View paddingHorizontal={'large'} paddingVertical={'large'}>
-          <Text variant={'semiBold20'} color={'black'}>
-            vFairs
+          <Text
+            variant={'semiBold20'}
+            textTransform={'capitalize'}
+            color={'black'}
+          >
+            {company?.name}
           </Text>
           <Text variant={'regular13'} color={'grey200'}>
-            Lahore-Islamabad Motorway, Punjab, Pakistan
+            {company?.short_description}
           </Text>
         </View>
 
@@ -71,6 +77,11 @@ export const Settings = () => {
               icon="person"
               title="User Management"
               onPress={() => navigation.navigate('Users')}
+            />
+            <SettingsItem
+              icon="person"
+              title=" Roles Management"
+              onPress={() => navigation.navigate('Roles')}
             />
             {/* <SettingsItem icon="person" title="Recruitment Process" onPress={() => null} /> */}
             <SettingsItem

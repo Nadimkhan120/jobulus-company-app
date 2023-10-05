@@ -1,15 +1,36 @@
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { ThemeProvider } from '@shopify/restyle';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
+import FlashMessage from 'react-native-flash-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useAppFonts } from '@/hooks';
 import { NavigationContainer, Root } from '@/navigation';
+import { APIProvider } from '@/services/api/api-provider';
+import { getToken } from '@/storage';
+import { login } from '@/store/auth';
 import { theme } from '@/theme';
 
 const App = () => {
   const appFontsLoaded = useAppFonts();
+
+  const appInit = async () => {
+    let token = getToken();
+
+    console.log('token', token);
+
+    if (token) {
+      login(token);
+    }
+  };
+
+  useEffect(() => {
+    appInit().finally(async () => {
+      if (appFontsLoaded) {
+      }
+    });
+  }, [appFontsLoaded]);
 
   if (!appFontsLoaded) return;
 
@@ -17,9 +38,12 @@ const App = () => {
     <GestureHandlerRootView style={styles.appContainer}>
       <ThemeProvider theme={theme}>
         <NavigationContainer>
-          <BottomSheetModalProvider>
-            <Root />
-          </BottomSheetModalProvider>
+          <APIProvider>
+            <BottomSheetModalProvider>
+              <Root />
+              <FlashMessage position="bottom" />
+            </BottomSheetModalProvider>
+          </APIProvider>
         </NavigationContainer>
       </ThemeProvider>
     </GestureHandlerRootView>

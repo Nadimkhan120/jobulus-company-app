@@ -8,6 +8,7 @@ import { scale } from 'react-native-size-matters';
 import { icons } from '@/assets/icons';
 import { CompanyButton } from '@/components/company-button';
 import { ScreenHeader } from '@/components/screen-header';
+import { useUser } from '@/store/user';
 import type { Theme } from '@/theme';
 import { Screen, Text, View } from '@/ui';
 
@@ -35,12 +36,13 @@ const InfoRow = ({ label, value, isGrey = true }) => {
 export const CompanyDetail = () => {
   const { colors } = useTheme<Theme>();
   const navigation = useNavigation();
-
   const { width } = useWindowDimensions();
+
+  const company = useUser((state) => state?.company);
 
   return (
     <Screen backgroundColor={colors.white} edges={['top']}>
-      <ScreenHeader title="vFairs" showBorder={true} />
+      <ScreenHeader title={company?.name} showBorder={true} />
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View height={scale(119)}>
@@ -78,11 +80,15 @@ export const CompanyDetail = () => {
         </View>
         <View height={scale(19)} />
         <View paddingHorizontal={'large'} paddingVertical={'large'}>
-          <Text variant={'semiBold20'} color={'black'}>
-            vFairs
+          <Text
+            variant={'semiBold20'}
+            textTransform={'capitalize'}
+            color={'black'}
+          >
+            {company?.name}
           </Text>
           <Text variant={'regular13'} color={'grey200'}>
-            Lahore-Islamabad Motorway, Punjab, Pakistan
+            {company?.short_description}
           </Text>
         </View>
 
@@ -96,18 +102,7 @@ export const CompanyDetail = () => {
             variant={'regular14'}
             color={'grey200'}
             lineHeight={21}
-          >
-            A well-established company that is helping organizations across a
-            wide range of sectors to pay, manage, and recruit workers around the
-            world, is looking for a Senior Designer. The selected candidate will
-            be reporting to the CTO and CPO while leading the website design
-            team and navigating through complex networks of touchpoints while
-            promoting a problem-first strategy. The U.S.-based company provides
-            enterprises with the technology, local insight, and services they
-            need to adapt to a constantly changing global market. This is a
-            great opportunity for candidates to prove themselves while working
-            to build world-class products.
-          </Text>
+          />
         </View>
 
         <View height={scale(16)} />
@@ -121,36 +116,24 @@ export const CompanyDetail = () => {
             Company Detail
           </Text>
 
-          <InfoRow label={'Email'} value={'Nadeem@gmail.com'} isGrey={false} />
-          <InfoRow
-            label={'Phone Number'}
-            value={'+923450221988'}
-            isGrey={false}
-          />
-          <InfoRow label={'Website'} value={'Jubulus.com'} isGrey={false} />
+          <InfoRow label={'Email'} value={company?.email} isGrey={false} />
+          <InfoRow label={'Phone Number'} value={''} isGrey={false} />
+          <InfoRow label={'Website'} value={company?.website} isGrey={false} />
           <InfoRow
             label={'Employees'}
-            value={'Nadeem@gmail.com'}
+            value={company?.no_of_employees}
             isGrey={true}
           />
-          <InfoRow
-            label={'Category'}
-            value={'Nadeem@gmail.com'}
-            isGrey={true}
-          />
-          <InfoRow
-            label={'Industry'}
-            value={'Nadeem@gmail.com'}
-            isGrey={true}
-          />
+          <InfoRow label={'Category'} value={''} isGrey={true} />
+          <InfoRow label={'Industry'} value={''} isGrey={true} />
           <InfoRow
             label={'Work Time'}
-            value={'Nadeem@gmail.com'}
+            value={company?.working_time}
             isGrey={true}
           />
           <InfoRow
             label={'Average Wage'}
-            value={'Nadeem@gmail.com'}
+            value={company?.average_wage}
             isGrey={true}
           />
         </View>
@@ -164,21 +147,9 @@ export const CompanyDetail = () => {
             Social Links
           </Text>
 
-          <InfoRow
-            label={'Facebook'}
-            value={'Nadeem@gmail.com'}
-            isGrey={true}
-          />
-          <InfoRow
-            label={'Instagram'}
-            value={'Nadeem@gmail.com'}
-            isGrey={true}
-          />
-          <InfoRow
-            label={'Linkenin'}
-            value={'Nadeem@gmail.com'}
-            isGrey={true}
-          />
+          <InfoRow label={'Facebook'} value={''} isGrey={true} />
+          <InfoRow label={'Instagram'} value={''} isGrey={true} />
+          <InfoRow label={'Linkenin'} value={''} isGrey={true} />
         </View>
       </ScrollView>
     </Screen>

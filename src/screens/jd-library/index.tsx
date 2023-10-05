@@ -123,6 +123,7 @@ export const JdLibrary = () => {
 
       <ScrollMenu
         selectedIndex={selectedIndex}
+        //@ts-ignore
         data={menu}
         onChangeMenu={(index) => {
           setSelectedIndex(index);

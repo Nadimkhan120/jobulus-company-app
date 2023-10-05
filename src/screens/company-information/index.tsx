@@ -10,10 +10,11 @@ import * as z from 'zod';
 import StepIndicator from '@/components/indicator-2';
 import { ScreenHeader } from '@/components/screen-header';
 import { useSoftKeyboardEffect } from '@/hooks';
-import { useApp } from '@/store/app';
+import { useCompanyInformation } from '@/services/api/auth/company-information';
 import type { Theme } from '@/theme';
 import { Button, ControlledInput, Screen, Text, View } from '@/ui';
 import { DescriptionField } from '@/ui/description-field';
+import { showErrorMessage } from '@/utils';
 
 const labels = ['Registration', 'Information', 'Invite'];
 
@@ -39,19 +40,38 @@ export const CompanyInformation = () => {
 
   useSoftKeyboardEffect();
 
-  const companyType = useApp((state) => state?.companyType);
+  const { mutate: companyInformationApi, isLoading } = useCompanyInformation();
 
   const { handleSubmit, control } = useForm<CompanyInformationFormType>({
     resolver: zodResolver(schema),
   });
 
   const onSubmit = (data: CompanyInformationFormType) => {
-    console.log('data', data);
+    companyInformationApi(
+      {
+        company_name: data?.companyName,
+        company_description: data?.description,
+        google_location: data?.location,
+        country_id: 'pakistan',
+        city_id: 'lahore',
+      },
+      {
+        onSuccess: (data) => {
+          console.log('data', JSON.stringify(data, null, 2));
 
-    navigate('SendInvite');
+          if (data?.response?.status === 200) {
+            navigate('SendInvite');
+          } else {
+            showErrorMessage(data.response.message);
+          }
+        },
+        onError: (error) => {
+          // An error happened!
+          console.log('error', error?.response?.data);
+        },
+      }
+    );
   };
-
-  console.log('companyType', companyType);
 
   return (
     <Screen backgroundColor={colors.white} edges={['top']}>
@@ -104,7 +124,11 @@ export const CompanyInformation = () => {
             />
           </View>
           <View height={scale(24)} />
-          <Button label="Next" onPress={handleSubmit(onSubmit)} />
+          <Button
+            label="Next"
+            onPress={handleSubmit(onSubmit)}
+            loading={isLoading}
+          />
         </View>
       </ScrollView>
     </Screen>

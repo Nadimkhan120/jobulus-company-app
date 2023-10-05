@@ -4,7 +4,7 @@ import { scale } from 'react-native-size-matters';
 import { ImageButton } from '@/components';
 import { Button, Text, View } from '@/ui';
 
-const OverView = () => {
+const OverView = ({ data }: any) => {
   return (
     <View paddingHorizontal={'large'} flex={1}>
       <View>
@@ -12,10 +12,7 @@ const OverView = () => {
           About
         </Text>
         <Text variant={'regular14'} color={'grey200'}>
-          I live and breathe SaaS! 💕I'm a two-times founder & bootstrapper in
-          SaaS / marketing technology / social media marketing. Angel investor
-          😇 connecting and sharing knowledge & war stories with fellow
-          entrepreneurs (SaaS & beyond) worldwide. 🌍
+          {data}
         </Text>
       </View>
 

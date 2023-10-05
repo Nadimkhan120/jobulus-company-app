@@ -1,31 +1,46 @@
-//import { removeItem, removeToken } from "@/storage";
 import { create } from 'zustand';
-//import { setToken, setItem } from "@/storage";
+
+import { removeToken, setToken } from '@/storage';
 
 interface AuthState {
   token: string | null;
   status: 'signOut' | 'signIn';
-  login: () => void;
+  login: (data: string) => void;
+  setUserToken: (data: string) => void;
   logOut: () => void;
 }
 
 export const useAuth = create<AuthState>((set) => ({
   status: 'signOut',
   token: null,
-  login: () => {
-    set({ status: 'signIn' });
+  login: (token: string) => {
+    set({ status: 'signIn', token });
+    setToken(token);
+  },
+  setUserToken: (token: string) => {
+    set({ token });
+    setToken(token);
   },
   logOut: () => {
     set({ status: 'signOut' });
+    removeToken();
   },
 }));
 
 // login
-export const login = () => {
-  return useAuth.getState().login();
+export const login = (token) => {
+  return useAuth.getState().login(token);
 };
 
-// login
+// logOut
 export const logOut = () => {
   return useAuth.getState().logOut();
+};
+
+export const getAuthToken = () => {
+  return useAuth.getState().token;
+};
+
+export const setUserToken = (data) => {
+  return useAuth.getState().setUserToken(data);
 };

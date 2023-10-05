@@ -4,17 +4,11 @@ import { StyleSheet } from 'react-native';
 import { scale } from 'react-native-size-matters';
 
 import { icons } from '@/assets/icons';
+import type { Role } from '@/services/api/roles';
 import { PressableScale, Text, View } from '@/ui';
 
 type RoleItemProps = {
-  data: {
-    title: string;
-    detail: string;
-    address: string;
-    status: string;
-    time: string;
-    color: string;
-  };
+  data: Role;
   showStatus?: boolean;
   onPress: () => void;
   onOptionPress: () => void;
@@ -38,7 +32,7 @@ export const RoleItem = ({ data, onPress, onOptionPress }: RoleItemProps) => {
             justifyContent={'space-between'}
           >
             <Text variant={'medium14'} color={'grey200'}>
-              {data?.title}
+              {data?.rolename}
             </Text>
             <PressableScale onPress={() => onOptionPress?.()}>
               <Image
