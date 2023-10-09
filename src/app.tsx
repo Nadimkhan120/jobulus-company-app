@@ -1,16 +1,16 @@
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { ThemeProvider } from '@shopify/restyle';
-import React, { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
-import FlashMessage from 'react-native-flash-message';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
-import { useAppFonts } from '@/hooks';
-import { NavigationContainer, Root } from '@/navigation';
-import { APIProvider } from '@/services/api/api-provider';
-import { getToken } from '@/storage';
-import { login } from '@/store/auth';
-import { theme } from '@/theme';
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { ThemeProvider } from "@shopify/restyle";
+import React, { useEffect } from "react";
+import { StyleSheet } from "react-native";
+import FlashMessage from "react-native-flash-message";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import BootSplash from "react-native-bootsplash";
+import { useAppFonts } from "@/hooks";
+import { NavigationContainer, Root } from "@/navigation";
+import { APIProvider } from "@/services/api/api-provider";
+import { getToken } from "@/storage";
+import { login } from "@/store/auth";
+import { theme } from "@/theme";
 
 const App = () => {
   const appFontsLoaded = useAppFonts();
@@ -18,7 +18,7 @@ const App = () => {
   const appInit = async () => {
     let token = getToken();
 
-    console.log('token', token);
+    console.log("token", token);
 
     if (token) {
       login(token);
@@ -28,6 +28,7 @@ const App = () => {
   useEffect(() => {
     appInit().finally(async () => {
       if (appFontsLoaded) {
+        await BootSplash.hide({ fade: true });
       }
     });
   }, [appFontsLoaded]);

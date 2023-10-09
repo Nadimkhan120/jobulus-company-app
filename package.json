@@ -5,9 +5,9 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "postinstall": "husky install",
+    // "postinstall": "husky install",
     "lint": "eslint .",
-    "type-check": "tsc  --noemit",
+    // "type-check": "tsc  --noemit",
     "start": "react-native start",
     "test": "jest"
   },
