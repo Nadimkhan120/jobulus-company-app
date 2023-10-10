@@ -39,3 +39,8 @@ export * from "./user-settings";
 export * from "./users";
 export * from "./vacancies";
 export * from "./verify-code";
+export * from "./recuitment-process";
+export * from "./recuitment-process/add-process";
+export * from "./recuitment-process/steps";
+export * from "./recuitment-process/add-step";
+export * from "./add-company";

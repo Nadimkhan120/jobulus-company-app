@@ -1,28 +1,26 @@
-import type { BottomSheetModal } from '@gorhom/bottom-sheet';
-import { BottomSheetFooter, BottomSheetView } from '@gorhom/bottom-sheet';
-import { useNavigation } from '@react-navigation/native';
-import { FlashList } from '@shopify/flash-list';
-import { useTheme } from '@shopify/restyle';
-import { Image } from 'expo-image';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { scale } from 'react-native-size-matters';
-
-import { ImageButton } from '@/components';
-import ActivityIndicator from '@/components/activity-indicator';
-import { AddButton } from '@/components/add-button';
-import { BottomModal } from '@/components/bottom-modal';
-import { ScreenHeader } from '@/components/screen-header';
-import { SearchField } from '@/components/search-field';
-import { Status } from '@/components/status-info';
-import type { User } from '@/services/api/user';
-import { useGetUser } from '@/services/api/user';
-import { useUser } from '@/store/user';
-import type { Theme } from '@/theme';
-import { Button, Screen, Text, View } from '@/ui';
-
-import { UserItem } from './user-item';
+import React, { useCallback, useMemo, useRef, useState } from "react";
+import type { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { BottomSheetFooter, BottomSheetView } from "@gorhom/bottom-sheet";
+import { useNavigation } from "@react-navigation/native";
+import { FlashList } from "@shopify/flash-list";
+import { useTheme } from "@shopify/restyle";
+import { Image } from "expo-image";
+import { StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { scale } from "react-native-size-matters";
+import { ImageButton } from "@/components";
+import ActivityIndicator from "@/components/activity-indicator";
+import { AddButton } from "@/components/add-button";
+import { BottomModal } from "@/components/bottom-modal";
+import { ScreenHeader } from "@/components/screen-header";
+import { SearchField } from "@/components/search-field";
+import { Status } from "@/components/status-info";
+import type { User } from "@/services/api/user";
+import { useGetUser } from "@/services/api/user";
+import { useUser } from "@/store/user";
+import type { Theme } from "@/theme";
+import { Button, Screen, Text, View } from "@/ui";
+import { UserItem } from "./user-item";
 
 export const Users = () => {
   const { colors } = useTheme<Theme>();
@@ -40,7 +38,7 @@ export const Users = () => {
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   // variables
-  const snapPoints = useMemo(() => ['60%'], []);
+  const snapPoints = useMemo(() => ["60%"], []);
 
   // callbacks
   const handlePresentModalPress = useCallback(() => {
@@ -71,19 +69,19 @@ export const Users = () => {
   const renderFooter = useCallback(
     (props) => (
       <BottomSheetFooter {...props} bottomInset={bottom}>
-        <View paddingVertical={'large'}>
+        <View paddingVertical={"large"}>
           <Button
-            marginHorizontal={'large'}
+            marginHorizontal={"large"}
             label="Edit User "
             onPress={handleDismissModalPress}
-            variant={'outline'}
+            variant={"outline"}
           />
           <Button
-            marginHorizontal={'large'}
+            marginHorizontal={"large"}
             label="Delete "
             onPress={handleDismissModalPress}
-            marginTop={'small'}
-            variant={'error'}
+            marginTop={"small"}
+            variant={"error"}
           />
         </View>
       </BottomSheetFooter>
@@ -92,48 +90,37 @@ export const Users = () => {
   );
 
   return (
-    <Screen backgroundColor={colors.white} edges={['top']}>
+    <Screen backgroundColor={colors.white} edges={["top"]}>
       <ScreenHeader
         title="Users"
-        rightElement={
-          <AddButton label="User" onPress={() => navigate('AddUser')} />
-        }
+        rightElement={<AddButton label="User" onPress={() => navigate("AddUser")} />}
       />
 
       <View
-        backgroundColor={'grey500'}
-        paddingVertical={'large'}
-        flexDirection={'row'}
-        alignItems={'center'}
-        paddingHorizontal={'large'}
-        columnGap={'medium'}
-        paddingBottom={'medium'}
+        backgroundColor={"grey500"}
+        paddingVertical={"large"}
+        flexDirection={"row"}
+        alignItems={"center"}
+        paddingHorizontal={"large"}
+        columnGap={"medium"}
+        paddingBottom={"medium"}
       >
         <SearchField placeholder="Search by name" showBorder={true} />
       </View>
 
       {isLoading ? (
-        <View
-          flex={1}
-          height={scale(300)}
-          justifyContent={'center'}
-          alignItems={'center'}
-        >
-          <ActivityIndicator size={'large'} />
+        <View flex={1} height={scale(300)} justifyContent={"center"} alignItems={"center"}>
+          <ActivityIndicator size={"large"} />
         </View>
       ) : (
-        <View flex={1} backgroundColor={'grey500'}>
+        <View flex={1} backgroundColor={"grey500"}>
           <FlashList
             //@ts-ignore
             data={data}
             renderItem={renderItem}
             estimatedItemSize={150}
             ListEmptyComponent={
-              <View
-                height={scale(300)}
-                justifyContent={'center'}
-                alignItems={'center'}
-              >
+              <View height={scale(300)} justifyContent={"center"} alignItems={"center"}>
                 <Text>No Users Found</Text>
               </View>
             }
@@ -145,54 +132,36 @@ export const Users = () => {
         ref={bottomSheetModalRef}
         index={0}
         snapPoints={snapPoints}
-        backgroundStyle={{ backgroundColor: 'rgb(250,250,253)' }}
+        backgroundStyle={{ backgroundColor: "rgb(250,250,253)" }}
         footerComponent={renderFooter}
       >
         <BottomSheetView style={styles.contentContainer}>
-          <View
-            flexDirection={'row'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-          >
-            <ImageButton
-              icon="close"
-              onPress={handleDismissModalPress}
-              size={scale(16)}
-            />
-            <Status
-              status={selectUser?.isactive === '0' ? 'Pending' : 'Active'}
-            />
+          <View flexDirection={"row"} justifyContent={"space-between"} alignItems={"center"}>
+            <ImageButton icon="close" onPress={handleDismissModalPress} size={scale(16)} />
+            <Status status={selectUser?.isactive === "0" ? "Pending" : "Active"} />
           </View>
-          <View
-            alignItems={'center'}
-            justifyContent={'center'}
-            paddingVertical={'medium'}
-          >
+          <View alignItems={"center"} justifyContent={"center"} paddingVertical={"medium"}>
             <Image
               transition={1000}
-              source={{ uri: 'https://fakeimg.pl/400x400/cccccc/cccccc' }}
-              placeholder={{ uri: 'https://fakeimg.pl/400x400/cccccc/cccccc' }}
+              source={{ uri: "https://fakeimg.pl/400x400/cccccc/cccccc" }}
+              placeholder={{ uri: "https://fakeimg.pl/400x400/cccccc/cccccc" }}
               style={styles.image}
               contentFit="contain"
             />
           </View>
           <View
-            gap={'tiny'}
-            alignItems={'center'}
-            justifyContent={'center'}
-            paddingVertical={'medium'}
+            gap={"tiny"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            paddingVertical={"medium"}
           >
-            <Text
-              variant={'medium24'}
-              textTransform={'capitalize'}
-              color={'black'}
-            >
+            <Text variant={"medium24"} textTransform={"capitalize"} color={"black"}>
               {selectUser?.person_name}
             </Text>
-            <Text variant={'regular13'} color={'grey200'}>
+            <Text variant={"regular13"} color={"grey200"}>
               {selectUser?.email}
             </Text>
-            <Text variant={'regular13'} color={'black'}>
+            <Text variant={"regular13"} color={"black"}>
               {selectUser?.role}
             </Text>
           </View>
@@ -212,3 +181,4 @@ const styles = StyleSheet.create({
     borderRadius: scale(53),
   },
 });
+

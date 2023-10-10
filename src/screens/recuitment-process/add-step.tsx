@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
 import { useForm } from "react-hook-form";
 import { ScrollView, StyleSheet } from "react-native";
@@ -10,41 +10,65 @@ import SelectionBox from "@/components/drop-down";
 import { ScreenHeader } from "@/components/screen-header";
 import { useSoftKeyboardEffect } from "@/hooks";
 import { queryClient } from "@/services/api/api-provider";
-import { useDepartments } from "@/services/api/settings";
-import { useAddProcess, useRecruitMentProcess } from "@/services/api/recruitment-process";
+import { useAddStep, useSteps } from "@/services/api/recruitment-process";
 import { useUser } from "@/store/user";
+import { useGetUser } from "@/services/api/user";
 import type { Theme } from "@/theme";
 import { Button, ControlledInput, Screen, Text, View } from "@/ui";
 import { showErrorMessage, showSuccessMessage } from "@/utils";
 import { DescriptionField } from "@/ui/description-field";
 
 const schema = z.object({
-  processName: z.string({
-    required_error: "Process Name is required",
-  }),
-  ownerName: z.string({
-    required_error: "Owner Name is required",
+  stepName: z.string({
+    required_error: "Step Name is required",
   }),
   description: z.string({
     required_error: "Description is required",
   }),
-
-  department: z.string({
-    required_error: "Department is required",
+  order: z.string().optional(),
+  contactPerson: z.string({
+    required_error: "Contact person is required",
   }),
 });
 
-export type AddProcessFormType = z.infer<typeof schema>;
+export type AddStepFormType = z.infer<typeof schema>;
 
-export const AddProcess = () => {
+function createArrayWithConsecutiveNumbers(count) {
+  if (count <= 0) {
+    return [];
+  }
+
+  const resultArray = [];
+
+  for (let i = 1; i <= count + 1; i++) {
+    resultArray.push(i);
+  }
+
+  return resultArray;
+}
+
+export const AddStep = () => {
   const { colors } = useTheme<Theme>();
   const { goBack } = useNavigation();
+  const route = useRoute<any>();
 
   useSoftKeyboardEffect();
 
   const company = useUser((state) => state?.company);
 
-  const { mutate: AddProcessApi, isLoading } = useAddProcess();
+  const { data: users } = useGetUser({
+    variables: {
+      id: company?.id,
+    },
+  });
+
+  const { mutate: AddStepApi, isLoading } = useAddStep();
+
+  const sorderOrders = useMemo(() => {
+    let sortOrdersArray = createArrayWithConsecutiveNumbers(route?.params?.stepsCount);
+
+    return sortOrdersArray;
+  }, [route?.params]);
 
   const {
     handleSubmit,
@@ -52,32 +76,25 @@ export const AddProcess = () => {
     setValue,
     setError,
     formState: { errors },
-  } = useForm<AddProcessFormType>({
+  } = useForm<AddStepFormType>({
     resolver: zodResolver(schema),
   });
 
-  const { data: departments } = useDepartments({
-    variables: {
-      id: company?.id,
-    },
-  });
-
   // @ts-ignore
-  const onSubmit = (data: AddProcessFormType) => {
-    AddProcessApi(
+  const onSubmit = (data: AddStepFormType) => {
+    AddStepApi(
       {
-        process_name: data?.processName,
+        step_name: data?.stepName,
         description: data?.description,
-        is_default: "0",
-        company_id: company?.id,
-        department_id: parseInt(data?.department),
-        process_owner: 1, //data?.ownerName,
+        company_recruitment_process_id: route?.params?.processId,
+        responsible_person_id: parseInt(data?.contactPerson),
+        sort_order: route?.params?.stepsCount === 0 ? 1 : parseInt(data?.order),
       },
       {
         onSuccess: (responseData) => {
           if (responseData?.response?.status === 200) {
             showSuccessMessage(responseData?.response?.message);
-            queryClient.invalidateQueries(useRecruitMentProcess.getKey());
+            queryClient.invalidateQueries(useSteps.getKey());
             goBack();
           } else {
             showErrorMessage(responseData?.response?.message);
@@ -101,10 +118,10 @@ export const AddProcess = () => {
       >
         <View paddingTop={"large"} gap={"medium"} paddingHorizontal={"large"}>
           <ControlledInput
-            placeholder="Enter process name"
-            label="Process Name"
+            placeholder="Enter step name"
+            label="Step Name"
             control={control}
-            name="processName"
+            name="stepName"
           />
           <DescriptionField
             placeholder="Enter description"
@@ -112,30 +129,57 @@ export const AddProcess = () => {
             control={control}
             name="description"
           />
-          <ControlledInput
-            placeholder="Enter owner name"
-            label="Owner Name"
-            control={control}
-            name="ownerName"
-          />
+
+          {route?.params?.stepsCount !== 0 ? (
+            <View>
+              <SelectionBox
+                label="Step Order"
+                placeholder="Select order"
+                //@ts-ignore
+                data={sorderOrders?.map((element) => {
+                  return {
+                    id: element,
+                    name: `${element}`,
+                  };
+                })}
+                onChange={(data) => {
+                  setValue("order", `${data?.id}`);
+                  setError("order", {
+                    type: "custom",
+                    message: "",
+                  });
+                }}
+              />
+              {errors?.order?.message && (
+                <Text paddingTop={"small"} variant="regular14" color={"error"}>
+                  {errors?.order?.message}
+                </Text>
+              )}
+            </View>
+          ) : null}
 
           <View>
             <SelectionBox
-              label="Department"
-              placeholder="Select department"
+              label="Contact Person"
+              placeholder="Select person"
               //@ts-ignore
-              data={departments?.default}
+              data={users?.map((element) => {
+                return {
+                  id: parseInt(element?.user_id),
+                  name: element?.person_name,
+                };
+              })}
               onChange={(data) => {
-                setValue("department", `${data?.id}`);
-                setError("department", {
+                setValue("contactPerson", `${data?.id}`);
+                setError("contactPerson", {
                   type: "custom",
                   message: "",
                 });
               }}
             />
-            {errors?.department?.message && (
+            {errors?.contactPerson?.message && (
               <Text paddingTop={"small"} variant="regular14" color={"error"}>
-                {errors?.department?.message}
+                {errors?.contactPerson?.message}
               </Text>
             )}
           </View>

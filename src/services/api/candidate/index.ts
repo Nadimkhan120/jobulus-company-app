@@ -1,13 +1,17 @@
-import type { AxiosError } from 'axios';
-import { createQuery } from 'react-query-kit';
+import type { AxiosError } from "axios";
+import { createQuery } from "react-query-kit";
 
-import { NetWorkService } from '@/services/apinetworkservice';
+import { NetWorkService } from "@/services/apinetworkservice";
 
 type Variables = { statusId: number; id: number };
 type Variables2 = void;
 
 type Profile = {
   unique_id: string;
+};
+
+type Variables3 = {
+  id: number;
 };
 
 export type Candidate = {
@@ -39,20 +43,21 @@ type Response = {
   status: number;
 };
 
+type Response4 = {
+  response: {
+    data: Candidate[];
+  };
+
+  message: string;
+  status: number;
+};
+
 type Setting = {
   id: number;
   name: string;
 };
 
 type Response2 = Setting[];
-
-// type Response3 = {
-//   response: {
-//     data: {
-//       data: null;
-//     };
-//   };
-// };
 
 type Skill = {
   person_skill_id: string;
@@ -153,8 +158,16 @@ export type CandidateProfile = {
   experience: Experience[];
 };
 
+type Candidates = {
+  response: {
+    data: Candidate[];
+    message: string;
+    status: number;
+  };
+};
+
 export const useCandidates = createQuery<Response, Variables, AxiosError>({
-  primaryKey: 'company-candidates',
+  primaryKey: "company-candidates",
   queryFn: ({ queryKey: [primaryKey, variables] }) => {
     return NetWorkService.Get({
       url: `${primaryKey}/company_id/${variables?.id}/status/${variables?.statusId}`,
@@ -163,12 +176,18 @@ export const useCandidates = createQuery<Response, Variables, AxiosError>({
   },
 });
 
-export const useCandidateStatuses = createQuery<
-  Response2,
-  Variables2,
-  AxiosError
->({
-  primaryKey: 'job-applied-job-statuses',
+export const useAllCandidates = createQuery<Response4, Variables2, AxiosError>({
+  primaryKey: "all-candidates",
+  queryFn: ({ queryKey: [primaryKey] }) => {
+    return NetWorkService.Get({
+      url: `${primaryKey}`,
+      //@ts-ignore
+    }).then((response) => response.data);
+  },
+});
+
+export const useCandidateStatuses = createQuery<Response2, Variables2, AxiosError>({
+  primaryKey: "job-applied-job-statuses",
   queryFn: ({ queryKey: [primaryKey] }) => {
     return NetWorkService.Get({ url: primaryKey }).then(
       //@ts-ignore
@@ -177,16 +196,23 @@ export const useCandidateStatuses = createQuery<
   },
 });
 
-export const useCandidateDetail = createQuery<
-  CandidateProfile,
-  Profile,
-  AxiosError
->({
-  primaryKey: 'person/profile-detail',
+export const useCandidateDetail = createQuery<CandidateProfile, Profile, AxiosError>({
+  primaryKey: "person/profile-detail",
   queryFn: ({ queryKey: [primaryKey, variables] }) => {
     return NetWorkService.Post({
       url: `${primaryKey}`,
       body: variables,
+      //@ts-ignore
+    }).then((response) => response.data);
+  },
+});
+
+export const useCandidateByJob = createQuery<Candidates, Variables3, AxiosError>({
+  primaryKey: "job-candidates/",
+  queryFn: ({ queryKey: [primaryKey, variables] }) => {
+    console.log("yyyy", `${primaryKey}job_id/${variables?.id}`);
+    return NetWorkService.Get({
+      url: `${primaryKey}job_id/${variables?.id}`,
       //@ts-ignore
     }).then((response) => response.data);
   },

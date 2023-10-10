@@ -1,7 +1,7 @@
-import { MMKV } from 'react-native-mmkv';
-import { create } from 'zustand';
-import type { StateStorage } from 'zustand/middleware';
-import { createJSONStorage, persist } from 'zustand/middleware';
+import { MMKV } from "react-native-mmkv";
+import { create } from "zustand";
+import type { StateStorage } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 const storage = new MMKV();
 
 const zustandStorage: StateStorage = {
@@ -34,7 +34,7 @@ type User = {
   person_bio: string | null;
   is_block: string | null;
   email: string;
-  phone: string | '';
+  phone: string | "";
   is_current: string;
   company_name: string | null;
   company_short_description: string | null;
@@ -93,6 +93,8 @@ interface UserState {
   roles: Role[];
   setUserData: (data: any) => void;
   removeUserData: () => void;
+  setUserWithProfile: (data: any) => void;
+  setUserCompanyWithRoles: (data: any) => void;
 }
 
 export const useUser = create<UserState>()(
@@ -118,9 +120,20 @@ export const useUser = create<UserState>()(
           roles: null,
         });
       },
+      setUserWithProfile: (data: any) => {
+        set({
+          profile: data?.profile,
+          user: data?.user,
+        });
+      },
+      setUserCompanyWithRoles: (data: any) => {
+        set({
+          company: data?.company,
+        });
+      },
     }),
     {
-      name: 'user-storage', // name of item in the storage (must be unique)
+      name: "user-storage", // name of item in the storage (must be unique)
       storage: createJSONStorage(() => zustandStorage), // (optional) by default the 'localStorage' is used
     }
   )
@@ -129,4 +142,19 @@ export const useUser = create<UserState>()(
 // set user data
 export const setUserData = (data: any) => {
   return useUser.getState().setUserData(data);
+};
+
+// set user data
+export const setUserWithProfile = (data: any) => {
+  return useUser.getState().setUserWithProfile(data);
+};
+
+// set user data
+export const setUserCompanyWithRoles = (data: any) => {
+  return useUser.getState().setUserCompanyWithRoles(data);
+};
+
+// set user data
+export const removeUserData = () => {
+  return useUser.getState().removeUserData();
 };

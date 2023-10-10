@@ -1,7 +1,7 @@
-import type { AxiosError } from 'axios';
-import { createQuery } from 'react-query-kit';
+import type { AxiosError } from "axios";
+import { createQuery } from "react-query-kit";
 
-import { NetWorkService } from '@/services/apinetworkservice';
+import { NetWorkService } from "@/services/apinetworkservice";
 
 type Variables = { status: string; id: number };
 type TopVariables = { id: number };
@@ -17,15 +17,15 @@ export type Job = {
   company_member_since: string;
   experience_level: string;
   job_level: string | null;
-  job_type: 'Software Engineer';
-  job_category: 'App developer';
-  job_address_1: '';
-  job_address_2: '';
-  web_location: '';
-  latitude: '0.0000000';
-  longitude: '0.0000000';
-  city_name: 'islamabad';
-  country_name: 'pakistan';
+  job_type: "Software Engineer";
+  job_category: "App developer";
+  job_address_1: "";
+  job_address_2: "";
+  web_location: "";
+  latitude: "0.0000000";
+  longitude: "0.0000000";
+  city_name: "islamabad";
+  country_name: "pakistan";
   image_type: null;
   file_name: string | null;
   file_description: string | null;
@@ -61,6 +61,7 @@ export type Job = {
   is_expired: string;
   deleted_at: string | null;
   applicants: any;
+  NoOfApplicants?: number;
 };
 
 type Response = {
@@ -97,7 +98,7 @@ type Response3 = {
 };
 
 export const useVacancies = createQuery<Response, Variables, AxiosError>({
-  primaryKey: 'company-jobs',
+  primaryKey: "company-jobs",
   queryFn: ({ queryKey: [primaryKey, variables] }) => {
     return NetWorkService.Get({
       url: `${primaryKey}/company_id/${variables?.id}/status/${variables?.status}`,
@@ -106,20 +107,18 @@ export const useVacancies = createQuery<Response, Variables, AxiosError>({
   },
 });
 
-export const useTopVacancies = createQuery<Response4, TopVariables, AxiosError>(
-  {
-    primaryKey: 'company-top-jobs',
-    queryFn: ({ queryKey: [primaryKey, variables] }) => {
-      return NetWorkService.Get({
-        url: `${primaryKey}/company_id/${variables?.id}`,
-        //@ts-ignore
-      }).then((response) => response.data);
-    },
-  }
-);
+export const useTopVacancies = createQuery<Response4, TopVariables, AxiosError>({
+  primaryKey: "company-top-jobs",
+  queryFn: ({ queryKey: [primaryKey, variables] }) => {
+    return NetWorkService.Get({
+      url: `${primaryKey}/company_id/${variables?.id}`,
+      //@ts-ignore
+    }).then((response) => response.data);
+  },
+});
 
 export const useJobStatuses = createQuery<Response2, Variables, AxiosError>({
-  primaryKey: 'job-statuses',
+  primaryKey: "job-statuses",
   queryFn: ({ queryKey: [primaryKey] }) => {
     //@ts-ignore
     return NetWorkService.Get({ url: primaryKey }).then(
@@ -130,7 +129,7 @@ export const useJobStatuses = createQuery<Response2, Variables, AxiosError>({
 });
 
 export const useJobDetail = createQuery<Response3, JobVariables, AxiosError>({
-  primaryKey: 'jobs/job_id',
+  primaryKey: "jobs/job_id",
   queryFn: ({ queryKey: [primaryKey, variables] }) => {
     return NetWorkService.Get({
       url: `${primaryKey}/${variables?.id}`,

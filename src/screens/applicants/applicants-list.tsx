@@ -1,11 +1,10 @@
-import { Image } from 'expo-image';
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import { scale } from 'react-native-size-matters';
-
-import { icons } from '@/assets/icons';
-import { Avatar } from '@/components/avatar';
-import { PressableScale, Text, View } from '@/ui';
+import React from "react";
+import { StyleSheet } from "react-native";
+import { scale } from "react-native-size-matters";
+import { Image } from "expo-image";
+import { icons } from "@/assets/icons";
+import { Avatar } from "@/components/avatar";
+import { PressableScale, Text, View } from "@/ui";
 
 type ApplicantListProps = {
   data: {
@@ -29,42 +28,33 @@ type ApplicantListProps = {
   onOptionPress: () => void;
 };
 
-const ApplicantList = ({
-  data,
-  showStatus,
-  onPress,
-  onOptionPress,
-}: ApplicantListProps) => {
+const ApplicantList = ({ data, showStatus, onPress, onOptionPress }: ApplicantListProps) => {
   return (
     <PressableScale onPress={onPress}>
       <View
-        flexDirection={'row'}
-        paddingHorizontal={'large'}
-        borderBottomColor={'grey400'}
+        flexDirection={"row"}
+        paddingHorizontal={"large"}
+        borderBottomColor={"grey400"}
         borderBottomWidth={StyleSheet.hairlineWidth}
-        backgroundColor={'white'}
-        paddingVertical={'medium'}
+        backgroundColor={"white"}
+        paddingVertical={"medium"}
       >
         <View>
           <Avatar
             transition={1000}
-            source={{ uri: 'https://fakeimg.pl/400x400/cccccc/cccccc' }}
-            placeholder={{ uri: 'https://fakeimg.pl/400x400/cccccc/cccccc' }}
+            source={{ uri: "https://fakeimg.pl/400x400/cccccc/cccccc" }}
+            placeholder={{ uri: "https://fakeimg.pl/400x400/cccccc/cccccc" }}
           />
         </View>
 
-        <View flex={1} paddingLeft={'medium'}>
-          <View
-            flexDirection={'row'}
-            alignItems={'center'}
-            justifyContent={'space-between'}
-          >
-            <Text variant={'semiBold14'} color={'black'}>
+        <View flex={1} paddingLeft={"medium"}>
+          <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
+            <Text variant={"semiBold14"} color={"black"}>
               {data?.full_name}
             </Text>
             <PressableScale onPress={() => onOptionPress?.()}>
               <Image
-                source={icons['more-horizontal']}
+                source={icons["more-horizontal"]}
                 style={style.dot}
                 contentFit="contain"
               />
@@ -72,31 +62,31 @@ const ApplicantList = ({
           </View>
 
           <Text
-            variant={'regular13'}
-            textTransform={'capitalize'}
-            marginVertical={'tiny'}
-            color={'grey100'}
+            variant={"regular13"}
+            textTransform={"capitalize"}
+            marginVertical={"tiny"}
+            color={"grey100"}
           >
             {data?.job_title}
           </Text>
           <Text
-            variant={'regular12'}
-            textTransform={'capitalize'}
-            marginVertical={'tiny'}
-            color={'black'}
+            variant={"regular12"}
+            textTransform={"capitalize"}
+            marginVertical={"tiny"}
+            color={"black"}
           >
             {data?.city}, {data?.country}
           </Text>
 
           {showStatus ? (
-            <View flexDirection={'row'} marginVertical={'tiny'}>
+            <View flexDirection={"row"} marginVertical={"tiny"}>
               <View>
-                <Text variant={'semiBold12'} style={{ color: 'red' }}>
+                <Text variant={"semiBold12"} style={{ color: "red" }}>
                   {/* {data?.status}.{" "} */}
                 </Text>
               </View>
               <View>
-                <Text variant={'regular12'} color={'grey200'}>
+                <Text variant={"regular12"} color={"grey200"}>
                   {/* {data?.time} */}
                 </Text>
               </View>

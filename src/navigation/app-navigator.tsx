@@ -1,5 +1,5 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as React from 'react';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import * as React from "react";
 
 import {
   AddPaymentCard,
@@ -25,22 +25,26 @@ import {
   Roles,
   Users,
   UserSettings,
-} from '@/screens';
-import Applicants from '@/screens/applicants';
-import CandidateProfile from '@/screens/candidate-profile';
-import { Job } from '@/screens/job';
-import JobDetail from '@/screens/job-detail';
-
-import { TabNavigator } from './tab-navigator';
+  RecruitmentProcess,
+  AddProcess,
+  Steps,
+  AddStep,
+  AddCompany,
+} from "@/screens";
+import Applicants from "@/screens/applicants";
+import CandidateProfile from "@/screens/candidate-profile";
+import { Job } from "@/screens/job";
+import JobDetail from "@/screens/job-detail";
+import { TabNavigator } from "./tab-navigator";
 
 export type AppStackParamList = {
   TabNavigator: undefined;
   Details: { id: number };
   Job: { id: string };
   Payments: undefined;
-  Applicants: { data: any };
+  Applicants: { id: any };
   jobDetail: { id: null };
-  CandidateProfile: undefined;
+  CandidateProfile: { data: any };
   PaymentMethods: undefined;
   MyPayments: undefined;
   AddPaymentCard: undefined;
@@ -56,13 +60,18 @@ export type AppStackParamList = {
   PersonalInformation: undefined;
   LoginAndSecurity: undefined;
   CompanyDetail: undefined;
-  EditCompany: undefined;
+  EditCompany: { data: any };
   UserSettings: undefined;
   Users: undefined;
   AddUser: undefined;
   Roles: undefined;
   AddRole: undefined;
   JobDescription: undefined;
+  RecruitmentProcess: undefined;
+  AddProcess: undefined;
+  Steps: { id: number };
+  AddStep: { processId: number; stepsCount: number };
+  AddCompany: undefined;
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -93,10 +102,7 @@ export const AppNavigator = () => {
         <Stack.Screen name="JdLibraryDetail" component={JdLibraryDetail} />
         <Stack.Screen name="MyAccount" component={MyAccount} />
         <Stack.Screen name="ChangePassword" component={ChangePassword} />
-        <Stack.Screen
-          name="PersonalInformation"
-          component={PersonalInformation}
-        />
+        <Stack.Screen name="PersonalInformation" component={PersonalInformation} />
         <Stack.Screen name="LoginAndSecurity" component={LoginAndSecurity} />
         <Stack.Screen name="CompanyDetail" component={CompanyDetail} />
         <Stack.Screen name="EditCompany" component={EditCompany} />
@@ -106,7 +112,13 @@ export const AppNavigator = () => {
         <Stack.Screen name="Roles" component={Roles} />
         <Stack.Screen name="AddRole" component={AddRole} />
         <Stack.Screen name="JobDescription" component={JobDescription} />
+        <Stack.Screen name="RecruitmentProcess" component={RecruitmentProcess} />
+        <Stack.Screen name="AddProcess" component={AddProcess} />
+        <Stack.Screen name="Steps" component={Steps} />
+        <Stack.Screen name="AddStep" component={AddStep} />
+        <Stack.Screen name="AddCompany" component={AddCompany} />
       </Stack.Group>
     </Stack.Navigator>
   );
 };
+

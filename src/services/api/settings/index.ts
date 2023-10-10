@@ -5,6 +5,10 @@ import { NetWorkService } from '@/services/apinetworkservice';
 
 type Variables = void;
 
+type Variables2 = {
+  id: number
+};
+
 type Setting = {
   id: string;
   name: string;
@@ -27,6 +31,7 @@ export const useExperienceLevels = createQuery<Response, Variables, AxiosError>(
     queryFn: ({ queryKey: [primaryKey] }) => {
       //@ts-ignore
       return NetWorkService.Get({ url: primaryKey }).then(
+        //@ts-ignore
         (response) => response.data
       );
     },
@@ -49,6 +54,7 @@ export const useJobTypes = createQuery<Response2, Variables, AxiosError>({
   queryFn: ({ queryKey: [primaryKey] }) => {
     //@ts-ignore
     return NetWorkService.Get({ url: primaryKey }).then(
+      //@ts-ignore
       (response) => response.data
     );
   },
@@ -62,5 +68,17 @@ export const useJobCategories = createQuery<Response, Variables, AxiosError>({
       //@ts-ignore
       return response.data;
     });
+  },
+});
+
+
+export const useDepartments = createQuery<Response2, Variables2, AxiosError>({
+  primaryKey: 'company-department',
+  queryFn: ({ queryKey: [primaryKey, variables] }) => {
+    
+    return NetWorkService.Get({ url: `${primaryKey}?company_id=${variables?.id}` }).then(
+      //@ts-ignore
+      (response) => response.data
+    );
   },
 });
