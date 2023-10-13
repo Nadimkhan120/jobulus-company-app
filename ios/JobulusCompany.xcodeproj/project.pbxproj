@@ -16,6 +16,7 @@
 		7699B88040F8A987B510C191 /* libPods-JobulusCompany-JobulusCompanyTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-JobulusCompany-JobulusCompanyTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		C53E7EDAA9C8748612545EC4 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886E594D73F6290E36B1F979 /* ExpoModulesProvider.swift */; };
+		FAAE44612AD93AB300749D5E /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAAE44602AD93AB300749D5E /* BootSplash.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		89C6BE57DB24E9ADA2F236DE /* Pods-JobulusCompany-JobulusCompanyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobulusCompany-JobulusCompanyTests.release.xcconfig"; path = "Target Support Files/Pods-JobulusCompany-JobulusCompanyTests/Pods-JobulusCompany-JobulusCompanyTests.release.xcconfig"; sourceTree = "<group>"; };
 		BF3B74F08F03D7BC283315BF /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-JobulusCompany/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		FAAE44602AD93AB300749D5E /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = JobulusCompany/BootSplash.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 			children = (
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				FAAE44602AD93AB300749D5E /* BootSplash.storyboard */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -274,6 +277,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAAE44612AD93AB300749D5E /* BootSplash.storyboard in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
