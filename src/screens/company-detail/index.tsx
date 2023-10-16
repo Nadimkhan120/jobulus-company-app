@@ -46,8 +46,6 @@ export const CompanyDetail = () => {
     },
   });
 
-  console.log("data", JSON.stringify(data, null, 2));
-
   return (
     <Screen backgroundColor={colors.white} edges={["top"]}>
       <ScreenHeader title={company?.name} showBorder={true} />
@@ -149,4 +147,3 @@ const styles = StyleSheet.create({
     paddingBottom: scale(160),
   },
 });
-

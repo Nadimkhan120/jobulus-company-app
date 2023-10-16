@@ -82,7 +82,6 @@ const Applicants = () => {
         title={item?.title}
         icon={item?.icon}
         onPress={(data) => {
-          console.log("data", data);
           handleDismissOptionsModalPress();
         }}
       />

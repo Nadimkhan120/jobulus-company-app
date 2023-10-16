@@ -36,8 +36,6 @@ const CandidateItem = ({
   onOptionPress,
   showMore = true,
 }: ApplicantListProps) => {
-  console.log("showMore", showMore);
-
   return (
     <PressableScale onPress={onPress}>
       <View

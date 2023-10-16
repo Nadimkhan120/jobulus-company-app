@@ -227,7 +227,7 @@ export const Vacancies = () => {
   );
 
   return (
-    <Screen edges={["top"]} backgroundColor={colors.white}>
+    <Screen edges={["top"]} backgroundColor={colors.white} barStyle="dark-content">
       <Header onPress={() => navigation.navigate("Postjob")} />
 
       <SearchWithFilter

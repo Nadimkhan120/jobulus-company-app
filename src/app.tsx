@@ -18,8 +18,6 @@ const App = () => {
   const appInit = async () => {
     let token = getToken();
 
-    console.log("token", token);
-
     if (token) {
       login(token);
     }

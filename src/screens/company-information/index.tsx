@@ -1,4 +1,3 @@
-
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigation } from "@react-navigation/native";
@@ -58,7 +57,6 @@ export const CompanyInformation = () => {
       },
       {
         onSuccess: (data) => {
-          console.log("data", JSON.stringify(data, null, 2));
           if (data?.response?.status === 200) {
             //@ts-ignore
             setUserCompanyWithRoles(data?.response);
@@ -136,4 +134,3 @@ const styles = StyleSheet.create({
     paddingBottom: scale(40),
   },
 });
-

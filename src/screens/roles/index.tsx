@@ -1,4 +1,3 @@
-
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
 import { scale } from "react-native-size-matters";
@@ -48,8 +47,6 @@ export const Roles = () => {
     },
   });
 
-  console.log("data", JSON.stringify(data, null, 2));
-
   const listData = useMemo(() => {
     let dataToRender = [];
     if (data && !isLoading) {
@@ -84,7 +81,6 @@ export const Roles = () => {
         title={item?.title}
         icon={item?.icon}
         onPress={(data) => {
-          console.log("data", data);
           handleDismissOptionsModalPress();
         }}
       />
@@ -175,4 +171,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(16),
   },
 });
-

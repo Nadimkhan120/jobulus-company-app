@@ -8,7 +8,7 @@ import type { Route } from "@showtime-xyz/tab-view";
 import { TabView } from "@showtime-xyz/tab-view";
 import { TopHeader } from "@/components/top-header";
 import type { Theme } from "@/theme";
-import { FocusAwareStatusBar, Screen, Text, View } from "@/ui";
+import { Screen, Text, View } from "@/ui";
 import { HomeSliderContainer } from "./home-slider";
 import Interviews from "./interview";
 import PendingList from "./pending";
@@ -52,7 +52,14 @@ const renderTabBar = (props: any) => {
         scrollEnabled={false}
         renderLabel={renderLabel}
         renderIndicator={() => null}
-        android_ripple={null}
+        pressColor="transparent"
+        pressOpacity={0}
+        android_ripple={{
+          color: "red",
+          borderless: false,
+          radius: 0,
+          foreground: false,
+        }}
       />
     </View>
   );
@@ -99,13 +106,18 @@ export function Home() {
   }, []);
 
   return (
-    <Screen edges={["top"]} backgroundColor={colors.primary}>
-      <FocusAwareStatusBar
+    <Screen
+      edges={["top"]}
+      backgroundColor={colors.primary}
+      statusBarColor={colors.primary}
+      barStyle="light-content"
+    >
+      {/* <FocusAwareStatusBar
         barStyle="light-content"
         backgroundColor={colors?.primary}
         //@ts-ignore
         statusBarColor={colors?.primary}
-      />
+      /> */}
       <TopHeader />
       <TabView
         onStartRefresh={onStartRefresh}
@@ -138,4 +150,3 @@ const styles = StyleSheet.create({
     backgroundColor: "#01C96C",
   },
 });
-

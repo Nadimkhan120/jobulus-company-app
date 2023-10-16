@@ -1,27 +1,27 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigation } from '@react-navigation/native';
-import { useTheme } from '@shopify/restyle';
-import { Image } from 'expo-image';
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { StyleSheet } from 'react-native';
-import { scale } from 'react-native-size-matters';
-import * as z from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigation } from "@react-navigation/native";
+import { useTheme } from "@shopify/restyle";
+import { Image } from "expo-image";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { StyleSheet } from "react-native";
+import { scale } from "react-native-size-matters";
+import * as z from "zod";
 
-import { icons } from '@/assets/icons';
-import { ScreenHeader } from '@/components/screen-header';
-import { useForgotPassword } from '@/services/api/auth';
-import type { Theme } from '@/theme';
-import { Button, ControlledInput, Screen, Text, View } from '@/ui';
-import { showErrorMessage } from '@/utils';
+import { icons } from "@/assets/icons";
+import { ScreenHeader } from "@/components/screen-header";
+import { useForgotPassword } from "@/services/api/auth";
+import type { Theme } from "@/theme";
+import { Button, ControlledInput, Screen, Text, View } from "@/ui";
+import { showErrorMessage } from "@/utils";
 
 const schema = z.object({
   email: z
     .string({
-      required_error: 'Email is required',
+      required_error: "Email is required",
     })
     .email({
-      message: 'Invalid email',
+      message: "Invalid email",
     }),
 });
 
@@ -42,9 +42,8 @@ export const ForgotPassword = () => {
       { email: body?.email },
       {
         onSuccess: (data) => {
-          console.log('data', JSON.stringify(data, null, 2));
           if (data?.response?.status === 200) {
-            navigate('ResetPassword', {
+            navigate("ResetPassword", {
               email: body?.email,
               token: data?.response?.token,
             });
@@ -64,35 +63,30 @@ export const ForgotPassword = () => {
     <Screen backgroundColor={colors.white}>
       <ScreenHeader />
 
-      <View flex={1} paddingHorizontal={'large'}>
+      <View flex={1} paddingHorizontal={"large"}>
         <View height={scale(72)} />
 
-        <View alignItems={'center'} justifyContent={'center'}>
+        <View alignItems={"center"} justifyContent={"center"}>
           <Image source={icons.logo} contentFit="contain" style={styles.logo} />
           <View height={scale(16)} />
-          <View
-            paddingTop={'large'}
-            alignItems={'center'}
-            justifyContent={'center'}
-          >
-            <Text variant={'semiBold24'} textAlign={'center'} color={'black'}>
+          <View paddingTop={"large"} alignItems={"center"} justifyContent={"center"}>
+            <Text variant={"semiBold24"} textAlign={"center"} color={"black"}>
               Forgot Password
             </Text>
             <Text
-              variant={'regular14'}
-              paddingTop={'small'}
-              textAlign={'center'}
-              color={'grey100'}
+              variant={"regular14"}
+              paddingTop={"small"}
+              textAlign={"center"}
+              color={"grey100"}
             >
-              Enter your email or phone number, we will send you verification
-              code
+              Enter your email or phone number, we will send you verification code
             </Text>
           </View>
         </View>
 
         <View height={scale(32)} />
 
-        <View paddingTop={'large'}>
+        <View paddingTop={"large"}>
           <ControlledInput
             placeholder="Enter email"
             label="Email"
@@ -102,11 +96,7 @@ export const ForgotPassword = () => {
           <View height={scale(8)} />
         </View>
         <View height={scale(24)} />
-        <Button
-          label="Verify"
-          onPress={handleSubmit(onSubmit)}
-          loading={isLoading}
-        />
+        <Button label="Verify" onPress={handleSubmit(onSubmit)} loading={isLoading} />
       </View>
     </Screen>
   );

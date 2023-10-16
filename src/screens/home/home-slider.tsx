@@ -20,8 +20,6 @@ export const HomeSliderContainer = ({}) => {
 
   useRefreshOnFocus(refetch);
 
-  console.log("data", JSON.stringify(data?.response?.data, null, 2));
-
   return (
     <View backgroundColor={"secondary"} paddingTop={"large"}>
       <View

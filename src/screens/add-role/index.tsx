@@ -1,31 +1,27 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigation } from '@react-navigation/native';
-import { useTheme } from '@shopify/restyle';
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { ScrollView, StyleSheet } from 'react-native';
-import { scale } from 'react-native-size-matters';
-import * as z from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigation } from "@react-navigation/native";
+import { useTheme } from "@shopify/restyle";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { ScrollView, StyleSheet } from "react-native";
+import { scale } from "react-native-size-matters";
+import * as z from "zod";
 
-import { ScreenHeader } from '@/components/screen-header';
-import { useSoftKeyboardEffect } from '@/hooks';
-import { queryClient } from '@/services/api/api-provider';
-import { useAddRole, useGetRoles } from '@/services/api/roles';
-import {
-  onChange,
-  resetData,
-  usePermissionHandler,
-} from '@/store/permission-handler';
-import { useUser } from '@/store/user';
-import type { Theme } from '@/theme';
-import { Button, ControlledInput, Screen, Text, View } from '@/ui';
-import { showErrorMessage, showSuccessMessage } from '@/utils';
+import { ScreenHeader } from "@/components/screen-header";
+import { useSoftKeyboardEffect } from "@/hooks";
+import { queryClient } from "@/services/api/api-provider";
+import { useAddRole, useGetRoles } from "@/services/api/roles";
+import { onChange, resetData, usePermissionHandler } from "@/store/permission-handler";
+import { useUser } from "@/store/user";
+import type { Theme } from "@/theme";
+import { Button, ControlledInput, Screen, Text, View } from "@/ui";
+import { showErrorMessage, showSuccessMessage } from "@/utils";
 
-import PermissionManager from './permission-manager';
+import PermissionManager from "./permission-manager";
 
 const schema = z.object({
   userName: z.string({
-    required_error: 'Role Name is required',
+    required_error: "Role Name is required",
   }),
 });
 
@@ -66,8 +62,6 @@ export const AddRole = () => {
       },
       {
         onSuccess: (responseData) => {
-          console.log('responseData', JSON.stringify(responseData, null, 2));
-
           if (responseData?.status === 200) {
             showSuccessMessage(responseData?.message);
             queryClient.invalidateQueries(useGetRoles.getKey());
@@ -93,7 +87,7 @@ export const AddRole = () => {
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}
       >
-        <View paddingTop={'large'} gap={'medium'} paddingHorizontal={'large'}>
+        <View paddingTop={"large"} gap={"medium"} paddingHorizontal={"large"}>
           <ControlledInput
             placeholder="Enter role name"
             label="Role Name"
@@ -102,22 +96,20 @@ export const AddRole = () => {
           />
           <View>
             <Text
-              paddingTop={'small'}
-              paddingBottom={'small'}
-              variant={'medium24'}
-              color={'black'}
+              paddingTop={"small"}
+              paddingBottom={"small"}
+              variant={"medium24"}
+              color={"black"}
             >
               Set Permissions
             </Text>
-            <View gap={'small'}>
+            <View gap={"small"}>
               {permissions?.map((element, index) => {
                 return (
                   <PermissionManager
                     key={index}
                     data={element}
-                    onChange={(data, onChangeKey) =>
-                      onChange(data, onChangeKey)
-                    }
+                    onChange={(data, onChangeKey) => onChange(data, onChangeKey)}
                   />
                 );
               })}
@@ -126,14 +118,10 @@ export const AddRole = () => {
         </View>
       </ScrollView>
 
-      <View
-        paddingVertical={'large'}
-        borderTopWidth={1}
-        borderTopColor={'grey400'}
-      >
+      <View paddingVertical={"large"} borderTopWidth={1} borderTopColor={"grey400"}>
         <Button
           label="Save Role"
-          marginHorizontal={'large'}
+          marginHorizontal={"large"}
           loading={isLoading}
           onPress={handleSubmit(onSubmit)}
         />

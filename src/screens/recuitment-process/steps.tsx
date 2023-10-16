@@ -55,8 +55,6 @@ export const Steps = () => {
     bottomSheetOptionsModalRef?.current?.dismiss();
   }, []);
 
-  //console.log("data", JSON.stringify(data, null, 2));
-
   const renderOptionItem = useCallback(({ item }: any) => {
     return (
       <SelectModalItem
@@ -139,4 +137,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(16),
   },
 });
-

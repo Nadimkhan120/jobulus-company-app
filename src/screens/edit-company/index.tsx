@@ -118,8 +118,6 @@ export const EditCompany = () => {
       },
       {
         onSuccess: (responseData) => {
-          console.log("responseData", JSON.stringify(responseData, null, 2));
-
           if (responseData?.status === 200) {
             showSuccessMessage(responseData?.message ?? "");
             queryClient.invalidateQueries(useCompanies.getKey());
@@ -271,4 +269,3 @@ const styles = StyleSheet.create({
     paddingBottom: scale(160),
   },
 });
-

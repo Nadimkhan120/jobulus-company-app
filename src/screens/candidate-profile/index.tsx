@@ -8,7 +8,7 @@ import { Image } from "expo-image";
 import { Avatar } from "@/components/avatar";
 import { ScreenHeader } from "@/components/screen-header";
 import type { Theme } from "@/theme";
-import {PressableScale, Screen, Text, View } from "@/ui";
+import { PressableScale, Screen, Text, View } from "@/ui";
 import { useRoute } from "@react-navigation/native";
 import { icons } from "@/assets/icons";
 
@@ -33,7 +33,6 @@ const CandidateProfile = () => {
                 cardHeight={height * 0.8}
                 cardStyle={styles.card}
                 onSwipedRight={() => {
-                  console.log("item", item);
                   //Alert.alert('Swiped right');
                 }}
                 onSwipedTop={() => {
@@ -175,4 +174,3 @@ const styles = StyleSheet.create({
 });
 
 export default CandidateProfile;
-

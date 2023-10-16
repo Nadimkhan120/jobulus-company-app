@@ -11,7 +11,7 @@ import ActivityIndicator from "@/components/activity-indicator";
 import { ScreenHeader } from "@/components/screen-header";
 import { useCandidateDetail } from "@/services/api/candidate";
 import type { Theme } from "@/theme";
-import { Screen, Text, View,PressableScale } from "@/ui";
+import { Screen, Text, View, PressableScale } from "@/ui";
 import Education from "./education";
 import Experience from "./experience";
 import Header from "./header";
@@ -169,7 +169,6 @@ export function Job() {
   const onStartRefresh = async () => {
     setIsRefreshing(true);
     setTimeout(() => {
-      console.log("onStartRefresh");
       setIsRefreshing(false);
     }, 300);
   };

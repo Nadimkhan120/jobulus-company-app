@@ -3,7 +3,7 @@ import type {
   BorderProps,
   SpacingProps,
   VariantProps,
-} from '@shopify/restyle';
+} from "@shopify/restyle";
 import {
   backgroundColor,
   border,
@@ -12,21 +12,21 @@ import {
   createVariant,
   spacing,
   useRestyle,
-} from '@shopify/restyle';
-import React from 'react';
-import { ActivityIndicator } from 'react-native';
+} from "@shopify/restyle";
+import React from "react";
+import { ActivityIndicator, Platform } from "react-native";
 
-import type { Theme } from '@/theme';
+import type { Theme } from "@/theme";
 
-import { PressableScale } from './moti-pressable';
-import type { TextProps } from './text';
-import { Text } from './text';
-import { View } from './view';
+import { PressableScale } from "./moti-pressable";
+import type { TextProps } from "./text";
+import { Text } from "./text";
+import { View } from "./view";
 
-const buttonVariant = createVariant({ themeKey: 'buttonVariants' });
+const buttonVariant = createVariant({ themeKey: "buttonVariants" });
 
 const ButtonContainer = createRestyleComponent<
-  VariantProps<Theme, 'buttonVariants'> & React.ComponentProps<typeof View>,
+  VariantProps<Theme, "buttonVariants"> & React.ComponentProps<typeof View>,
   Theme
 >([buttonVariant], View);
 
@@ -38,7 +38,7 @@ const restyleFunctions = composeRestyleFunctions([
 ]);
 
 type Props = SpacingProps<Theme> &
-  VariantProps<Theme, 'buttonVariants'> &
+  VariantProps<Theme, "buttonVariants"> &
   BorderProps<Theme> &
   BackgroundColorProps<Theme> & {
     onPress: () => void;
@@ -52,7 +52,7 @@ export const Button = ({
   onPress,
   label,
   loading = false,
-  variant = 'primary',
+  variant = "primary",
   buttonTextProps,
   ...rest
 }: Props) => {
@@ -65,25 +65,21 @@ export const Button = ({
         {loading ? (
           <ActivityIndicator
             size="small"
-            color={
-              variant === 'primary'
-                ? 'white'
-                : variant === 'error'
-                ? 'error'
-                : 'primary'
-            }
+            color={variant === "primary" ? "white" : variant === "error" ? "error" : "primary"}
           />
         ) : (
           <Text
             {...buttonTextProps}
-            color={
-              variant === 'primary'
-                ? 'white'
-                : variant === 'error'
-                ? 'error'
-                : 'primary'
-            }
-            variant={'medium16'}
+            color={variant === "primary" ? "white" : variant === "error" ? "error" : "primary"}
+            variant={"medium16"}
+            style={{
+              ...Platform.select({
+                ios: {},
+                android: {
+                  marginTop: 5,
+                },
+              }),
+            }}
           >
             {label}
           </Text>

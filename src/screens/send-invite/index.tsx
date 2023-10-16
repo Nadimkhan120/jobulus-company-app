@@ -97,15 +97,12 @@ export const SendInvite = () => {
       }),
     };
 
-    console.log("body", body);
-
     if (body?.emails?.length === 0) {
       showErrorMessage("Please enter email and select role first");
     }
 
     sendInviteApi(body, {
       onSuccess: (data) => {
-        console.log("data?.response?.data", JSON.stringify(data, null, 2));
         if (data?.response?.status === 200) {
           loginFromVerifyCode();
           showSuccessMessage("Invites sent successfully.");
@@ -262,4 +259,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(16),
   },
 });
-

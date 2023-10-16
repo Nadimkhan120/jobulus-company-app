@@ -1,12 +1,12 @@
-import React, { useCallback } from 'react';
-import { scale } from 'react-native-size-matters';
+import React, { useCallback } from "react";
+import { scale } from "react-native-size-matters";
 
-import ActivityIndicator from '@/components/activity-indicator';
-import { PersonItem } from '@/components/person-item';
-import { TabFlashList } from '@/components/tab-flash-list';
-import { useCandidates } from '@/services/api/candidate';
-import { useUser } from '@/store/user';
-import { Text, View } from '@/ui';
+import ActivityIndicator from "@/components/activity-indicator";
+import { PersonItem } from "@/components/person-item";
+import { TabFlashList } from "@/components/tab-flash-list";
+import { useCandidates } from "@/services/api/candidate";
+import { useUser } from "@/store/user";
+import { Text, View } from "@/ui";
 
 type PendingListProps = {
   index: number;
@@ -28,13 +28,8 @@ const PendingList = ({ index }: PendingListProps) => {
 
   if (isLoading) {
     return (
-      <View
-        flex={1}
-        height={scale(300)}
-        justifyContent={'center'}
-        alignItems={'center'}
-      >
-        <ActivityIndicator size={'large'} />
+      <View flex={1} height={scale(300)} justifyContent={"center"} alignItems={"center"}>
+        <ActivityIndicator size={"large"} />
       </View>
     );
   }
@@ -47,14 +42,10 @@ const PendingList = ({ index }: PendingListProps) => {
         paddingHorizontal: scale(16),
       }}
       renderItem={renderItem}
-      estimatedItemSize={150}
+      estimatedItemSize={110}
       showsVerticalScrollIndicator={false}
       ListEmptyComponent={
-        <View
-          height={scale(300)}
-          justifyContent={'center'}
-          alignItems={'center'}
-        >
+        <View height={scale(300)} justifyContent={"center"} alignItems={"center"}>
           <Text>No Cadidates Found</Text>
         </View>
       }

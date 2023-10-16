@@ -10,8 +10,6 @@ type HomeSliderItemProps = {
 };
 
 export const HomeSliderItem = ({ data }: HomeSliderItemProps) => {
-  //console.log("data", JSON.stringify(data, null, 2));
-
   return (
     <View
       marginRight={"medium"}
@@ -21,7 +19,9 @@ export const HomeSliderItem = ({ data }: HomeSliderItemProps) => {
       height={scale(119)}
       width={scale(256)}
     >
-      <Text variant={"medium17"}>{data?.job_titles}</Text>
+      <Text variant={"medium17"} color={"black"}>
+        {data?.job_titles}
+      </Text>
       <Text variant={"regular13"} color={"primary"} paddingTop={"small"}>
         {data?.applicants?.length} new applicants
       </Text>

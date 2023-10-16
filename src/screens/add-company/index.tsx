@@ -55,7 +55,6 @@ export const AddCompany = () => {
       },
       {
         onSuccess: (data) => {
-          console.log("data", JSON.stringify(data, null, 2));
           if (data?.response?.status === 200) {
             goBack();
             showSuccessMessage("Company added successfully");
@@ -66,7 +65,6 @@ export const AddCompany = () => {
         },
         onError: (error) => {
           // An error happened!
-          console.log("error", error?.response?.data);
         },
       }
     );
