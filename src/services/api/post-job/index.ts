@@ -1,7 +1,9 @@
-import type { AxiosError } from 'axios';
-import { createMutation } from 'react-query-kit';
+import type { AxiosError } from "axios";
+import { createMutation, createQuery } from "react-query-kit";
 
-import { NetWorkService } from '@/services/apinetworkservice';
+import { NetWorkService } from "@/services/apinetworkservice";
+
+type DescriptionListVariables = void;
 
 type Variables = {
   job_description_id: number;
@@ -29,15 +31,29 @@ type Response = {
   };
 };
 
-export const usePostJobMutation = createMutation<
-  Response,
-  Variables,
-  AxiosError
->({
+type Response2 = {
+  response: {
+    data: any;
+    message: string;
+    status: number;
+  };
+};
+
+export const usePostJobMutation = createMutation<Response, Variables, AxiosError>({
   mutationFn: async (variables) =>
     NetWorkService.Post({
-      url: 'job/post/step_all',
+      url: "job/post/step_all",
       body: variables,
       // @ts-ignore
     }).then((response) => response?.data),
+});
+
+export const useJobTitles = createQuery<Response2, DescriptionListVariables, AxiosError>({
+  primaryKey: "job-descriptions",
+  queryFn: ({ queryKey: [primaryKey] }) => {
+    return NetWorkService.Get({
+      url: `${primaryKey}`,
+      //@ts-ignore
+    }).then((response) => response.data);
+  },
 });

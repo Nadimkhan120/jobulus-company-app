@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scale } from "react-native-size-matters";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
@@ -11,27 +11,39 @@ import SelectionBox from "@/components/drop-down";
 import { ScrollMenu } from "@/components/scroll-menu";
 import { SearchWithFilter } from "@/components/search-with-filter";
 import { SelectModalItem } from "@/components/select-modal-item";
-import { useRefreshOnFocus } from "@/hooks";
-import { useJobStatuses, useVacancies } from "@/services/api/vacancies";
+import { useDebounce, useRefreshOnFocus } from "@/hooks";
+import {
+  useJobStatuses,
+  useVacancies,
+  useSearchVacancies,
+  useFilterVacancies,
+  useDeleteVacancy,
+} from "@/services/api/vacancies";
+import { useJobCategories, useJobTypes } from "@/services/api/settings";
 import { useUser } from "@/store/user";
 import type { Theme } from "@/theme";
 import { Button, Screen, Text, View } from "@/ui";
 import Header from "./header";
 import VecanciesList from "./vacancies-list";
 import { useNavigation } from "@react-navigation/native";
+import { SelectOptionButton } from "@/components/select-option-button";
+import { format } from "date-fns";
+import DatePicker from "react-native-date-picker";
+import { showErrorMessage } from "@/utils";
+import { queryClient } from "@/services/api/api-provider";
 
 const data2 = [
   {
     icon: "eye",
-    title: "View Details",
+    name: "View Details",
   },
   {
     icon: "delete",
-    title: "Delete Job",
+    name: "Delete Job",
   },
   {
     icon: "person",
-    title: "Applicants",
+    name: "Applicants",
   },
 ];
 
@@ -45,6 +57,15 @@ export const Vacancies = () => {
   const [selectedIndex, setSelectedIndex] = useState<number>(1);
   const [selectedStatus, setSelectedStatus] = useState<string>("Published");
   const [selectedVacancy, setSelectedVacancy] = useState<any>(null);
+  const [date, setDate] = useState(new Date());
+  const [formatedDate, setFormatedDate] = useState("");
+  const [open, setOpen] = useState(false);
+  const [vacancyType, setVacancyTyepe] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [status, setStatus] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showFilter, setShowFilter] = useState(false);
+  const debouncedSearch = useDebounce<string>(searchQuery, 300);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const bottomSheetOptionsModalRef = useRef<BottomSheetModal>(null);
@@ -54,7 +75,7 @@ export const Vacancies = () => {
   const snapPoints2 = useMemo(() => ["35%"], []);
 
   const { data: statuses, isLoading, refetch } = useJobStatuses();
-  const { data: vacancies } = useVacancies({
+  const { data: vacancies, refetch: refetchVacancy } = useVacancies({
     enabled: statuses?.length ? true : false,
     variables: {
       id: company?.id,
@@ -62,7 +83,32 @@ export const Vacancies = () => {
     },
   });
 
+  const { data: seachData } = useSearchVacancies({
+    enabled: debouncedSearch?.length ? true : false,
+    variables: {
+      id: company?.id,
+      keyword: debouncedSearch,
+    },
+  });
+
+  const { data: filteredVacancies } = useFilterVacancies({
+    enabled: showFilter,
+    variables: {
+      id: company?.id,
+      job_status: status,
+      date_posted: formatedDate,
+      job_type_id: vacancyType,
+      job_category_id: category,
+    },
+  });
+
+  const { data: jobTypes } = useJobTypes();
+  const { data: jobCategores } = useJobCategories();
+
+  const { mutate: deletePost } = useDeleteVacancy();
+
   useRefreshOnFocus(refetch);
+  useRefreshOnFocus(refetchVacancy);
 
   // callbacks
   const handlePresentModalPress = useCallback(() => {
@@ -92,12 +138,15 @@ export const Vacancies = () => {
           <Button
             marginHorizontal={"large"}
             label="Show Results"
-            onPress={handleDismissModalPress}
+            onPress={() => {
+              setShowFilter(true);
+              handleDismissModalPress();
+            }}
           />
         </View>
       </BottomSheetFooter>
     ),
-    []
+    [showFilter, setShowFilter]
   );
 
   const renderItem = useCallback(
@@ -106,12 +155,51 @@ export const Vacancies = () => {
         <SelectModalItem
           title={item?.title}
           icon={item?.icon}
-          onPress={(title) => {
-            if (title === "Applicants") {
+          item={item}
+          onPress={(data) => {
+            if (data?.name === "Applicants") {
               handleDismissOptionsModalPress();
               setTimeout(() => {
                 navigation.navigate("Applicants", { id: selectedVacancy?.id });
               }, 200);
+            } else if (data?.name === "View Details") {
+              handleDismissOptionsModalPress();
+              setTimeout(() => {
+                navigation.navigate("Applicants", { id: selectedVacancy?.id });
+              }, 200);
+            } else if (data?.name === "Delete Job") {
+              Alert.alert("Confirmation", "Are you sure? you want to delete this job ", [
+                {
+                  text: "Cancel",
+                  onPress: () => console.log("Cancel Pressed"),
+                  style: "cancel",
+                },
+                {
+                  text: "Delete",
+                  onPress: () => {
+                    deletePost(
+                      { id: selectedVacancy?.id },
+                      {
+                        onSuccess: (data) => {
+                          console.log("data?.response?.data", JSON.stringify(data, null, 2));
+
+                          if (data?.response?.status === 200) {
+                            queryClient.invalidateQueries(useVacancies.getKey());
+                            handleDismissOptionsModalPress();
+                          } else {
+                            //@ts-ignore
+                            showErrorMessage(data?.response?.message);
+                          }
+                        },
+                        onError: (error) => {
+                          // An error happened!
+                          console.log(`error`, error?.response?.data);
+                        },
+                      }
+                    );
+                  },
+                },
+              ]);
             }
           }}
         />
@@ -142,7 +230,11 @@ export const Vacancies = () => {
     <Screen edges={["top"]} backgroundColor={colors.white}>
       <Header onPress={() => navigation.navigate("Postjob")} />
 
-      <SearchWithFilter onFilter={handlePresentModalPress} />
+      <SearchWithFilter
+        searchValue={searchQuery}
+        onChangeText={(text) => setSearchQuery(text)}
+        onFilter={handlePresentModalPress}
+      />
 
       {isLoading ? (
         <RenderLoader />
@@ -161,7 +253,14 @@ export const Vacancies = () => {
 
           <View flex={1} backgroundColor={"grey500"}>
             <FlatList
-              data={vacancies?.response?.data?.data}
+              // @ts-ignore
+              data={
+                showFilter
+                  ? filteredVacancies?.response?.data
+                  : debouncedSearch
+                  ? seachData?.response?.data
+                  : vacancies?.response?.data?.data
+              }
               keyExtractor={(item, index) => index.toString()}
               renderItem={renderVacancyItem}
               ListEmptyComponent={
@@ -202,12 +301,57 @@ export const Vacancies = () => {
             </Text>
           </View>
 
-          <SelectionBox label="Vacancy Tye" placeholder="Select vacancy type" />
-          <SelectionBox label="Categories" placeholder="Select categories" />
-          <SelectionBox label="Applied on last job" placeholder="Select last job" />
-          <SelectionBox label="Job status" placeholder="Select status" />
+          <SelectionBox
+            label="Vacancy Tye"
+            data={jobTypes}
+            placeholder="Select vacancy type"
+            onChange={(menu) => {
+              setVacancyTyepe(menu?.id);
+            }}
+          />
+          <SelectionBox
+            label="Categories"
+            data={jobCategores}
+            placeholder="Select categories"
+            onChange={(menu) => {
+              setCategory(menu?.id);
+            }}
+          />
+          <SelectOptionButton
+            label="Posted On"
+            isSelected={formatedDate !== "" ? true : false}
+            selectedText={formatedDate !== "" ? formatedDate : "Select date"}
+            icon="calendar"
+            onPress={() => setOpen(true)}
+          />
+
+          <SelectionBox
+            label="Job status"
+            placeholder="Select status"
+            data={statuses}
+            onChange={(menu) => {
+              setStatus(menu?.name);
+            }}
+          />
         </BottomSheetView>
       </BottomModal>
+
+      <DatePicker
+        modal
+        locale="en"
+        open={open}
+        date={date}
+        onConfirm={(date) => {
+          const myDate = new Date(date);
+          const formattedDate = format(myDate, "yyyy/MM/dd");
+          setFormatedDate(formattedDate);
+          setOpen(false);
+          setDate(date);
+        }}
+        onCancel={() => {
+          setOpen(false);
+        }}
+      />
     </Screen>
   );
 };
@@ -217,4 +361,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(16),
   },
 });
-

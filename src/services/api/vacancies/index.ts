@@ -1,11 +1,20 @@
 import type { AxiosError } from "axios";
-import { createQuery } from "react-query-kit";
+import { createMutation, createQuery } from "react-query-kit";
 
 import { NetWorkService } from "@/services/apinetworkservice";
 
 type Variables = { status: string; id: number };
 type TopVariables = { id: number };
 type JobVariables = { id: number };
+type SearchVariable = { id: number; keyword: string };
+
+type FilterVariable = {
+  id: number;
+  date_posted: string;
+  job_status: string;
+  job_type_id: number;
+  job_category_id: number;
+};
 
 export type Job = {
   industry_name: string | null;
@@ -97,6 +106,13 @@ type Response3 = {
   };
 };
 
+type DeleteResponse = {
+  response: {
+    status: number;
+    message: string;
+  };
+};
+
 export const useVacancies = createQuery<Response, Variables, AxiosError>({
   primaryKey: "company-jobs",
   queryFn: ({ queryKey: [primaryKey, variables] }) => {
@@ -136,4 +152,33 @@ export const useJobDetail = createQuery<Response3, JobVariables, AxiosError>({
       //@ts-ignore
     }).then((response) => response.data);
   },
+});
+
+export const useSearchVacancies = createQuery<Response3, SearchVariable, AxiosError>({
+  primaryKey: "find-jobs",
+  queryFn: ({ queryKey: [primaryKey, variables] }) => {
+    return NetWorkService.Get({
+      url: `${primaryKey}?keyword=${variables.keyword}&company_id=${variables?.id}`,
+      //@ts-ignore
+    }).then((response) => response.data);
+  },
+});
+
+export const useFilterVacancies = createQuery<Response3, FilterVariable, AxiosError>({
+  primaryKey: "find-jobs",
+  queryFn: ({ queryKey: [primaryKey, variables] }) => {
+    return NetWorkService.Get({
+      url: `${primaryKey}?company_id=${variables?.id}&date_posted=${variables?.date_posted}&job_status=${variables?.job_status}&job_type_id=${variables?.job_type_id}&job_category_id=${variables?.job_category_id}`,
+      //@ts-ignore
+    }).then((response) => response.data);
+  },
+});
+
+export const useDeleteVacancy = createMutation<DeleteResponse, TopVariables, AxiosError>({
+  mutationFn: async (variables) =>
+    NetWorkService.Delete({
+      url: `companies/job/delete/${variables?.id}`,
+      body: {},
+      // @ts-ignore
+    }).then((response) => response?.data),
 });

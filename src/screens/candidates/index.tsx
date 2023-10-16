@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scale } from "react-native-size-matters";
@@ -11,17 +11,47 @@ import ActivityIndicator from "@/components/activity-indicator";
 import { BottomModal } from "@/components/bottom-modal";
 import SelectionBox from "@/components/drop-down";
 import { SearchWithFilter } from "@/components/search-with-filter";
-import { useAllCandidates } from "@/services/api/candidate";
+import {
+  useAllCandidates,
+  useCandidateByName,
+  useFilterCandidates,
+} from "@/services/api/candidate";
 import type { Theme } from "@/theme";
 import { Button, Screen, Text, View } from "@/ui";
 import PersonItem from "./candidate-item";
+import { useIndustries, useSkills } from "@/services/api/settings";
+import { useDebounce } from "@/hooks";
 
 export const Candidates = () => {
   const { colors } = useTheme<Theme>();
   const { navigate } = useNavigation();
   const { bottom } = useSafeAreaInsets();
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showFilter, setShowFilter] = useState(false);
+  const [industry, setIndustry] = useState(null);
+  const [skill, setSkill] = useState(null);
+
+  const debouncedSearch = useDebounce<string>(searchQuery, 300);
+
   const { data, isLoading } = useAllCandidates();
+  const { data: industries } = useIndustries();
+  const { data: skills } = useSkills();
+
+  const { data: seachData } = useCandidateByName({
+    enabled: debouncedSearch?.length ? true : false,
+    variables: {
+      search: debouncedSearch,
+    },
+  });
+
+  const { data: filterData } = useFilterCandidates({
+    enabled: showFilter ? true : false,
+    variables: {
+      skill: skill,
+      industries: industry,
+    },
+  });
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -44,6 +74,7 @@ export const Candidates = () => {
         data={item}
         onPress={() => navigate("Job", { id: item?.unique_id })}
         onOptionPress={handlePresentModalPress}
+        showMore={false}
       />
     );
   };
@@ -56,12 +87,15 @@ export const Candidates = () => {
           <Button
             marginHorizontal={"large"}
             label="Show Results"
-            onPress={handleDismissModalPress}
+            onPress={() => {
+              setShowFilter(true);
+              handleDismissModalPress();
+            }}
           />
         </View>
       </BottomSheetFooter>
     ),
-    []
+    [setShowFilter, showFilter]
   );
 
   return (
@@ -80,6 +114,8 @@ export const Candidates = () => {
       </View>
 
       <SearchWithFilter
+        searchValue={searchQuery}
+        onChangeText={(text) => setSearchQuery(text)}
         onFilter={handlePresentModalPress}
         onSwap={() => navigate("CandidateProfile", { data })}
       />
@@ -91,7 +127,13 @@ export const Candidates = () => {
       ) : (
         <View flex={1} backgroundColor={"white"} paddingTop={"large"}>
           <FlashList
-            data={data?.response?.data}
+            data={
+              showFilter
+                ? filterData?.response?.data
+                : debouncedSearch
+                ? seachData?.response?.data
+                : data?.response?.data
+            }
             renderItem={renderItem}
             estimatedItemSize={150}
             contentContainerStyle={{
@@ -120,10 +162,24 @@ export const Candidates = () => {
             </Text>
           </View>
 
-          <SelectionBox label="Industry" placeholder="Select industry" />
-          <SelectionBox label="Categories" placeholder="Select categories" />
-          <SelectionBox label="Applied on last job" placeholder="Select last job" />
-          <SelectionBox label="Last job status" placeholder="Select status" />
+          <SelectionBox
+            label="Industry"
+            placeholder="Select industry"
+            data={industries?.response?.data}
+            onChange={(menu) => {
+              setIndustry(menu?.id);
+            }}
+          />
+          <SelectionBox
+            label="Skills"
+            placeholder="Skills"
+            data={skills}
+            onChange={(menu) => {
+              setSkill(menu?.id);
+            }}
+          />
+          {/* <SelectionBox label="Applied on last job" placeholder="Select last job" />
+          <SelectionBox label="Last job status" placeholder="Select status" /> */}
         </BottomSheetView>
       </BottomModal>
     </Screen>
@@ -135,4 +191,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(16),
   },
 });
-

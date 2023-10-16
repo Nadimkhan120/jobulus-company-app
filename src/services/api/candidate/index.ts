@@ -10,6 +10,15 @@ type Profile = {
   unique_id: string;
 };
 
+type Search = {
+  search: string;
+};
+
+type Filter = {
+  skill: number;
+  industries: number;
+};
+
 type Variables3 = {
   id: number;
 };
@@ -213,6 +222,26 @@ export const useCandidateByJob = createQuery<Candidates, Variables3, AxiosError>
     console.log("yyyy", `${primaryKey}job_id/${variables?.id}`);
     return NetWorkService.Get({
       url: `${primaryKey}job_id/${variables?.id}`,
+      //@ts-ignore
+    }).then((response) => response.data);
+  },
+});
+
+export const useCandidateByName = createQuery<Candidates, Search, AxiosError>({
+  primaryKey: "find-candidates",
+  queryFn: ({ queryKey: [primaryKey, variables] }) => {
+    return NetWorkService.Get({
+      url: `${primaryKey}?name=${variables?.search}`,
+      //@ts-ignore
+    }).then((response) => response.data);
+  },
+});
+
+export const useFilterCandidates = createQuery<Candidates, Filter, AxiosError>({
+  primaryKey: "find-candidates?skill=2&industries=1&name=Shafqat jan",
+  queryFn: ({ queryKey: [primaryKey, variables] }) => {
+    return NetWorkService.Get({
+      url: `${primaryKey}?skill=${variables?.skill}&industries=${variables?.industries}`,
       //@ts-ignore
     }).then((response) => response.data);
   },
