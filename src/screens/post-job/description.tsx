@@ -16,8 +16,8 @@ interface IProps {
 function createContentStyle(theme: ColorSchemeName) {
   // Can be selected for more situations (cssText or contentCSSText).
   const contentStyle = {
-    backgroundColor: "#2e3847",
-    color: "#fff",
+    backgroundColor: "#fff", //"#2e3847",
+    color: "#000033", //"#fff",
     caretColor: "red",
     placeholderColor: "gray",
 

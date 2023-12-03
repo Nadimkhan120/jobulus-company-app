@@ -48,7 +48,7 @@ export const Postjob = () => {
   const { colors } = useTheme<Theme>();
   const navigation = useNavigation();
 
-  useSoftKeyboardEffect();
+  //  useSoftKeyboardEffect();
 
   const [skillValue, setSkillValue] = useState<string>("");
   const [skills, setSkills] = useState<string[]>([]);

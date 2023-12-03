@@ -99,10 +99,10 @@ export const Users = () => {
       <View
         backgroundColor={"grey500"}
         paddingVertical={"large"}
-        flexDirection={"row"}
-        alignItems={"center"}
+        // flexDirection={"row"}
+        //   alignItems={"center"}
         paddingHorizontal={"large"}
-        columnGap={"medium"}
+        //columnGap={"medium"}
         paddingBottom={"medium"}
       >
         <SearchField placeholder="Search by name" showBorder={true} />
@@ -181,4 +181,3 @@ const styles = StyleSheet.create({
     borderRadius: scale(53),
   },
 });
-

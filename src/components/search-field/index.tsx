@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginHorizontal: scale(4),
     fontFamily: AppFonts.APP_FONT_REGULAR,
-    justifyContent: "center",
   },
   icon: {
     height: scale(16),
