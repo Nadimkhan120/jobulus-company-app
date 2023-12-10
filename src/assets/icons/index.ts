@@ -62,6 +62,7 @@ export const icons = {
   "check-mark-white": require("../images/check-mark-white.png"),
   people: require("../images/people.png"),
   book: require("../images/book.png"),
+  camera: require("../images/camera.png"),
 };
 
 export type IconTypes = keyof typeof icons;

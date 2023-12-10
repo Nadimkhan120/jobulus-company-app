@@ -44,3 +44,4 @@ export * from "./recuitment-process/add-process";
 export * from "./recuitment-process/steps";
 export * from "./recuitment-process/add-step";
 export * from "./add-company";
+export * from "./choose-location";

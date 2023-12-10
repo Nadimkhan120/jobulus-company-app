@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>JobulusCompany</string>
+	<string>Jobulus Recruiter</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -37,6 +37,12 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Please allow your gallery permission so that you can upload company images</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Please allow your camera  permission so that you can take  company images</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Please allow your microphoen  permission</string>
 	<key>UILaunchStoryboardName</key>
 	<string>BootSplash.storyboard</string>
 	<key>UIRequiredDeviceCapabilities</key>

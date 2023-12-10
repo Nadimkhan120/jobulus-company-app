@@ -1,28 +1,28 @@
+import React, { useCallback, useMemo, useRef, useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { ScrollView, StyleSheet } from "react-native";
+import DatePicker from "react-native-date-picker";
+import { scale } from "react-native-size-matters";
+import * as z from "zod";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
 import { format } from "date-fns";
-import React, { useCallback, useMemo, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { ScrollView, StyleSheet } from "react-native";
-import DatePicker from "react-native-date-picker";
-import { scale } from "react-native-size-matters";
-import * as z from "zod";
-
 import { BottomModal } from "@/components/bottom-modal";
 import SelectionBox from "@/components/drop-down";
 import StepIndicator from "@/components/indicator-2";
 import { ScreenHeader } from "@/components/screen-header";
 import { SelectModalItem } from "@/components/select-modal-item";
-import { SelectOptionButton } from "@/components/select-option-button";
 import { useSoftKeyboardEffect } from "@/hooks";
 import { useCompanies } from "@/services/api/company";
 import { useJobCategories } from "@/services/api/settings";
 import { setPostCompany, setPostJobStep2 } from "@/store/post-job";
 import type { Theme } from "@/theme";
 import { Button, ControlledInput, Screen, Text, View } from "@/ui";
+import { SelectOptionButton } from "@/components/select-option-button";
+import { useSelection, setSelectedLocation } from "@/store/selection";
 
 const labels = ["Job Detail", "Post Description", "Post Detail", "Preview"];
 
@@ -49,12 +49,15 @@ export const PostJobDetail = () => {
 
   useSoftKeyboardEffect();
 
+  const selectedLocation = useSelection((state) => state.selectedLocation);
+
   const {
     handleSubmit,
     control,
     setValue,
     watch,
     setError,
+    trigger,
     formState: { errors },
   } = useForm<PostJobDetailFormType>({
     resolver: zodResolver(schema),
@@ -62,6 +65,7 @@ export const PostJobDetail = () => {
 
   const watchCompany = watch("company");
   const watchDate = watch("date");
+  const watchLocation = watch("location");
 
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
@@ -111,10 +115,21 @@ export const PostJobDetail = () => {
     [setValue]
   );
 
+  useEffect(() => {
+    if (selectedLocation) {
+      setValue("location", selectedLocation?.address);
+      trigger("location");
+    }
+  }, [selectedLocation]);
+
   return (
     <Screen backgroundColor={colors.white} edges={["top"]}>
       <ScreenHeader />
-      <View paddingHorizontal={"large"} backgroundColor={"grey500"} paddingBottom={"medium"}>
+      <View
+        paddingHorizontal={"large"}
+        backgroundColor={"grey500"}
+        paddingBottom={"medium"}
+      >
         <StepIndicator stepCount={4} currentPosition={2} labels={labels} />
       </View>
       <ScrollView
@@ -159,12 +174,22 @@ export const PostJobDetail = () => {
             )}
           </View>
 
-          <ControlledInput
+          <SelectOptionButton
+            label="Location"
+            isSelected={watchLocation ? true : false}
+            selectedText={watchLocation ? watchLocation : "Choose Job Location"}
+            icon={"arrow-ios-down"}
+            onPress={() => {
+              navigation?.navigate("ChooseLocation", { from: "Register" });
+            }}
+          />
+
+          {/* <ControlledInput
             placeholder="Enter location"
             label="Job Location"
             control={control}
             name="location"
-          />
+          /> */}
 
           <SelectOptionButton
             label="Deadline Date"
@@ -178,7 +203,11 @@ export const PostJobDetail = () => {
         <View height={scale(72)} />
 
         <View paddingVertical={"large"} borderTopWidth={1} borderTopColor={"grey400"}>
-          <Button label="Next" marginHorizontal={"large"} onPress={handleSubmit(onSubmit)} />
+          <Button
+            label="Next"
+            marginHorizontal={"large"}
+            onPress={handleSubmit(onSubmit)}
+          />
         </View>
       </ScrollView>
 

@@ -1,5 +1,3 @@
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { ThemeProvider } from "@shopify/restyle";
 import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import FlashMessage from "react-native-flash-message";
@@ -11,6 +9,9 @@ import { APIProvider } from "@/services/api/api-provider";
 import { getToken } from "@/storage";
 import { login } from "@/store/auth";
 import { theme } from "@/theme";
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { ThemeProvider } from "@shopify/restyle";
 
 const App = () => {
   const appFontsLoaded = useAppFonts();
@@ -36,14 +37,16 @@ const App = () => {
   return (
     <GestureHandlerRootView style={styles.appContainer}>
       <ThemeProvider theme={theme}>
-        <NavigationContainer>
-          <APIProvider>
-            <BottomSheetModalProvider>
-              <Root />
-              <FlashMessage position="bottom" />
-            </BottomSheetModalProvider>
-          </APIProvider>
-        </NavigationContainer>
+        <ActionSheetProvider>
+          <NavigationContainer>
+            <APIProvider>
+              <BottomSheetModalProvider>
+                <Root />
+                <FlashMessage position="bottom" />
+              </BottomSheetModalProvider>
+            </APIProvider>
+          </NavigationContainer>
+        </ActionSheetProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );

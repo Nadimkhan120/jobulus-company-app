@@ -1,9 +1,12 @@
 import type { AxiosError } from "axios";
 import { createMutation, createQuery } from "react-query-kit";
 import { NetWorkService } from "@/services/apinetworkservice";
+import { getAuthToken } from "@/store/auth";
 
 type Variables = void;
 type CompanyVariables = { id: number };
+
+type UpdateProfile = { company_id: string; image_type: "pic" | "cover"; file: any };
 
 type EditCompanyVariables = {
   name: string;
@@ -143,7 +146,11 @@ export const useCompanies = createQuery<Response, Variables, AxiosError>({
   },
 });
 
-export const useGetCompanyDetails = createQuery<SingleCompany, CompanyVariables, AxiosError>({
+export const useGetCompanyDetails = createQuery<
+  SingleCompany,
+  CompanyVariables,
+  AxiosError
+>({
   primaryKey: "company/detail/",
   queryFn: ({ queryKey: [primaryKey, variables] }) => {
     return NetWorkService.Get({ url: `${primaryKey}company_id/${variables?.id}` }).then(
@@ -160,4 +167,22 @@ export const useEditCompany = createMutation<Response, EditCompanyVariables, Axi
       body: variables,
       // @ts-ignore
     }).then((response) => response?.data),
+});
+
+export const useUpdatePicture = createMutation<Response, UpdateProfile, AxiosError>({
+  mutationFn: async (variables) => {
+    const token = getAuthToken();
+
+    let headers = {
+      "Content-Type": "multipart/form-data",
+      authorization: "Bearer " + token ?? "",
+    };
+
+    return NetWorkService.Post({
+      url: "company/update-profile-images",
+      body: variables,
+      headers: headers,
+      // @ts-ignore
+    }).then((response) => response?.data);
+  },
 });

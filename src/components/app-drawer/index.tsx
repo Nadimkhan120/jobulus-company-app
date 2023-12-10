@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import { Drawer } from "react-native-drawer-layout";
@@ -40,6 +39,8 @@ export function AppDrawer({ children }: AppDrawer) {
     }
     // @ts-ignore
   }, [companies?.response?.status]);
+
+  console.log("companies", JSON.stringify(companies, null, 2));
 
   return (
     <Drawer
@@ -115,7 +116,7 @@ export function AppDrawer({ children }: AppDrawer) {
                       <View flex={1} flexDirection={"row"} alignItems={"center"}>
                         <CompanyButton
                           backgroundColor={"black"}
-                          icon="company"
+                          source={item?.pic}
                           onPress={() => null}
                           size={scale(48)}
                           imageSize={scale(48)}

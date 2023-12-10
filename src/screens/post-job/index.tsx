@@ -1,6 +1,14 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Pressable, ScrollView, StyleSheet } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableWithoutFeedback,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import { scale } from "react-native-size-matters";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,13 +20,20 @@ import SelectionBox from "@/components/drop-down";
 import StepIndicator from "@/components/indicator-2";
 import { ScreenHeader } from "@/components/screen-header";
 import { useSoftKeyboardEffect } from "@/hooks";
-import { useEducationLevels, useExperienceLevels, useJobTypes } from "@/services/api/settings";
+import {
+  useEducationLevels,
+  useExperienceLevels,
+  useJobTypes,
+} from "@/services/api/settings";
 import { useJobTitles } from "@/services/api/post-job";
 import { setJobPost } from "@/store/post-job";
-import type { Theme } from "@/theme";
+import { palette, type Theme } from "@/theme";
 import { Button, ControlledInput, Screen, Text, View } from "@/ui";
 import { SkillsTextField } from "@/ui/skills-field";
 import { setPostJobDescription2 } from "@/store/post-job";
+import { AnimatePresence } from "moti";
+import TitleSearch from "./title-search";
+import { useDebounce } from "@/hooks";
 
 const labels = ["Job Detail", "Post Description", "Post Detail", "Preview"];
 
@@ -53,9 +68,17 @@ export const Postjob = () => {
   const [skillValue, setSkillValue] = useState<string>("");
   const [skills, setSkills] = useState<string[]>([]);
 
-  const { handleSubmit, control, formState, setValue } = useForm<PostJobFormType>({
+  const [searchQuery, setSearchQuery] = useState("");
+  const [value, setTextValue] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
+
+  const debouncedSearch = useDebounce<string>(searchQuery, 300);
+
+  const { handleSubmit, control, formState, setValue, watch } = useForm<PostJobFormType>({
     resolver: zodResolver(schema),
   });
+
+  const watchTitle = watch("title");
 
   const { data: experienceLevels } = useExperienceLevels();
   const { data: educationLevels } = useEducationLevels();
@@ -88,26 +111,23 @@ export const Postjob = () => {
     [skillValue, skills]
   );
 
-  console.log(
-    "titles",
-    JSON.stringify(
-      titles?.response?.data?.map((element) => {
-        return {
-          id: element?.job_title_id,
-          name: element?.job_title,
-          description: element?.job_description,
-        };
-      }),
-      null,
-      2
-    )
-  );
+  useEffect(() => {
+    if (debouncedSearch) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  }, [debouncedSearch]);
 
   return (
     <Screen backgroundColor={colors.white} edges={["top"]}>
       <ScreenHeader />
 
-      <View paddingHorizontal={"large"} backgroundColor={"grey500"} paddingBottom={"medium"}>
+      <View
+        paddingHorizontal={"large"}
+        backgroundColor={"grey500"}
+        paddingBottom={"medium"}
+      >
         <StepIndicator stepCount={4} currentPosition={0} labels={labels} />
       </View>
 
@@ -116,22 +136,84 @@ export const Postjob = () => {
         showsVerticalScrollIndicator={false}
       >
         <View paddingTop={"large"} gap={"medium"} paddingHorizontal={"large"}>
-          {/* <ControlledInput
-            placeholder="Enter job title"
-            label="Job Title"
-            control={control}
-            name="title"
-          /> */}
+          <View position={"relative"}>
+            <Text paddingVertical={"small"} variant="medium14" color={"black"}>
+              Title
+            </Text>
+            <TextInput
+              placeholder="Write Title"
+              style={{
+                height: scale(49),
+                backgroundColor: palette.grey500,
+                borderRadius: scale(8),
+                marginBottom: scale(8),
+                paddingHorizontal: scale(12),
+              }}
+              onChangeText={(text) => {
+                setSearchQuery(text);
+                setTextValue(text);
+              }}
+              value={value}
+            />
 
-          {/* <DescriptionField
-            placeholder="Your Job Description"
-            label="Job Description"
-            control={control}
-            name="description"
-          /> */}
+            <AnimatePresence>
+              {isVisible && (
+                <TitleSearch>
+                  <ScrollView
+                    contentContainerStyle={{
+                      paddingHorizontal: scale(12),
+                      paddingVertical: scale(8),
+                    }}
+                    showsVerticalScrollIndicator={false}
+                  >
+                    <View>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setValue("title", debouncedSearch);
+                          setSearchQuery("");
+                          setPostJobDescription2(debouncedSearch);
+                        }}
+                        activeOpacity={0.6}
+                      >
+                        <View marginVertical={"small"}>
+                          <Text>{debouncedSearch}</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                    {titles?.response?.data
+                      ?.map((element) => {
+                        return {
+                          id: element?.job_title_id,
+                          name: element?.job_title,
+                          description: element?.job_description,
+                        };
+                      })
+                      .map((element, index) => {
+                        return (
+                          <TouchableOpacity
+                            onPress={() => {
+                              setValue("title", element?.name);
+                              setTextValue(element?.name);
+                              setSearchQuery("");
 
-          <View>
-            <SelectionBox
+                              setPostJobDescription2(element?.description);
+                            }}
+                            activeOpacity={0.6}
+                            key={index}
+                          >
+                            <View marginVertical={"small"}>
+                              <Text>{element?.name}</Text>
+                            </View>
+                          </TouchableOpacity>
+                        );
+                      })}
+                  </ScrollView>
+                </TitleSearch>
+              )}
+            </AnimatePresence>
+
+            {/* <SelectionBox
+              search={true}
               label="Title"
               placeholder="Select title"
               data={titles?.response?.data?.map((element) => {
@@ -146,6 +228,12 @@ export const Postjob = () => {
                 setPostJobDescription2(data?.description);
               }}
             />
+            {formState?.errors?.title?.message && (
+              <Text paddingTop={"small"} variant="regular14" color={"error"}>
+                {formState?.errors?.title?.message}
+              </Text>
+            )} */}
+
             {formState?.errors?.title?.message && (
               <Text paddingTop={"small"} variant="regular14" color={"error"}>
                 {formState?.errors?.title?.message}
@@ -248,7 +336,11 @@ export const Postjob = () => {
           borderTopWidth={1}
           borderTopColor={"grey400"}
         >
-          <Button label="Next" marginHorizontal={"large"} onPress={handleSubmit(onSubmit)} />
+          <Button
+            label="Next"
+            marginHorizontal={"large"}
+            onPress={handleSubmit(onSubmit)}
+          />
         </View>
       </ScrollView>
     </Screen>

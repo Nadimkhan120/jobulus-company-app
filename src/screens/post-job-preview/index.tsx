@@ -14,6 +14,7 @@ import { usePostJob } from "@/store/post-job";
 import type { Theme } from "@/theme";
 import { Button, Screen, Text, View } from "@/ui";
 import { showErrorMessage } from "@/utils";
+import { useSelection, setSelectedLocation } from "@/store/selection";
 
 const labels = ["Job Detail", "Post Description", "Post Detail", "Preview"];
 
@@ -29,6 +30,8 @@ export const PostJobPreview = () => {
   const description = usePostJob((state) => state?.description);
   const description2 = usePostJob((state) => state?.description2);
   const company = usePostJob((state) => state?.company);
+
+  const selectedLocation = useSelection((state) => state.selectedLocation);
 
   const { mutate: postJobApi, isLoading } = usePostJobMutation();
 
@@ -51,9 +54,11 @@ export const PostJobPreview = () => {
       skills: jobStep1?.skills,
       deadline_date: jobStep2?.date,
       experience_levels: [experience[1]],
-      city_id: 1,
-      country_id: 1,
-      google_location: jobStep2?.location,
+      city_id: selectedLocation?.city,
+      country_id: selectedLocation?.country,
+      // city_id: 1,
+      // country_id: 1,
+      google_location: selectedLocation?.address,
       company_recruitment_process_id: 1,
       job_status: "published",
       job_type_id: jobType[0],
@@ -67,8 +72,11 @@ export const PostJobPreview = () => {
       onSuccess: (responseData) => {
         if (responseData?.response?.status === 200) {
           navigation?.navigate("JobPosted");
+          setSelectedLocation("");
         } else {
-          showErrorMessage(responseData?.response?.message ?? "Error while posting a job");
+          showErrorMessage(
+            responseData?.response?.message ?? "Error while posting a job"
+          );
         }
       },
       onError: (error) => {
@@ -84,7 +92,11 @@ export const PostJobPreview = () => {
   return (
     <Screen backgroundColor={colors.white} edges={["top"]}>
       <ScreenHeader />
-      <View paddingHorizontal={"large"} backgroundColor={"grey500"} paddingBottom={"medium"}>
+      <View
+        paddingHorizontal={"large"}
+        backgroundColor={"grey500"}
+        paddingBottom={"medium"}
+      >
         <StepIndicator stepCount={4} currentPosition={3} labels={labels} />
       </View>
 

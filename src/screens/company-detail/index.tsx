@@ -46,13 +46,20 @@ export const CompanyDetail = () => {
     },
   });
 
+  console.log("data", JSON.stringify(data, null, 2));
+
   return (
     <Screen backgroundColor={colors.white} edges={["top"]}>
       <ScreenHeader title={company?.name} showBorder={true} />
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View height={scale(119)}>
-          <Image source={icons["back-cover"]} style={{ height: scale(119), width: width }} />
+          <Image
+            source={data?.images?.cover}
+            style={{ height: scale(119), width: width }}
+            transition={1000}
+            placeholder={`https://fakeimg.pl/${width}x400/cccccc/cccccc`}
+          />
           <View
             alignSelf={"flex-start"}
             position={"absolute"}
@@ -63,7 +70,7 @@ export const CompanyDetail = () => {
             }}
           >
             <CompanyButton
-              icon="company"
+              source={data?.images?.pic}
               onPress={() => null}
               size={scale(86)}
               imageSize={scale(86)}
@@ -96,7 +103,12 @@ export const CompanyDetail = () => {
             About Company
           </Text>
 
-          <Text paddingTop={"small"} variant={"regular14"} color={"grey200"} lineHeight={21} />
+          <Text
+            paddingTop={"small"}
+            variant={"regular14"}
+            color={"grey200"}
+            lineHeight={21}
+          />
         </View>
 
         <View height={scale(16)} />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
@@ -15,6 +15,8 @@ import { Button, ControlledInput, Screen, Text, View } from "@/ui";
 import { DescriptionField } from "@/ui/description-field";
 import { showErrorMessage } from "@/utils";
 import { setUserCompanyWithRoles } from "@/store/user";
+import { SelectOptionButton } from "@/components/select-option-button";
+import { useSelection, setSelectedLocation } from "@/store/selection";
 
 const labels = ["Registration", "Information", "Invite"];
 
@@ -41,47 +43,65 @@ export const CompanyInformation = () => {
   useSoftKeyboardEffect();
 
   const { mutate: companyInformationApi, isLoading } = useCompanyInformation();
+  const selectedLocation = useSelection((state) => state.selectedLocation);
 
-  const { handleSubmit, control } = useForm<CompanyInformationFormType>({
-    resolver: zodResolver(schema),
-  });
+  const { handleSubmit, control, watch, setValue, trigger } =
+    useForm<CompanyInformationFormType>({
+      resolver: zodResolver(schema),
+    });
+
+  const watchLocation = watch("location");
 
   const onSubmit = (data: CompanyInformationFormType) => {
-    companyInformationApi(
-      {
-        company_name: data?.companyName,
-        company_description: data?.description,
-        google_location: data?.location,
-        country_id: "pakistan",
-        city_id: "lahore",
+    const body = {
+      company_name: data?.companyName,
+      company_description: data?.description,
+      google_location: data?.location,
+      city_id: selectedLocation?.city,
+      country_id: selectedLocation?.country,
+    };
+
+    companyInformationApi(body, {
+      onSuccess: (data) => {
+        if (data?.response?.status === 200) {
+          //@ts-ignore
+          setUserCompanyWithRoles(data?.response);
+          navigate("SendInvite");
+          setSelectedLocation("");
+        } else {
+          showErrorMessage(data.response.message);
+        }
       },
-      {
-        onSuccess: (data) => {
-          if (data?.response?.status === 200) {
-            //@ts-ignore
-            setUserCompanyWithRoles(data?.response);
-            navigate("SendInvite");
-          } else {
-            showErrorMessage(data.response.message);
-          }
-        },
-        onError: (error) => {
-          // An error happened!
-          console.log("error", error?.response?.data);
-        },
-      }
-    );
+      onError: (error) => {
+        // An error happened!
+        console.log("error", error?.response?.data);
+      },
+    });
   };
+
+  useEffect(() => {
+    if (selectedLocation) {
+      setValue("location", selectedLocation?.address);
+      trigger("location");
+    }
+  }, [selectedLocation]);
 
   return (
     <Screen backgroundColor={colors.white} edges={["top"]}>
       <ScreenHeader />
 
-      <View paddingHorizontal={"large"} backgroundColor={"grey500"} paddingBottom={"medium"}>
+      <View
+        paddingHorizontal={"large"}
+        backgroundColor={"grey500"}
+        paddingBottom={"medium"}
+      >
         <StepIndicator stepCount={3} currentPosition={1} labels={labels} />
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.content}
+      >
         <View flex={1} paddingHorizontal={"large"}>
           <View height={scale(12)} />
 
@@ -109,11 +129,15 @@ export const CompanyInformation = () => {
               name="description"
             />
             <View height={scale(8)} />
-            <ControlledInput
-              placeholder="Enter location"
+
+            <SelectOptionButton
               label="Location"
-              control={control}
-              name="location"
+              isSelected={watchLocation ? true : false}
+              selectedText={watchLocation ? watchLocation : "Choose Location"}
+              icon={"arrow-ios-down"}
+              onPress={() => {
+                navigate("ChooseLocation", { from: "Register" });
+              }}
             />
           </View>
           <View height={scale(24)} />

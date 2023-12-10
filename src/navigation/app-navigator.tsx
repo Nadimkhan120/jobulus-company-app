@@ -30,6 +30,7 @@ import {
   Steps,
   AddStep,
   AddCompany,
+  ChooseLocation,
 } from "@/screens";
 import Applicants from "@/screens/applicants";
 import CandidateProfile from "@/screens/candidate-profile";
@@ -72,6 +73,7 @@ export type AppStackParamList = {
   Steps: { id: number };
   AddStep: { processId: number; stepsCount: number };
   AddCompany: undefined;
+  ChooseLocation: { from: any };
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -117,8 +119,8 @@ export const AppNavigator = () => {
         <Stack.Screen name="Steps" component={Steps} />
         <Stack.Screen name="AddStep" component={AddStep} />
         <Stack.Screen name="AddCompany" component={AddCompany} />
+        <Stack.Screen name="ChooseLocation" component={ChooseLocation} />
       </Stack.Group>
     </Stack.Navigator>
   );
 };
-

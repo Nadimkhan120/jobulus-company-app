@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
@@ -15,6 +15,8 @@ import { Button, ControlledInput, Screen, Text, View } from "@/ui";
 import { DescriptionField } from "@/ui/description-field";
 import { showErrorMessage, showSuccessMessage } from "@/utils";
 import { queryClient } from "@/services/api/api-provider";
+import { useSelection, setSelectedLocation } from "@/store/selection";
+import { SelectOptionButton } from "@/components/select-option-button";
 
 const schema = z.object({
   companyName: z.string({
@@ -34,47 +36,63 @@ export type AddCompanyFormType = z.infer<typeof schema>;
 
 export const AddCompany = () => {
   const { colors } = useTheme<Theme>();
-  const { goBack } = useNavigation();
+  const { goBack, navigate } = useNavigation();
 
   useSoftKeyboardEffect();
 
+  const selectedLocation = useSelection((state) => state.selectedLocation);
+
   const { mutate: AddCompanyApi, isLoading } = useCompanyInformation();
 
-  const { handleSubmit, control } = useForm<AddCompanyFormType>({
-    resolver: zodResolver(schema),
-  });
+  const { handleSubmit, control, watch, setValue, trigger } = useForm<AddCompanyFormType>(
+    {
+      resolver: zodResolver(schema),
+    }
+  );
+
+  const watchLocation = watch("location");
 
   const onSubmit = (data: AddCompanyFormType) => {
-    AddCompanyApi(
-      {
-        company_name: data?.companyName,
-        company_description: data?.description,
-        google_location: data?.location,
-        country_id: "pakistan",
-        city_id: "lahore",
+    const body = {
+      company_name: data?.companyName,
+      company_description: data?.description,
+      google_location: data?.location,
+      country_id: selectedLocation?.country,
+      city_id: selectedLocation?.city,
+    };
+
+    AddCompanyApi(body, {
+      onSuccess: (data) => {
+        if (data?.response?.status === 200) {
+          goBack();
+          showSuccessMessage("Company added successfully");
+          queryClient.invalidateQueries(useCompanies.getKey());
+          setSelectedLocation("");
+        } else {
+          showErrorMessage(data.response.message);
+        }
       },
-      {
-        onSuccess: (data) => {
-          if (data?.response?.status === 200) {
-            goBack();
-            showSuccessMessage("Company added successfully");
-            queryClient.invalidateQueries(useCompanies.getKey());
-          } else {
-            showErrorMessage(data.response.message);
-          }
-        },
-        onError: (error) => {
-          // An error happened!
-        },
-      }
-    );
+      onError: (error) => {
+        // An error happened!
+      },
+    });
   };
+
+  useEffect(() => {
+    if (selectedLocation) {
+      setValue("location", selectedLocation?.address);
+      trigger("location");
+    }
+  }, [selectedLocation]);
 
   return (
     <Screen backgroundColor={colors.white} edges={["top"]}>
       <ScreenHeader />
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.content}
+      >
         <View flex={1} paddingHorizontal={"large"}>
           <View height={scale(12)} />
 
@@ -87,35 +105,40 @@ export const AddCompany = () => {
             </Text>
           </View>
 
-          <View paddingTop={"large"}>
+          <View paddingTop={"large"} gap={"medium"}>
             <ControlledInput
               placeholder="Enter company name"
               label="Company Name"
               control={control}
               name="companyName"
             />
-            <View height={scale(8)} />
+
             <DescriptionField
               placeholder="Enter company details"
               label="About Company"
               control={control}
               name="description"
             />
-            <View height={scale(8)} />
-            <ControlledInput
+
+            <SelectOptionButton
+              label="Location"
+              isSelected={watchLocation ? true : false}
+              selectedText={watchLocation ? watchLocation : "Choose Location"}
+              icon={"arrow-ios-down"}
+              onPress={() => {
+                navigate("ChooseLocation", { from: "Register" });
+              }}
+            />
+
+            {/* <ControlledInput
               placeholder="Enter location"
               label="Location"
               control={control}
               name="location"
-            />
+            /> */}
           </View>
           <View height={scale(24)} />
-          <Button
-            label="Add"
-            //onPress={() => navigate("SendInvite")}
-            onPress={handleSubmit(onSubmit)}
-            loading={isLoading}
-          />
+          <Button label="Add" onPress={handleSubmit(onSubmit)} loading={isLoading} />
         </View>
       </ScrollView>
     </Screen>

@@ -4,8 +4,9 @@ import { Dropdown } from "react-native-element-dropdown";
 import { scale } from "react-native-size-matters";
 import { palette } from "@/theme";
 import { Text, View } from "@/ui";
+import { TextInput, TouchableWithoutFeedback } from "react-native-gesture-handler";
 
-const SelectionBox = ({ placeholder, label, data, onChange }: any) => {
+const SelectionBox = ({ placeholder, label, data, onChange, search }: any) => {
   const [isFocus, setIsFocus] = useState(false);
 
   return (
@@ -21,6 +22,7 @@ const SelectionBox = ({ placeholder, label, data, onChange }: any) => {
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
+          search={search}
           iconStyle={styles.iconStyle}
           itemTextStyle={{ color: palette.black }}
           data={data ?? []}

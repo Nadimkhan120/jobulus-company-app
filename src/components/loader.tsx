@@ -19,7 +19,7 @@ const Loader = ({ isVisible }: LoaderProps) => {
           borderRadius={scale(5)}
         >
           <ActivityIndicator color={"blue"} />
-          <Text variant={"body"} color="black">
+          <Text variant={"medium14"} color="black">
             Uploading...
           </Text>
         </View>
