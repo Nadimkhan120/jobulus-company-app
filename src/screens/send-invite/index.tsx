@@ -128,7 +128,11 @@ export const SendInvite = () => {
     <Screen backgroundColor={colors.white} edges={["top", "bottom"]}>
       <ScreenHeader />
 
-      <View paddingHorizontal={"large"} backgroundColor={"grey500"} paddingBottom={"medium"}>
+      <View
+        paddingHorizontal={"large"}
+        backgroundColor={"grey500"}
+        paddingBottom={"medium"}
+      >
         <StepIndicator stepCount={3} currentPosition={2} labels={labels} />
       </View>
 
@@ -207,15 +211,11 @@ export const SendInvite = () => {
         })}
 
         <View flex={1} justifyContent={"flex-end"} paddingBottom={"large"}>
-          <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
-            <View width={scale(100)}>
-              <Button
-                backgroundColor={"black"}
-                label="Finish"
-                onPress={sendIvitesToPeople}
-                loading={isLoadingInvite}
-              />
-            </View>
+          <View
+            flexDirection={"row"}
+            alignItems={"center"}
+            justifyContent={"space-between"}
+          >
             <View width={scale(100)}>
               <Button
                 label="Skip"
@@ -223,6 +223,15 @@ export const SendInvite = () => {
                   loginFromVerifyCode();
                 }}
                 backgroundColor={"grey300"}
+              />
+            </View>
+            <View width={scale(100)}>
+              <Button
+                //  backgroundColor={""}
+                variant={"primary"}
+                label="Finish"
+                onPress={sendIvitesToPeople}
+                loading={isLoadingInvite}
               />
             </View>
           </View>

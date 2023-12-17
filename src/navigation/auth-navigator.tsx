@@ -12,6 +12,7 @@ import {
   SendInvite,
   VerifyCode,
   ChooseLocation,
+  VerifyPasswordCode,
 } from "@/screens";
 
 export type AuthStackParamList = {
@@ -25,6 +26,7 @@ export type AuthStackParamList = {
   ForgotPassword: undefined;
   ResetPassword: { email: string; token: string };
   ChooseLocation: { from: any };
+  VerifyPasswordCode: { email: string };
 };
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
@@ -99,6 +101,13 @@ export const AuthNavigator = () => {
       <Stack.Screen
         name="ChooseLocation"
         component={ChooseLocation}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="VerifyPasswordCode"
+        component={VerifyPasswordCode}
         options={{
           headerShown: false,
         }}

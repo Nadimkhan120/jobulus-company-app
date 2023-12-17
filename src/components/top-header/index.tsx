@@ -1,15 +1,15 @@
 import React from "react";
-import {} from "react-native";
 import { scale } from "react-native-size-matters";
-
 import { ImageButton } from "@/components/image-button";
 import { openDrawer } from "@/store/app";
 import { View } from "@/ui";
-
 import { CompanyButton } from "../company-button";
 import { SearchField } from "../search-field";
+import { useNavigation } from "@react-navigation/native";
 
 export const TopHeader = () => {
+  const { navigate } = useNavigation();
+
   return (
     <View
       height={scale(72)}
@@ -35,14 +35,14 @@ export const TopHeader = () => {
           icon="message-icon"
           size={scale(40)}
           backgroundColor={"black"}
-          onPress={() => null}
+          onPress={() => navigate("ChatList")}
         />
         <View width={scale(10)} />
         <ImageButton
           icon="bell"
           size={scale(40)}
           backgroundColor={"black"}
-          onPress={() => null}
+          onPress={() => navigate("Notifications")}
         />
       </View>
     </View>

@@ -12,6 +12,7 @@ import { theme } from "@/theme";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { ThemeProvider } from "@shopify/restyle";
+import { StripeProvider } from "@stripe/stripe-react-native";
 
 const App = () => {
   const appFontsLoaded = useAppFonts();
@@ -41,7 +42,13 @@ const App = () => {
           <NavigationContainer>
             <APIProvider>
               <BottomSheetModalProvider>
-                <Root />
+                <StripeProvider
+                  publishableKey={
+                    "pk_test_51OLJsBLNk4NTWnZrnYmBAM0WTJ9T3RHOKWY2eXQJ6BZ31BKf9gJm36R2aYhDrE5ZR0i9hY2sbOKxEwmJNIXKl3Q400qGJegeQP"
+                  }
+                >
+                  <Root />
+                </StripeProvider>
                 <FlashMessage position="bottom" />
               </BottomSheetModalProvider>
             </APIProvider>

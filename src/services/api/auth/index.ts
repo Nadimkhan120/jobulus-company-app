@@ -6,6 +6,10 @@ type Variables = {
   email: string;
 };
 
+type Variables4 = {
+  verification_code: number;
+};
+
 type Variables2 = {
   email: string;
   password: string;
@@ -49,6 +53,19 @@ export const useSendInviteLink = createMutation<Response, InviteBody, AxiosError
   mutationFn: async (variables) =>
     NetWorkService.Post({
       url: "company/register-step-3",
+      body: variables,
+      // @ts-ignore
+    }).then((response) => response?.data),
+});
+
+export const useForgotPasswordVerification = createMutation<
+  Response,
+  Variables4,
+  AxiosError
+>({
+  mutationFn: async (variables) =>
+    NetWorkService.Post({
+      url: "verify-password-code",
       body: variables,
       // @ts-ignore
     }).then((response) => response?.data),

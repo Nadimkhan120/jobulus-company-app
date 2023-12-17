@@ -3,7 +3,7 @@ import { StyleSheet, useWindowDimensions } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import { scale } from "react-native-size-matters";
 import { TabBar } from "react-native-tab-view";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
 import type { Route } from "@showtime-xyz/tab-view";
 import { TabScrollView, TabView } from "@showtime-xyz/tab-view";
@@ -21,13 +21,20 @@ import { Image } from "expo-image";
 import { icons } from "@/assets/icons";
 
 const OverViewTab = ({ route, data }: any) => {
+  const { navigate } = useNavigation();
+
   return (
     <>
       <TabScrollView index={route?.index}>
-        <OverView data={data} />
+        <OverView data={data?.resume_bio} />
       </TabScrollView>
       <View paddingVertical={"large"} paddingHorizontal={"large"}>
-        <PressableScale>
+        <PressableScale
+          onPress={() => {
+            console.log("data", JSON.stringify(data, null, 2));
+            navigate("Chats", { person_id: data?.person_id });
+          }}
+        >
           <View
             backgroundColor={"black"}
             height={scale(44)}
@@ -97,7 +104,13 @@ const HistoryTab = ({ route }: any) => {
   );
 };
 
-const renderLabel = ({ focused, route }: { focused: boolean; route: { title: string } }) => {
+const renderLabel = ({
+  focused,
+  route,
+}: {
+  focused: boolean;
+  route: { title: string };
+}) => {
   return (
     <Text color={focused ? "primary" : "black"} variant="medium14" numberOfLines={1}>
       {route.title}
@@ -151,9 +164,11 @@ export function Job() {
     ({ route }: any) => {
       switch (route.key) {
         case "Overview":
-          return <OverViewTab route={route} index={0} data={candidateData?.resume_bio} />;
+          return <OverViewTab route={route} index={0} data={candidateData} />;
         case "Experience":
-          return <ExperienceTab route={route} index={1} data={candidateData?.experience} />;
+          return (
+            <ExperienceTab route={route} index={1} data={candidateData?.experience} />
+          );
         case "Education & Skills":
           return <EducationTab route={route} index={2} data={candidateData} />;
         case "History":
@@ -186,7 +201,12 @@ export function Job() {
     <Screen backgroundColor={colors.white}>
       <ScreenHeader showBorder={true} icon="close" />
       {isLoading ? (
-        <View flex={1} height={scale(300)} justifyContent={"center"} alignItems={"center"}>
+        <View
+          flex={1}
+          height={scale(300)}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
           <ActivityIndicator size={"large"} />
         </View>
       ) : (

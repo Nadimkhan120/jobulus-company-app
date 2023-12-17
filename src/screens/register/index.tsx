@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useForm } from "react-hook-form";
 import { StyleSheet } from "react-native";
@@ -60,6 +59,7 @@ export const Register = () => {
         password: data?.password,
         password_confirmation: data?.password,
         full_name: data?.fullName,
+        user_type: "company",
       },
       {
         onSuccess: (responseData) => {
@@ -163,4 +163,3 @@ const styles = StyleSheet.create({
     width: scale(98),
   },
 });
-

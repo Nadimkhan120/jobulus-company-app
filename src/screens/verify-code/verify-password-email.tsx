@@ -1,53 +1,65 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { useTheme } from "@shopify/restyle";
+import { Image } from "expo-image";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { StyleSheet } from "react-native";
 import { scale } from "react-native-size-matters";
 import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigation } from "@react-navigation/native";
-import { useTheme } from "@shopify/restyle";
-import { Image } from "expo-image";
 import { icons } from "@/assets/icons";
 import { ScreenHeader } from "@/components/screen-header";
-import { useForgotPassword } from "@/services/api/auth";
+import { useVerifyEmail } from "@/services/api/auth/verify-email";
+import { useApp } from "@/store/app";
+import { setUserToken } from "@/store/auth";
 import type { Theme } from "@/theme";
 import { Button, ControlledInput, Screen, Text, View } from "@/ui";
 import { showErrorMessage } from "@/utils";
+import { setUserWithProfile } from "@/store/user";
 
 const schema = z.object({
-  email: z
+  code: z
     .string({
-      required_error: "Email is required",
+      required_error: "Verification code is required",
     })
-    .email({
-      message: "Invalid email",
-    }),
+    .min(6, "Verification code must be at least 6 characters"),
 });
 
-export type ForgotPasswordFormType = z.infer<typeof schema>;
+export type VerifyPassswordCodeForm = z.infer<typeof schema>;
 
-export const ForgotPassword = () => {
+export const VerifyPasswordCode = () => {
   const { colors } = useTheme<Theme>();
   const { navigate } = useNavigation();
+  const route = useRoute<any>();
 
-  const { mutate: forgotPasswordApi, isLoading } = useForgotPassword();
+  const companyType = useApp((state) => state.companyType);
 
-  const { handleSubmit, control } = useForm<ForgotPasswordFormType>({
+  const { mutate: verifyEmailApi, isLoading } = useVerifyEmail();
+
+  const { handleSubmit, control } = useForm<VerifyPassswordCodeForm>({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (body: ForgotPasswordFormType) => {
-    forgotPasswordApi(
-      { email: body?.email },
+  const onSubmit = (data: VerifyPassswordCodeForm) => {
+    verifyEmailApi(
+      {
+        email: route?.params?.email,
+        verification_code: data?.code,
+        password: route?.params?.password,
+      },
       {
         onSuccess: (data) => {
+          console.log("data", JSON.stringify(data, null, 2));
           if (data?.response?.status === 200) {
-            navigate("ResetPassword", {
-              email: body?.email,
-              token: data?.response?.token,
-            });
+            setUserToken(data?.response?.data?.token);
+            setUserWithProfile(data?.response?.data);
+            if (companyType === "company") {
+              navigate("CompanyInformation");
+            } else {
+              navigate("AgencyInformation");
+            }
           } else {
-            showErrorMessage(data?.response?.message);
+            showErrorMessage(data.response.message);
           }
         },
         onError: (error) => {
@@ -70,7 +82,7 @@ export const ForgotPassword = () => {
           <View height={scale(16)} />
           <View paddingTop={"large"} alignItems={"center"} justifyContent={"center"}>
             <Text variant={"semiBold24"} textAlign={"center"} color={"black"}>
-              Forgot Password
+              Verify Code
             </Text>
             <Text
               variant={"regular14"}
@@ -78,7 +90,8 @@ export const ForgotPassword = () => {
               textAlign={"center"}
               color={"grey100"}
             >
-              Enter your email to reset your password
+              Enter your verification code from your email that we’ve sent at:{" "}
+              <Text color={"primary"}>{route?.params?.email}</Text>
             </Text>
           </View>
         </View>
@@ -87,10 +100,10 @@ export const ForgotPassword = () => {
 
         <View paddingTop={"large"}>
           <ControlledInput
-            placeholder="Enter email"
-            label="Email"
+            placeholder="Enter code"
+            label="Verification Code"
             control={control}
-            name="email"
+            name="code"
           />
           <View height={scale(8)} />
         </View>

@@ -108,11 +108,12 @@ export const Roles = () => {
       <View
         backgroundColor={"grey500"}
         paddingVertical={"large"}
-        flexDirection={"row"}
-        alignItems={"center"}
+        // flexDirection={"row"}
+        // alignItems={"center"}
         paddingHorizontal={"large"}
         columnGap={"medium"}
         paddingBottom={"medium"}
+        width={"100%"}
       >
         <SearchField placeholder="Search by name" showBorder={true} />
       </View>
@@ -130,7 +131,12 @@ export const Roles = () => {
       />
       <View height={scale(10)} backgroundColor={"grey500"} />
       {isLoading ? (
-        <View flex={1} height={scale(300)} justifyContent={"center"} alignItems={"center"}>
+        <View
+          flex={1}
+          height={scale(300)}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
           <ActivityIndicator size={"large"} />
         </View>
       ) : (

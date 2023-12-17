@@ -63,7 +63,7 @@ export const TextField = React.forwardRef<TextInput, NInputProps>((props, ref) =
         {isSecure ? (
           <PressableScale onPress={togglePassword}>
             <Image
-              source={showPassword ? icons.eye : icons["eye-closed"]}
+              source={showPassword ? icons["eye-closed"] : icons.eye}
               style={styles.icon}
               contentFit="contain"
             />

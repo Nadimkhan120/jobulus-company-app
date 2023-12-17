@@ -1,11 +1,9 @@
 import React from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { scale } from "react-native-size-matters";
-
 import { useTopVacancies } from "@/services/api/vacancies";
 import { useUser } from "@/store/user";
 import { PressableScale, Text, View } from "@/ui";
-
 import { HomeSliderItem } from "./slider-item";
 import { useRefreshOnFocus } from "@/hooks";
 
@@ -38,15 +36,26 @@ export const HomeSliderContainer = ({}) => {
         </PressableScale>
       </View>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.container}
-      >
-        {data?.response?.data?.map((element, index) => {
-          return <HomeSliderItem data={element} key={index} />;
-        })}
-      </ScrollView>
+      {data?.response?.data?.length === 0 ? (
+        <View
+          alignContent={"center"}
+          alignSelf={"center"}
+          paddingVertical={"large"}
+          flex={1}
+        >
+          <Text>NO Recent Jobs Found</Text>
+        </View>
+      ) : (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.container}
+        >
+          {data?.response?.data?.map((element, index) => {
+            return <HomeSliderItem data={element} key={index} />;
+          })}
+        </ScrollView>
+      )}
     </View>
   );
 };

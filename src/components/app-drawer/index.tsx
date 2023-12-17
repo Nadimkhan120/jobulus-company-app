@@ -40,7 +40,7 @@ export function AppDrawer({ children }: AppDrawer) {
     // @ts-ignore
   }, [companies?.response?.status]);
 
-  console.log("companies", JSON.stringify(companies, null, 2));
+  // console.log("companies", JSON.stringify(companies, null, 2));
 
   return (
     <Drawer

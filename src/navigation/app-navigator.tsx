@@ -31,6 +31,9 @@ import {
   AddStep,
   AddCompany,
   ChooseLocation,
+  ChatList,
+  Chats,
+  Notifications,
 } from "@/screens";
 import Applicants from "@/screens/applicants";
 import CandidateProfile from "@/screens/candidate-profile";
@@ -52,7 +55,7 @@ export type AppStackParamList = {
   Postjob: undefined;
   PostJobDetail: undefined;
   PostJobPreview: undefined;
-  PostJobPayment: undefined;
+  PostJobPayment: { data: any };
   JobPosted: undefined;
   JdLibrary: undefined;
   JdLibraryDetail: undefined;
@@ -74,6 +77,9 @@ export type AppStackParamList = {
   AddStep: { processId: number; stepsCount: number };
   AddCompany: undefined;
   ChooseLocation: { from: any };
+  ChatList: undefined;
+  Chats: { person_id: any; chat_id?: string; profile_pic?: string; name?: string };
+  Notifications: undefined;
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -120,6 +126,9 @@ export const AppNavigator = () => {
         <Stack.Screen name="AddStep" component={AddStep} />
         <Stack.Screen name="AddCompany" component={AddCompany} />
         <Stack.Screen name="ChooseLocation" component={ChooseLocation} />
+        <Stack.Screen name="Chats" component={Chats} />
+        <Stack.Screen name="ChatList" component={ChatList} />
+        <Stack.Screen name="Notifications" component={Notifications} />
       </Stack.Group>
     </Stack.Navigator>
   );

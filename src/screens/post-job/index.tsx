@@ -5,8 +5,6 @@ import {
   ScrollView,
   StyleSheet,
   TextInput,
-  TouchableWithoutFeedback,
-  FlatList,
   TouchableOpacity,
 } from "react-native";
 import { scale } from "react-native-size-matters";
@@ -19,7 +17,6 @@ import { icons } from "@/assets/icons";
 import SelectionBox from "@/components/drop-down";
 import StepIndicator from "@/components/indicator-2";
 import { ScreenHeader } from "@/components/screen-header";
-import { useSoftKeyboardEffect } from "@/hooks";
 import {
   useEducationLevels,
   useExperienceLevels,
@@ -142,12 +139,14 @@ export const Postjob = () => {
             </Text>
             <TextInput
               placeholder="Write Title"
+              placeholderTextColor={colors.grey300}
               style={{
                 height: scale(49),
                 backgroundColor: palette.grey500,
                 borderRadius: scale(8),
                 marginBottom: scale(8),
                 paddingHorizontal: scale(12),
+                color: colors.black,
               }}
               onChangeText={(text) => {
                 setSearchQuery(text);
@@ -176,7 +175,7 @@ export const Postjob = () => {
                         activeOpacity={0.6}
                       >
                         <View marginVertical={"small"}>
-                          <Text>{debouncedSearch}</Text>
+                          <Text color={"black"}>{debouncedSearch}</Text>
                         </View>
                       </TouchableOpacity>
                     </View>
@@ -202,7 +201,7 @@ export const Postjob = () => {
                             key={index}
                           >
                             <View marginVertical={"small"}>
-                              <Text>{element?.name}</Text>
+                              <Text color={"black"}>{element?.name}</Text>
                             </View>
                           </TouchableOpacity>
                         );

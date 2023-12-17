@@ -70,8 +70,11 @@ export const PostJobPreview = () => {
     // @ts-ignore
     postJobApi(body, {
       onSuccess: (responseData) => {
+        console.log("responseData", JSON.stringify(responseData, null, 2));
+
         if (responseData?.response?.status === 200) {
-          navigation?.navigate("JobPosted");
+          //   navigation?.navigate("PostJobPayment", {data:});
+          // navigation?.navigate("JobPosted");
           setSelectedLocation("");
         } else {
           showErrorMessage(

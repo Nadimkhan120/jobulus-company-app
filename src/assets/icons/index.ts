@@ -63,6 +63,10 @@ export const icons = {
   people: require("../images/people.png"),
   book: require("../images/book.png"),
   camera: require("../images/camera.png"),
+  voice: require("../images/voice.png"),
+  send: require("../images/send.png"),
+  "chat-plus": require("../images/chat-plus.png"),
+  link: require("../images/link.png"),
 };
 
 export type IconTypes = keyof typeof icons;

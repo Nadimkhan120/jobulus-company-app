@@ -1,25 +1,27 @@
-import { DefaultTheme } from '@react-navigation/native';
-import { createTheme } from '@shopify/restyle';
-import { scale } from 'react-native-size-matters';
+import { DefaultTheme } from "@react-navigation/native";
+import { createTheme } from "@shopify/restyle";
+import { scale } from "react-native-size-matters";
 
-import { AppFonts } from '@/constants/fonts';
+import { AppFonts } from "@/constants/fonts";
 
 export const palette = {
-  primary: '#01C96C',
-  secondary: '#ECFDF5',
-  tertiary: '#D0FBE6',
-  backgroundLight: '#FFFFFF',
-  black: '#0D0D26',
-  white: '#FFFFFF',
-  grey100: '#494A50',
-  grey200: '#7A7C85',
-  grey300: '#AFB0B6',
-  grey400: '#CACBCE',
-  grey500: '#F2F2F3',
-  error: '#FE6D73',
-  info: '#5386E4',
-  warning: '#FFBC42',
-  transparent: 'transparent',
+  primary: "#01C96C",
+  secondary: "#ECFDF5",
+  tertiary: "#D0FBE6",
+  backgroundLight: "#FFFFFF",
+  black: "#0D0D26",
+  white: "#FFFFFF",
+  grey100: "#494A50",
+  grey200: "#7A7C85",
+  grey300: "#AFB0B6",
+  grey400: "#CACBCE",
+  grey500: "#F2F2F3",
+  error: "#FE6D73",
+  info: "#5386E4",
+  warning: "#FFBC42",
+  transparent: "transparent",
+  blue: "#2e57bd",
+  danger: "#D33415",
 };
 
 export const theme = createTheme({
@@ -45,7 +47,9 @@ export const theme = createTheme({
     error: palette.error,
     info: palette.info,
     warning: palette.warning,
-    transparent: 'transparent',
+    transparent: "transparent",
+    blue: "#2e57bd",
+    danger: "#D33415",
   },
   spacing: {
     tiny: scale(2),
@@ -54,9 +58,9 @@ export const theme = createTheme({
     medium: scale(12),
     large: scale(16),
     xLarge: scale(20),
-    '2xl': scale(24),
-    '3xl': scale(28),
-    '4xl': scale(32),
+    "2xl": scale(24),
+    "3xl": scale(28),
+    "4xl": scale(32),
   },
 
   breakpoints: {
@@ -66,7 +70,7 @@ export const theme = createTheme({
   textVariants: {
     // common
     primary: {
-      color: 'textColor',
+      color: "textColor",
       fontSize: 10,
     },
 
@@ -183,65 +187,65 @@ export const theme = createTheme({
     heading: {
       fontSize: 16,
       fontFamily: AppFonts.APP_FONT_BOLD,
-      color: 'black',
+      color: "black",
     },
     title: {
       fontSize: 14,
       fontFamily: AppFonts.APP_FONT_BOLD,
-      color: 'textColor',
+      color: "textColor",
     },
     body: {
       fontSize: 12,
       fontFamily: AppFonts.APP_FONT_MEDIUM,
-      color: 'textColor',
+      color: "textColor",
     },
   },
   buttonVariants: {
     defaults: {
-      borderRadius: 'xSmall',
+      borderRadius: "xSmall",
       height: scale(44),
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'primary',
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "primary",
     },
     primary: {
       borderRadius: scale(4),
       height: scale(44),
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'primary',
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "primary",
     },
 
     outline: {
       borderRadius: scale(4),
       height: scale(44),
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'transparent',
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "transparent",
       borderWidth: 1,
-      borderColor: 'primary',
+      borderColor: "primary",
     },
     error: {
       borderRadius: scale(4),
       height: scale(44),
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'transparent',
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "transparent",
       borderWidth: 1,
-      borderColor: 'error',
+      borderColor: "error",
     },
   },
 
   inputVariants: {
     default: {
-      borderRadius: 'tiny',
-      backgroundColor: 'white',
-      borderColor: 'borderColor',
+      borderRadius: "tiny",
+      backgroundColor: "white",
+      borderColor: "borderColor",
       borderWidth: 1,
     },
     underline: {
       borderBottomWidth: 2,
-      borderBottomColor: 'border',
+      borderBottomColor: "border",
     },
     none: {
       borderBottomWidth: 0,
@@ -268,6 +272,8 @@ export const darkTheme: Theme = {
     error: palette.error,
     info: palette.info,
     warning: palette.info,
-    transparent: 'transparent',
+    transparent: "transparent",
+    blue: "#2e57bd",
+    danger: "#D33415",
   },
 };
