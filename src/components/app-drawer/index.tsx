@@ -58,7 +58,7 @@ export function AppDrawer({ children }: AppDrawer) {
                 paddingTop={"medium"}
                 alignItems={"center"}
               >
-                <Avatar source={icons.avatar} size="medium" />
+                <Avatar source={user?.profile_pic} size="medium" />
                 <View>
                   <Text
                     variant={"medium16"}

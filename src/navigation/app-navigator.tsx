@@ -78,7 +78,7 @@ export type AppStackParamList = {
   AddCompany: undefined;
   ChooseLocation: { from: any };
   ChatList: undefined;
-  Chats: { person_id: any; chat_id?: string; profile_pic?: string; name?: string };
+  Chats: { person_id: any; chat_id?: any; profile_pic?: string; name?: string };
   Notifications: undefined;
 };
 

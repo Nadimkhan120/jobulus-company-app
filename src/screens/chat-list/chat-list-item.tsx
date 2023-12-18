@@ -6,6 +6,7 @@ import { PressableScale, Text, View } from "@/ui";
 import { useNavigation } from "@react-navigation/native";
 import { ChatListItems } from "@/services/api/chat";
 import { timeAgo } from "@/utils";
+import { useUser } from "@/store/user";
 
 type ChatListItemProps = {
   item: ChatListItems;
@@ -16,14 +17,24 @@ const ChatListItem = ({ item }: ChatListItemProps) => {
 
   const time = item?.lastMessage ? timeAgo(new Date(item?.lastMessage?.created_at)) : "";
 
+  const myUser = useUser((state) => state?.user);
+
+  const checkUser = `${myUser?.id}` === item?.person_id;
+
+  console.log("checkUser", checkUser);
+
   return (
     <PressableScale
       onPress={() =>
         navigate("Chats", {
-          person_id: item?.Reciever_Detail?.id,
+          person_id: checkUser ? item?.receiver_id : item?.person_id,
           chat_id: item?.lastMessage?.chat_id,
-          profile_pic: item?.Reciever_Detail?.profile_pic,
-          name: item?.Reciever_Detail?.full_name,
+          profile_pic: checkUser
+            ? item?.Reciever_Detail?.profile_pic
+            : item?.Person_Detail?.profile_pic,
+          name: checkUser
+            ? item?.Reciever_Detail?.full_name
+            : item?.Person_Detail?.full_name,
         })
       }
     >
@@ -38,7 +49,11 @@ const ChatListItem = ({ item }: ChatListItemProps) => {
         <View>
           <Avatar
             transition={1000}
-            source={{ uri: "https://fakeimg.pl/400x400/cccccc/cccccc" }}
+            source={
+              checkUser
+                ? item?.Reciever_Detail?.profile_pic
+                : item?.Person_Detail?.profile_pic
+            }
             placeholder={{ uri: "https://fakeimg.pl/400x400/cccccc/cccccc" }}
           />
         </View>
@@ -52,7 +67,9 @@ const ChatListItem = ({ item }: ChatListItemProps) => {
           >
             <View gap={"small"}>
               <Text variant={"medium14"} color={"black"}>
-                {item?.Reciever_Detail?.full_name}
+                {checkUser
+                  ? item?.Reciever_Detail?.full_name
+                  : item?.Person_Detail?.full_name}
               </Text>
               <Text
                 variant={"regular13"}

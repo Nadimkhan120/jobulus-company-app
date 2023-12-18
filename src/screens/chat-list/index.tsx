@@ -45,6 +45,8 @@ export const ChatList = () => {
     variables: {
       person_id: myUser?.id,
     },
+
+    refetchInterval: 5000,
   });
 
   useRefreshOnFocus(refetch);

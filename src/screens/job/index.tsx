@@ -32,7 +32,13 @@ const OverViewTab = ({ route, data }: any) => {
         <PressableScale
           onPress={() => {
             console.log("data", JSON.stringify(data, null, 2));
-            navigate("Chats", { person_id: data?.person_id });
+
+            navigate("Chats", {
+              person_id: data?.person_id,
+              profile_pic: data?.profile_pic,
+              name: data?.full_name,
+              chat_id: 0,
+            });
           }}
         >
           <View

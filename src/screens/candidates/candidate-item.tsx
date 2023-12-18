@@ -55,7 +55,11 @@ const CandidateItem = ({
         </View>
 
         <View flex={1} paddingLeft={"medium"}>
-          <View flexDirection={"row"} alignItems={"center"} justifyContent={"space-between"}>
+          <View
+            flexDirection={"row"}
+            alignItems={"center"}
+            justifyContent={"space-between"}
+          >
             <Text variant={"semiBold14"} color={"black"}>
               {data?.full_name}
             </Text>

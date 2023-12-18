@@ -17,12 +17,19 @@ export const Settings = () => {
   const { width } = useWindowDimensions();
 
   const company = useUser((state) => state?.company);
+  const profile = useUser((state) => state?.profile);
 
   return (
     <Screen backgroundColor={colors.white} edges={["top"]}>
       <View flex={1}>
         <View height={scale(119)}>
-          <Image source={icons["back-cover"]} style={{ height: scale(119), width: width }} />
+          <Image
+            //source={icons["back-cover"]}
+            source={profile?.cover_pic}
+            style={{ height: scale(119), width: width }}
+            transition={1000}
+            placeholder={`https://fakeimg.pl/${width}x400/cccccc/cccccc`}
+          />
         </View>
 
         <View
@@ -33,7 +40,7 @@ export const Settings = () => {
           }}
         >
           <CompanyButton
-            icon="company"
+            source={profile?.profile_pic}
             onPress={() => null}
             size={scale(86)}
             imageSize={scale(86)}
@@ -107,4 +114,3 @@ const styles = StyleSheet.create({
 });
 
 export default Settings;
-

@@ -66,7 +66,7 @@ export const Chats = () => {
     variables: {
       chat_id: route?.params?.chat_id,
     },
-    enabled: route?.params?.chat_id ? true : false,
+    enabled: route?.params?.chat_id !== 0 ? true : false,
     refetchInterval: 5000,
   });
 
@@ -106,8 +106,9 @@ export const Chats = () => {
       let makeMessage = chatMessage?.messages?.map((item, index) => {
         return {
           author: {
-            id: item?.person_id === `${myUser?.id}` ? item?.person_id : item?.receiver_id,
+            id: item?.person_id,
           },
+
           createdAt: item?.created_at,
           id: `${item?.id}`,
           text: item?.message,
@@ -135,28 +136,26 @@ export const Chats = () => {
 
     addMessage(textMessage);
 
-    sendMessage(
-      {
-        person_id: myUser?.id,
-        receiver_id: route?.params?.person_id,
-        message: message,
-        chat_id: route?.params?.chat_id ?? 0,
+    let body = {
+      person_id: myUser?.id,
+      receiver_id: route?.params?.person_id,
+      message: message,
+      chat_id: route?.params?.chat_id ?? 0,
+    };
+
+    sendMessage(body, {
+      onSuccess: (data) => {
+        if (data?.message?.chat_id) {
+          queryClient.invalidateQueries(useChatLists.getKey());
+        } else {
+          showErrorMessage(data?.response?.message);
+        }
       },
-      {
-        onSuccess: (data) => {
-          console.log("data", data);
-          if (data?.message?.chat_id) {
-            queryClient.invalidateQueries(useChatLists.getKey());
-          } else {
-            showErrorMessage(data?.response?.message);
-          }
-        },
-        onError: (error) => {
-          console.log("error", error?.response);
-          // An error happened!
-        },
-      }
-    );
+      onError: (error) => {
+        console.log("error", error?.response);
+        // An error happened!
+      },
+    });
 
     setMessage("");
   };
@@ -205,7 +204,8 @@ export const Chats = () => {
     return (
       <View
         style={{
-          backgroundColor: user.id !== message.author.id ? "#ffffff" : colors.primary,
+          backgroundColor:
+            user.id !== message.author.id ? colors.grey500 : colors.primary,
           borderBottomLeftRadius: 10,
           borderBottomRightRadius: 10,
           borderTopLeftRadius: 10,
@@ -272,7 +272,7 @@ export const Chats = () => {
     <Screen backgroundColor={colors.white}>
       <Header onRightPress={handlePresentModalPress} data={chatHeaderData} />
 
-      {isLoading ? (
+      {isLoading && route?.params?.chat_id !== 0 ? (
         <RenderLoader />
       ) : (
         <View flex={1} backgroundColor={"grey500"}>

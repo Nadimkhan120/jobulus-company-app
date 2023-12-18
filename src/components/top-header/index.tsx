@@ -6,9 +6,12 @@ import { View } from "@/ui";
 import { CompanyButton } from "../company-button";
 import { SearchField } from "../search-field";
 import { useNavigation } from "@react-navigation/native";
+import { useUser } from "@/store/user";
 
 export const TopHeader = () => {
   const { navigate } = useNavigation();
+
+  const profile = useUser((state) => state.profile);
 
   return (
     <View
@@ -21,10 +24,10 @@ export const TopHeader = () => {
     >
       <View flexDirection={"row"} alignItems={"center"}>
         <CompanyButton
-          icon="company"
           size={scale(40)}
           imageSize={scale(40)}
           backgroundColor={"error"}
+          source={profile?.profile_pic}
           onPress={openDrawer}
         />
         <View flex={1} marginHorizontal={"medium"}>
