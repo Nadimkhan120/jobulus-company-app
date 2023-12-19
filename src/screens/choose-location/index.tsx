@@ -106,7 +106,9 @@ export const ChooseLocation = () => {
               height: 0.5,
               backgroundColor: "#c8c7cc",
             },
-            description: {},
+            description: {
+              color: "black",
+            },
             loader: {
               flexDirection: "row",
               justifyContent: "flex-end",

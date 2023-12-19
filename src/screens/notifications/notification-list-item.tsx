@@ -35,7 +35,7 @@ const NotificationListItem = ({ item }: NotificationListItemProps) => {
           <Image
             transition={1000}
             //@ts-ignore
-            source={icons.zapier}
+            source={item?.image}
             contentFit="contain"
             style={style.image}
           />

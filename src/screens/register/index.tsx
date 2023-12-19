@@ -71,7 +71,25 @@ export const Register = () => {
               password: data?.password,
             });
           } else {
-            showErrorMessage(responseData?.response?.message ?? "Something went wrong");
+            // Extracting all messages  as a string
+            const extractedMessages = [];
+            const message: any = responseData?.response?.message;
+
+            // Iterate over the keys in the "message" object
+            for (const key in message) {
+              if (
+                Array.isArray(message[key]) &&
+                message[key].length > 0 &&
+                typeof message[key][0] === "string"
+              ) {
+                extractedMessages.push(message[key][0]);
+              }
+            }
+
+            // Concatenate the message into a single string
+            const concatenatedMessages = extractedMessages.join(", ");
+
+            showErrorMessage(concatenatedMessages ?? "Something went wrong");
           }
         },
         onError: (error) => {

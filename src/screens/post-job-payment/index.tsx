@@ -30,8 +30,8 @@ export const PostJobPayment = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        company_id: 23,
-        job_id: 59,
+        company_id: route?.params?.data?.company_id,
+        job_id: route?.params?.data?.job_id,
         payment: 25,
         payment_type: "job promotion",
       }),

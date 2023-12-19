@@ -18,6 +18,8 @@ export const Notifications = () => {
   const { mutate: markNotificationAsRead, isLoading: markingAsRead } =
     useNotificationMarkAsRead();
 
+  console.log("data", JSON.stringify(data, null, 2));
+
   const renderItem = useCallback(({ item }) => {
     return <NotificationListItem item={item} />;
   }, []);
@@ -83,7 +85,7 @@ export const Notifications = () => {
             }
             ListEmptyComponent={
               <View height={scale(300)} justifyContent={"center"} alignItems={"center"}>
-                <Text>No Users Found</Text>
+                <Text>No Notification Found</Text>
               </View>
             }
           />

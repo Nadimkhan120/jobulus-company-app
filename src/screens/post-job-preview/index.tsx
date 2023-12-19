@@ -69,11 +69,16 @@ export const PostJobPreview = () => {
 
     // @ts-ignore
     postJobApi(body, {
-      onSuccess: (responseData) => {
+      onSuccess: (responseData: any) => {
         console.log("responseData", JSON.stringify(responseData, null, 2));
 
         if (responseData?.response?.status === 200) {
-          //   navigation?.navigate("PostJobPayment", {data:});
+          navigation?.navigate("PostJobPayment", {
+            data: {
+              job_id: responseData?.response?.data?.id,
+              company_id: responseData?.response?.data?.company_id,
+            },
+          });
           // navigation?.navigate("JobPosted");
           setSelectedLocation("");
         } else {
