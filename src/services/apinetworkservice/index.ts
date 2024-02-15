@@ -1,21 +1,21 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
-import BaseConfig from '@/config';
+import BaseConfig from "@/config";
 
 //@ts-ignore
-import type { ParamsNetwork } from './type';
+import type { ParamsNetwork } from "./type";
 
 export const RESULT_CODE_PUSH_OUT = 401;
 const TIME_OUT = 20000;
 
-import type { AxiosRequestConfig } from 'axios';
-import Axios from 'axios';
+import type { AxiosRequestConfig } from "axios";
+import Axios from "axios";
 
-import { getAuthToken } from '@/store/auth';
+import { getAuthToken } from "@/store/auth";
 
 //@ts-ignore
-import { controller, handleParameter } from './helper';
-import type { ResponseBase } from './type';
+import { controller, handleParameter } from "./helper";
+import type { ResponseBase } from "./type";
 
 const AxiosInstance = Axios.create({});
 
@@ -117,8 +117,8 @@ function Request(config: ParamsNetwork) {
   const token = getAuthToken();
 
   let headers = {
-    'Content-Type': 'application/json',
-    authorization: 'Bearer ' + token ?? '',
+    "Content-Type": "application/json",
+    authorization: "Bearer " + token ?? "",
   };
 
   const defaultConfig: AxiosRequestConfig = {
@@ -146,13 +146,13 @@ function Request(config: ParamsNetwork) {
 
 // get
 async function Get(params: ParamsNetwork) {
-  return Request(handleParameter(params, 'GET'));
+  return Request(handleParameter(params, "GET"));
 }
 
 // post
 //@ts-ignore
 async function Post(params: ParamsNetwork) {
-  return Request(handleParameter(params, 'POST'));
+  return Request(handleParameter(params, "POST"));
 }
 
 type ParameterPostFormData = AxiosRequestConfig & ParamsNetwork;
@@ -161,31 +161,29 @@ type ParameterPostFormData = AxiosRequestConfig & ParamsNetwork;
 //@ts-ignore
 async function PostFormData(params: ParamsNetwork) {
   //   const { token }: AppState = getState("app");
-  const headers: AxiosRequestConfig['headers'] = {
+  const headers: AxiosRequestConfig["headers"] = {
     // [tokenKeyHeader]: token ?? "",
-    'Content-Type': 'multipart/form-data',
+    "Content-Type": "multipart/form-data",
   };
-  return Request(
-    handleParameter<ParameterPostFormData>({ ...params, headers }, 'POST')
-  );
+  return Request(handleParameter<ParameterPostFormData>({ ...params, headers }, "POST"));
 }
 
 // put
 //@ts-ignore
 async function Put(params: ParamsNetwork) {
-  return Request(handleParameter(params, 'PUT'));
+  return Request(handleParameter(params, "PUT"));
 }
 
 // patch
 //@ts-ignore
 async function Patch(params: ParamsNetwork) {
-  return Request(handleParameter(params, 'PATCH'));
+  return Request(handleParameter(params, "PATCH"));
 }
 
 // delete
 //@ts-ignore
 async function Delete(params: ParamsNetwork) {
-  return Request(handleParameter(params, 'DELETE'));
+  return Request(handleParameter(params, "DELETE"));
 }
 
 export type NetWorkResponseType<T> = (

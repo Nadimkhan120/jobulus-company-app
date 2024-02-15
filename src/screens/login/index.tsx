@@ -114,9 +114,9 @@ export const Login = () => {
           gap={"medium"}
           marginVertical={"large"}
         >
-          <IconButton icon="apple" onPress={() => null} color={"grey500"} />
+          {/* <IconButton icon="apple" onPress={() => null} color={"grey500"} /> */}
           <IconButton icon="google" onPress={() => null} color={"grey500"} />
-          <IconButton icon="facebook" onPress={() => null} color={"grey500"} />
+          {/* <IconButton icon="facebook" onPress={() => null} color={"grey500"} /> */}
         </View>
 
         <View paddingVertical={"2xl"} alignSelf={"center"}>

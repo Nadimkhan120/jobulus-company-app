@@ -31,6 +31,7 @@ import { setPostJobDescription2 } from "@/store/post-job";
 import { AnimatePresence } from "moti";
 import TitleSearch from "./title-search";
 import { useDebounce } from "@/hooks";
+import { showErrorMessage } from "@/utils";
 
 const labels = ["Job Detail", "Post Description", "Post Detail", "Preview"];
 
@@ -84,6 +85,11 @@ export const Postjob = () => {
   const { data: titles } = useJobTitles();
 
   const onSubmit = (data: PostJobFormType) => {
+    if (skills.length === 0) {
+      showErrorMessage("Please add skills");
+      return;
+    }
+
     //navigation.navigate("PostJobDetail");
     navigation.navigate("JobDescription");
     setJobPost({ ...data, skills });
