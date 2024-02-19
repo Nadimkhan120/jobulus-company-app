@@ -46,7 +46,7 @@ export const CompanyDetail = () => {
     },
   });
 
-  console.log("data", JSON.stringify(data, null, 2));
+  console.log("data COMA", JSON.stringify(data, null, 2));
 
   return (
     <Screen backgroundColor={colors.white} edges={["top"]}>

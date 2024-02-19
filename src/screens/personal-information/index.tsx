@@ -34,6 +34,7 @@ export const PersonalInformation = () => {
   useSoftKeyboardEffect();
 
   const user = useUser((state) => state?.user);
+  const profile = useUser((state) => state?.profile);
 
   const { handleSubmit, control, setValue } = useForm<PersonalInformationFormType>({
     resolver: zodResolver(schema),
@@ -44,11 +45,10 @@ export const PersonalInformation = () => {
   };
 
   useEffect(() => {
-    if (user?.full_name) {
-      setValue("fullName", user?.full_name);
+    if (profile?.full_name) {
+      setValue("fullName", profile?.full_name);
     }
-
-    if (user?.phone) {
+    if (user?.phone != '') {
       setValue("phone", user?.phone);
     }
 
@@ -98,6 +98,7 @@ export const PersonalInformation = () => {
             control={control}
             name="phone"
             icon={
+              user?.phone  != ''? 
               <View
                 backgroundColor={"secondary"}
                 paddingVertical={"small"}
@@ -106,6 +107,7 @@ export const PersonalInformation = () => {
               >
                 <Text color={"primary"}>Verified</Text>
               </View>
+              : null
             }
           />
         </View>

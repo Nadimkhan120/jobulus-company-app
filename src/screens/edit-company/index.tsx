@@ -88,15 +88,18 @@ export const EditCompany = () => {
   //  console.log("company_id", JSON.stringify(data, null, 2));
 
   const [image, setImage] = useState(null);
+  const [coverImage, setCoverImage] = useState(null);
+
   const [picTyp, setPicType] = useState(null);
 
   const [cameraPermissionStatus, requestCameraPermission] =
     ImagePicker.useCameraPermissions();
   const [galleryPermission, requestGallaryPermission] =
     ImagePicker.useMediaLibraryPermissions();
+    console.log("COMPANY DATA ",JSON.stringify(data, null, 2));
 
   const { handleSubmit, control, setValue, watch, trigger } =
-    useForm<EditCompanyFormType>({
+    useForm<EditCompanyFormType>({      
       resolver: zodResolver(schema),
       defaultValues: {
         companyName: data?.name,
@@ -254,7 +257,13 @@ export const EditCompany = () => {
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      if (picType === 'pic') {
+        setImage(result.assets[0].uri);
+      } else {
+        setCoverImage(result.assets[0].uri);
+      }
+      // picType === "cover" ? setCoverImage(result.assets[0].uri): setImage(result.assets[0].uri)
+
       setPicType(picType);
       const asset = result?.assets[0];
       updateProfilePicApiCall({ asset, picType });
@@ -269,7 +278,9 @@ export const EditCompany = () => {
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      // setImage(result.assets[0].uri);
+      picType === "cover" ? setCoverImage(result.assets[0].uri): setImage(result.assets[0].uri)
+
       setPicType(picType);
       const asset = result?.assets[0];
       updateProfilePicApiCall({ asset, picType });
@@ -316,7 +327,7 @@ export const EditCompany = () => {
         <View>
           <View>
             <Image
-              source={picTyp === "cover" ? image : data?.images?.cover}
+              source={coverImage ? coverImage : data?.images?.cover}
               style={{ height: scale(119), width: width }}
             />
             <TouchableOpacity
@@ -349,7 +360,7 @@ export const EditCompany = () => {
             }}
           >
             <CompanyButton
-              source={picTyp === "pic" ? image : data?.images?.pic}
+              source={image ? image : data?.images?.pic}
               onPress={() => null}
               size={scale(86)}
               imageSize={scale(86)}

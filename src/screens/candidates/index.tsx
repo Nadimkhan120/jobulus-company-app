@@ -69,6 +69,8 @@ export const Candidates = () => {
   }, []);
 
   const renderItem = ({ item }) => {
+    console.log("PEOPLE ", item);
+    
     return (
       <PersonItem
         data={item}

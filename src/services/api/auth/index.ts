@@ -6,6 +6,13 @@ type Variables = {
   email: string;
 };
 
+interface UpdatePasswordData {
+  email: string;
+  oldpassword: string;
+  newpassword: string;
+  newpassword_confirmation: String;
+}
+
 type Variables4 = {
   verification_code: number;
 };
@@ -68,5 +75,14 @@ export const useForgotPasswordVerification = createMutation<
       url: "verify-password-code",
       body: variables,
       // @ts-ignore
+    }).then((response) => response?.data),
+});
+
+export const useUpdatePassword = createMutation<Response, UpdatePasswordData, AxiosError>({
+  mutationFn: async (variables) =>
+    NetWorkService.Post({
+      url: "update-password",
+      body: variables,
+      // No need for ts-ignore, variables is of correct type
     }).then((response) => response?.data),
 });

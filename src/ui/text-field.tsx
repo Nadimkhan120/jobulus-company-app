@@ -56,9 +56,9 @@ export const TextField = React.forwardRef<TextInput, NInputProps>((props, ref) =
           placeholderTextColor={theme.colors.grey300}
           onBlur={onBlur}
           onFocus={onFocus}
-          {...inputProps}
           style={styles.input}
           secureTextEntry={showPassword}
+          {...inputProps}
         />
         {isSecure ? (
           <PressableScale onPress={togglePassword}>
