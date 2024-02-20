@@ -6,9 +6,11 @@ import { useUser } from "@/store/user";
 import { PressableScale, Text, View } from "@/ui";
 import { HomeSliderItem } from "./slider-item";
 import { useRefreshOnFocus } from "@/hooks";
+import { useNavigation } from "@react-navigation/native";
 
 export const HomeSliderContainer = ({}) => {
   const company = useUser((state) => state?.company);
+  const { navigate } = useNavigation();
 
   const { data, refetch } = useTopVacancies({
     variables: {
@@ -29,7 +31,7 @@ export const HomeSliderContainer = ({}) => {
         <Text variant={"medium16"} color={"black"}>
           Recent Jobs
         </Text>
-        <PressableScale>
+        <PressableScale onPress={() => { navigate("Vacancies")}}>
           <Text color={"primary"} variant={"regular13"} textDecorationLine={"underline"}>
             See All
           </Text>

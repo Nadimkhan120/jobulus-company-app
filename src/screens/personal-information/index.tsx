@@ -8,7 +8,10 @@ import type { Theme } from "@/theme";
 import { Button, ControlledInput, Screen, Text, View } from "@/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTheme } from "@shopify/restyle";
-import { useUser } from "@/store/user";
+import { setUserData, useUser } from "@/store/user";
+import { useUpdateCandidateProfile } from '@/services/api/candidate';
+import { showErrorMessage, showSuccessMessage } from "@/utils";
+import { queryClient } from '@/services/api/api-provider';
 
 const schema = z.object({
   fullName: z.string({
@@ -35,18 +38,74 @@ export const PersonalInformation = () => {
 
   const user = useUser((state) => state?.user);
   const profile = useUser((state) => state?.profile);
+  const company = useUser((state) => state?.company);
+  console.log("User",user);
+  console.log("PROFILE",profile);
+  
+  
+  const roles = useUser((state) => state?.roles);
+  const { mutate: updateProfile, isLoading: updating } = useUpdateCandidateProfile();
 
   const { handleSubmit, control, setValue } = useForm<PersonalInformationFormType>({
     resolver: zodResolver(schema),
   });
 
   const onSubmit = (data: PersonalInformationFormType) => {
+
+
     console.log("data", data);
+    let newProfile = {
+      ...profile,
+      full_name: data?.fullName,
+      job_title: data?.jobTilte,
+    };
+
+    let newUser = {
+      ...user,
+      email: data?.email,
+      phone: data?.phone,
+    };
+
+    const body: any = {
+      email: data?.email,
+      full_name: data?.fullName,
+      job_title_id: data?.jobTilte,
+      phone:data?.phone,
+      unique_id: profile?.unique_id,
+    };
+
+
+    updateProfile(body, {
+      onSuccess: (responseData) => {
+        // console.log('responseData', JSON.stringify(responseData, null, 2));
+
+        if (responseData?.status === 200) {
+          showSuccessMessage(responseData?.message ?? '');
+          // queryClient.invalidateQueries(useGetProfile.getKey());
+
+          setUserData({
+            profile: newProfile,
+            user: newUser,
+            company,
+            roles,
+          });
+        } else {
+          showErrorMessage(responseData?.message ?? '');
+        }
+      },
+      onError: (error) => {
+        //@ts-ignore
+        showErrorMessage(error?.response?.data?.message ?? '');
+      },
+    });
   };
 
   useEffect(() => {
     if (profile?.full_name) {
       setValue("fullName", profile?.full_name);
+    }
+    if(profile?.job_title){
+      setValue("jobTilte", profile?.job_title)
     }
     if (user?.phone != '') {
       setValue("phone", user?.phone);

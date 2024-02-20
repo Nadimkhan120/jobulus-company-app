@@ -26,7 +26,7 @@ const Header = ({ data }: HeaderProps) => {
         }}
       >
         <Avatar
-          source={{ uri: 'https://fakeimg.pl/400x400/cccccc/cccccc' }}
+          source={{ uri: data?.profile_pic }}
           placeholder={{ uri: 'https://fakeimg.pl/400x400/cccccc/cccccc' }}
           size="large"
         />

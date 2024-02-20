@@ -10,6 +10,7 @@ import { Screen, Text, View } from "@/ui";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
 import { Image } from "expo-image";
+import { useGetCompanyDetails } from "@/services/api/company";
 
 export const Settings = () => {
   const { colors } = useTheme<Theme>();
@@ -18,6 +19,13 @@ export const Settings = () => {
 
   const company = useUser((state) => state?.company);
   const profile = useUser((state) => state?.profile);
+  console.log("profile ",company.id);
+  
+  const { data } = useGetCompanyDetails({
+    variables: {
+      id: company?.id,
+    },
+  });
 
   return (
     <Screen backgroundColor={colors.white} edges={["top"]}>
@@ -25,7 +33,7 @@ export const Settings = () => {
         <View height={scale(119)}>
           <Image
             //source={icons["back-cover"]}
-            source={profile?.cover_pic}
+            source={data?.images?.cover}
             style={{ height: scale(119), width: width }}
             transition={1000}
             placeholder={`https://fakeimg.pl/${width}x400/cccccc/cccccc`}
@@ -40,7 +48,7 @@ export const Settings = () => {
           }}
         >
           <CompanyButton
-            source={profile?.profile_pic}
+          source={data?.images?.pic}
             onPress={() => null}
             size={scale(86)}
             imageSize={scale(86)}

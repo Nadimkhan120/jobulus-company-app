@@ -16,7 +16,7 @@ type PersonItemProps = {
 
 export const PersonItem = ({ data }: PersonItemProps) => {
   const navigation = useNavigation();
-
+    
   return (
     <PressableScale
       onPress={() => {
@@ -30,7 +30,7 @@ export const PersonItem = ({ data }: PersonItemProps) => {
       >
         <View>
           <Avatar
-            source={{ uri: 'https://fakeimg.pl/400x400/cccccc/cccccc' }}
+            source={{ uri: data?.profile_pic }}
             placeholder={{ uri: 'https://fakeimg.pl/400x400/cccccc/cccccc' }}
             transition={1000}
           />

@@ -1,5 +1,5 @@
 import type { AxiosError } from "axios";
-import { createQuery } from "react-query-kit";
+import { createQuery, createMutation } from "react-query-kit";
 
 import { NetWorkService } from "@/services/apinetworkservice";
 
@@ -8,6 +8,18 @@ type Variables2 = void;
 
 type Profile = {
   unique_id: string;
+};
+
+type UpdateCandidatePaylaod = {
+  job_title_id: any;
+  expected_salary: any;
+  unique_id?: string;
+  location_id: string;
+  resume_bio: string;
+  full_name: string;
+  email: string;
+  city_id?: string;
+  country_id?: string;
 };
 
 type Search = {
@@ -67,6 +79,7 @@ type Setting = {
 };
 
 type Response2 = Setting[];
+type Response3 = any;
 
 type Skill = {
   person_skill_id: string;
@@ -245,4 +258,18 @@ export const useFilterCandidates = createQuery<Candidates, Filter, AxiosError>({
       //@ts-ignore
     }).then((response) => response.data);
   },
+});
+
+
+export const useUpdateCandidateProfile = createMutation<
+  Response3,
+  UpdateCandidatePaylaod,
+  AxiosError
+>({
+  mutationFn: async (variables) =>
+    NetWorkService.Post({
+      url: 'person/update-basic-info',
+      body: variables,
+      // @ts-ignore
+    }).then((response) => response?.data),
 });

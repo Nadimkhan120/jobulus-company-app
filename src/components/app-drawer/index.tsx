@@ -100,7 +100,7 @@ export function AppDrawer({ children }: AppDrawer) {
                     key={index}
                     onPress={() => {
                       setUserCompanyWithRoles({ company: item });
-                      navigate("CompanyDetail");
+                      // navigate("CompanyDetail");
                       closeDrawer();
                     }}
                   >

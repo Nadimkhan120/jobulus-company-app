@@ -82,10 +82,7 @@ export const EditCompany = () => {
   const company = useUser((state) => state?.company);
   const { mutate: editCompanyApi, isLoading } = useEditCompany();
   const { mutate: updateProfilePic, isLoading: savingPic } = useUpdatePicture();
-
   const data = route?.params?.data;
-
-  //  console.log("company_id", JSON.stringify(data, null, 2));
 
   const [image, setImage] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
@@ -96,7 +93,7 @@ export const EditCompany = () => {
     ImagePicker.useCameraPermissions();
   const [galleryPermission, requestGallaryPermission] =
     ImagePicker.useMediaLibraryPermissions();
-    console.log("COMPANY DATA ",JSON.stringify(data, null, 2));
+    // console.log("COMPANY DATA ",JSON.stringify(data, null, 2));
 
   const { handleSubmit, control, setValue, watch, trigger } =
     useForm<EditCompanyFormType>({      
@@ -151,7 +148,7 @@ export const EditCompany = () => {
       },
     };
 
-    //console.log("body", JSON.stringify(body, null, 2));
+    // console.log("body", JSON.stringify(body, null, 2));
 
     editCompanyApi(body, {
       onSuccess: (responseData) => {
@@ -173,7 +170,9 @@ export const EditCompany = () => {
 
   useEffect(() => {
     setValue("bio", data?.short_description);
+    
   }, []);
+  console.log("BIOS", data?.short_description);
 
   useEffect(() => {
     if (selectedLocation) {
@@ -220,9 +219,10 @@ export const EditCompany = () => {
       uri: Platform.OS === "ios" ? asset?.uri?.replace("file://", "") : asset?.uri,
     });
 
-    data?.append("company_id", route?.params?.data?.id);
+    data?.append("company_id", route?.params?.data?.id); // check 
     data?.append("image_type", picType);
-
+    console.log("company_id", route?.params?.data?.id);
+    
     // @ts-ignore
     updateProfilePic(data, {
       onSuccess: (response: any) => {
