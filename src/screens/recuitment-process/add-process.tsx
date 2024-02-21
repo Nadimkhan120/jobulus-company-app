@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
@@ -11,12 +11,13 @@ import { ScreenHeader } from "@/components/screen-header";
 import { useSoftKeyboardEffect } from "@/hooks";
 import { queryClient } from "@/services/api/api-provider";
 import { useDepartments } from "@/services/api/settings";
-import { useAddProcess, useRecruitMentProcess } from "@/services/api/recruitment-process";
+import { useAddProcess, useUpdateProcess, useRecruitMentProcess, } from "@/services/api/recruitment-process";
 import { useUser } from "@/store/user";
 import type { Theme } from "@/theme";
 import { Button, ControlledInput, Screen, Text, View } from "@/ui";
 import { showErrorMessage, showSuccessMessage } from "@/utils";
 import { DescriptionField } from "@/ui/description-field";
+import { useGetUser } from "@/services/api/user";
 
 const schema = z.object({
   processName: z.string({
@@ -36,15 +37,21 @@ const schema = z.object({
 
 export type AddProcessFormType = z.infer<typeof schema>;
 
-export const AddProcess = () => {
+export const AddProcess = ({route}) => {
   const { colors } = useTheme<Theme>();
   const { goBack } = useNavigation();
-
+  // Inside your AddProcess component
+  const paramData = route?.params?.data;
+  const isUpdate = route?.params?.isUpdate
+  console.log("PARAM",paramData);
+  
   useSoftKeyboardEffect();
 
   const company = useUser((state) => state?.company);
 
   const { mutate: AddProcessApi, isLoading } = useAddProcess();
+
+  const { mutate: updateProcessApi, updateIsLoading } = useUpdateProcess();
 
   const {
     handleSubmit,
@@ -56,44 +63,113 @@ export const AddProcess = () => {
     resolver: zodResolver(schema),
   });
 
+  
+
+
+  const { data: users } = useGetUser({
+    variables: {
+      id: company?.id,
+    },
+  });
+  
   const { data: departments } = useDepartments({
     variables: {
       id: company?.id,
     },
   });
 
+  const mappedData = useMemo(() => {
+    return users?.map((user: { company_user_id: any; person_name: any; }) => {
+      return {
+        id: user?.company_user_id, // Assuming company_user_id is equivalent to department id
+        name: user?.person_name
+      };
+    });
+  }, [users]);
+
+
+   // Set default values from route params data
+   React.useEffect(() => {
+    if (isUpdate && paramData) {
+      // If it's an update and paramData exists, populate form fields
+      setValue("processName", paramData?.process_name);
+      setValue("description", paramData?.description);
+      // setValue("ownerName", paramData?.process_owner);
+      // const selectedOwner = mappedData?.find(user => user?.id == parseInt(paramData?.process_owner));
+      // if (selectedOwner) {
+      //   setValue("ownerName", selectedOwner); // Set the user object as the default value for ownerName
+      // }
+      // setValue("department", paramData?.department_id?.toString());
+    }
+  }, [isUpdate, paramData, mappedData]);
+  
+
   // @ts-ignore
   const onSubmit = (data: AddProcessFormType) => {
-    AddProcessApi(
-      {
-        process_name: data?.processName,
-        description: data?.description,
-        is_default: "0",
-        company_id: company?.id,
-        department_id: parseInt(data?.department),
-        process_owner: 1, //data?.ownerName,
-      },
-      {
-        onSuccess: (responseData) => {
-          if (responseData?.response?.status === 200) {
-            showSuccessMessage(responseData?.response?.message);
-            queryClient.invalidateQueries(useRecruitMentProcess.getKey());
-            goBack();
-          } else {
-            showErrorMessage(responseData?.response?.message);
-          }
+    if(isUpdate){
+      // update process
+      updateProcessApi(
+        {
+          id:paramData?.id,
+          process_name: data?.processName,
+          description: data?.description,
+          is_default: "0",
+          company_id: company?.id,
+          department_id: parseInt(data?.department),
+          process_owner: parseInt(data?.ownerName),
         },
-        onError: (error) => {
-          //@ts-ignore
-          showErrorMessage(error?.response?.data?.message);
+        {
+          onSuccess: (responseData) => {
+            if (responseData?.response?.status === 200) {
+              showSuccessMessage(responseData?.response?.message);
+              queryClient.invalidateQueries(useRecruitMentProcess.getKey());
+              goBack();
+            } else {
+              showErrorMessage(responseData?.response?.message);
+            }
+          },
+          onError: (error) => {
+            //@ts-ignore
+            showErrorMessage(error?.response?.data?.message);
+          },
+        }
+      );
+    }
+    else{
+      //add new Process
+      AddProcessApi(
+        {
+          process_name: data?.processName,
+          description: data?.description,
+          is_default: "0",
+          company_id: company?.id,
+          department_id: parseInt(data?.department),
+          process_owner:  parseInt(data?.ownerName),
         },
-      }
-    );
+        {
+          onSuccess: (responseData) => {
+            if (responseData?.response?.status === 200) {
+              showSuccessMessage(responseData?.response?.message);
+              queryClient.invalidateQueries(useRecruitMentProcess.getKey());
+              goBack();
+            } else {
+              showErrorMessage(responseData?.response?.message);
+            }
+          },
+          onError: (error) => {
+            //@ts-ignore
+            showErrorMessage(error?.response?.data?.message);
+          },
+        }
+      );
+    }
+
+    
   };
 
   return (
     <Screen backgroundColor={colors.white}>
-      <ScreenHeader title="Add Process" />
+      <ScreenHeader title={isUpdate? "Edit Process": "Add Process"} />
 
       <ScrollView
         contentContainerStyle={styles.container}
@@ -112,12 +188,34 @@ export const AddProcess = () => {
             control={control}
             name="description"
           />
-          <ControlledInput
+          {/* <ControlledInput
             placeholder="Enter owner name"
             label="Owner Name"
             control={control}
             name="ownerName"
-          />
+          /> */}
+
+          <View>
+            <SelectionBox
+              label="Owner Name"
+              placeholder="Select owner"
+              //@ts-ignore
+              data={mappedData}
+              onChange={(selectedUser) => {
+                setValue("ownerName", selectedUser?.id); // Set the name of the selected user as the field value
+                setError("ownerName", {
+                  type: "custom",
+                  message: "",
+                });
+              }}
+            />
+            {errors?.ownerName?.message && (
+              <Text paddingTop={"small"} variant="regular14" color={"error"}>
+                {errors?.ownerName?.message}
+              </Text>
+            )}
+          </View>
+
 
           <View>
             <SelectionBox
@@ -139,14 +237,16 @@ export const AddProcess = () => {
               </Text>
             )}
           </View>
+
+         
         </View>
       </ScrollView>
 
       <View paddingVertical={"large"} borderTopWidth={1} borderTopColor={"grey400"}>
         <Button
-          label="Add Process"
+          label={isUpdate ? "Update Process" : "Add Process"}
           marginHorizontal={"large"}
-          loading={isLoading}
+          loading={isUpdate ? updateIsLoading : isLoading}
           onPress={handleSubmit(onSubmit)}
         />
       </View>

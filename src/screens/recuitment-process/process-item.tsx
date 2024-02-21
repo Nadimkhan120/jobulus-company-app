@@ -31,7 +31,7 @@ export const ProcessItem = ({ data, onOptionPress }: ProcessItemProps) => {
             <Text variant={"medium14"} color={"grey200"}>
               {data?.process_name}
             </Text>
-            <PressableScale onPress={() => onOptionPress?.(data)}>
+            <PressableScale onPress={() => onOptionPress(data)}>
               <Image
                 source={icons["more-horizontal"]}
                 style={style.dot}

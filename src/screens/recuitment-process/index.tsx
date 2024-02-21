@@ -10,7 +10,7 @@ import { useUser } from "@/store/user";
 import type { Theme } from "@/theme";
 import { Screen, Text, View } from "@/ui";
 import { ProcessItem } from "./process-item";
-import { useRecruitMentProcess } from "@/services/api/recruitment-process";
+import { useRecruitMentProcess, useDeleteProcess } from "@/services/api/recruitment-process";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
@@ -31,6 +31,7 @@ const data3 = [
 export const RecruitmentProcess = () => {
   const { colors } = useTheme<Theme>();
   const { navigate } = useNavigation();
+  const [selectedItem, setSelectedItem] = useState();
 
   const bottomSheetOptionsModalRef = useRef<BottomSheetModal>(null);
 
@@ -38,36 +39,65 @@ export const RecruitmentProcess = () => {
 
   const company = useUser((state) => state?.company);
 
-  const { data, isLoading } = useRecruitMentProcess({
+  const { data, isLoading, refetch } = useRecruitMentProcess({
     variables: {
       id: company?.id,
     },
   });
 
-  // show bottom modal
-  const handlePresentOptionsModalPress = useCallback(() => {
-    bottomSheetOptionsModalRef?.current?.present();
+  const { mutate: deleteProcessApi } = useDeleteProcess();
+
+
+   // Function to handle presenting options modal
+   const handlePresentOptionsModalPress = useCallback((item) => {
+    setSelectedItem(item); // Store selected item
+    bottomSheetOptionsModalRef?.current?.present(); // Present the bottom modal
   }, []);
+
 
   // dismiss bottom modal
   const handleDismissOptionsModalPress = useCallback(() => {
     bottomSheetOptionsModalRef?.current?.dismiss();
   }, []);
 
-  const renderOptionItem = useCallback(({ item }: any) => {
+
+  // Function to handle navigation to "AddProcess" screen
+  const handleNavigateToAddProcess = useCallback(() => {
+    if (selectedItem) {
+      navigate("AddProcess", { isUpdate: true, data: selectedItem }); // Navigate to "AddProcess" screen with selected item
+      handleDismissOptionsModalPress(); // Dismiss the options modal after navigation
+    }
+  }, [navigate, selectedItem, handleDismissOptionsModalPress]);
+
+  // Function to handle deletion of a process
+const handleDeleteProcess = (processId:  number) => {
+  console.log(processId);
+  
+  try {
+    // Call the delete API
+    deleteProcessApi({
+      id: processId,
+    });
+    // After successful deletion, refetch the data
+    handleDismissOptionsModalPress()
+    refetch();
+  } catch (error) {
+    console.error("Error deleting process:", error);
+    // Handle error appropriately
+  }
+};
+
+  const renderOptionItem = useCallback(({ item }) => {
     return (
       <SelectModalItem
-        title={item?.title}
-        icon={item?.icon}
-        onPress={(data) => {
-          console.log("data", data);
-          handleDismissOptionsModalPress();
-        }}
+        title={item.title}
+        icon={item.icon}
+        onPress={() => item.title === "Delete Process" ? handleDeleteProcess(selectedItem?.id): handleNavigateToAddProcess(item)} // Pass item to handleNavigateToAddProcess
       />
     );
-  }, []);
+  }, [handleNavigateToAddProcess]);
 
-  const renderItem = useCallback(({ item }: any) => {
+  const renderItem = useCallback(({ item, index }: any) => {
     return <ProcessItem data={item} onOptionPress={handlePresentOptionsModalPress} />;
   }, []);
 

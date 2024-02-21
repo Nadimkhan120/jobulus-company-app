@@ -16,6 +16,20 @@ type AddProcessBody = {
   process_owner: number; //string;
 };
 
+type UpdateProcessBody = {
+  id: any;
+  process_name: string;
+  department_id: number;
+  company_id: number;
+  is_default: "0" | "1";
+  description: string;
+  process_owner: number; //string;
+};
+
+type DeleteProcess = {
+  id: number
+}
+
 type AddStepBody = {
   step_name: string;
   sort_order: number;
@@ -123,6 +137,25 @@ export const useAddProcess = createMutation<Response2, AddProcessBody, AxiosErro
       // @ts-ignore
     }).then((response) => response?.data),
 });
+
+export const useUpdateProcess = createMutation<Response2, UpdateProcessBody, AxiosError>({  
+  mutationFn: async (variables) =>
+    NetWorkService.Patch({
+      url: `company/company_recruitment_processes/${variables?.id}`,
+      body: variables,
+      // @ts-ignore
+    }).then((response) => response?.data),
+});
+
+export const useDeleteProcess = createMutation<Response2, DeleteProcess, AxiosError>({  
+  mutationFn: async (variables) =>
+    NetWorkService.Delete({
+      url: `company/company_recruitment_processes/${variables?.id}`,
+      body: {},
+      // @ts-ignore
+    }).then((response) => response?.data),
+});
+
 
 export const useSteps = createQuery<Response3, StepsBody, AxiosError>({
   primaryKey: "company/company_recruitment_process_steps",
