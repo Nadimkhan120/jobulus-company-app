@@ -17,8 +17,9 @@ import { useGetRoles, useDeleteRole } from "@/services/api/roles";
 import { useUser } from "@/store/user";
 import type { Theme } from "@/theme";
 import { Screen, Text, View } from "@/ui";
-
+import { queryClient } from "@/services/api/api-provider";
 import { RoleItem } from "./role-item";
+import { showErrorMessage, showSuccessMessage } from "@/utils";
 
 const data2 = [
   {
@@ -90,23 +91,30 @@ export const Roles = () => {
 
 
 // delete Role
-  const handleDeleteRole = (roleID:  number) => {
-    console.log(selectedRole?.id);
-  
-    try {
-      // Call the delete API
-      deleteRoleApi({
-        role_id: selectedRole?.id,
-      });
-      // After successful deletion, refetch the data
-      console.log("SUCCESS");
-      refetch();
-      handleDismissOptionsModalPress()
-      
-    } catch (error) {
-      console.error("Error deleting process:", error);
-      // Handle error appropriately
+  const handleDeleteRole = () => {
+    deleteRoleApi({
+      role_id: selectedRole?.id,
+    },
+    {
+      onSuccess: (responseData) => {
+        if (responseData?.status === 200) {
+          showSuccessMessage(responseData?.message);
+          queryClient.invalidateQueries(useGetRoles.getKey());
+           handleDismissOptionsModalPress()
+
+          // goBack();
+          // resetData();
+        } else {
+          showErrorMessage(responseData?.message);
+        }
+      },
+      onError: (error) => {
+        //@ts-ignore
+        showErrorMessage(error?.response?.data?.message);
+      },
     }
+    );
+   
   };
 
   const renderOptionItem = useCallback(({ item }: any) => {
@@ -114,7 +122,7 @@ export const Roles = () => {
       <SelectModalItem
         title={item?.title}
         icon={item?.icon}
-        onPress={() => item.title === "Delete Role" ? handleDeleteRole(selectedRole?.id): handleNavigateToAddRole()} // Pass item to handleNavigateToAddProcess
+        onPress={() => item.title === "Delete Role" ? handleDeleteRole(): handleNavigateToAddRole()} // Pass item to handleNavigateToAddProcess
 
         // onPress={(data) => {
         //   handleDismissOptionsModalPress();

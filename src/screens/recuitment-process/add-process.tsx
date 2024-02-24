@@ -85,9 +85,6 @@ export const AddProcess = ({route}) => {
       };
     });
   }, [users]);
-  console.log("PARAM",parseInt(paramData?.process_owner));
-  console.log("mappedData",mappedData);
-
 
 
    // Set default values from route params data
@@ -224,7 +221,7 @@ export const AddProcess = ({route}) => {
               placeholder="Select department"
               //@ts-ignore
               data={departments?.default}
-              value={departments?.default[parseInt(paramData?.department_id)]}
+              value={departments?.default?.find((item) => item?.id === parseInt(paramData?.department_id) )}
               onChange={(data) => {
                 setValue("department", `${data?.id}`);
                 setError("department", {

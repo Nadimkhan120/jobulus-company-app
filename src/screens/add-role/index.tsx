@@ -58,10 +58,10 @@ const setPerrmision = () => {
     if (matchingParamPermission) {
       return {
         ...permission,
-        create: matchingParamPermission.is_create === '1', // Save '1' for true, '0' for false
-        read: matchingParamPermission.is_read === '1',
-        update: matchingParamPermission.is_update === '1',
-        delete: matchingParamPermission.is_delete === '1'
+        create: matchingParamPermission?.is_create === '1', // Save '1' for true, '0' for false
+        read: matchingParamPermission?.is_read === '1',
+        update: matchingParamPermission?.is_update === '1',
+        delete: matchingParamPermission?.is_delete === '1'
       };
     } else {
       return permission;
@@ -70,6 +70,29 @@ const setPerrmision = () => {
 setShowPermission(permissionsToShow);
 }
 
+const updatePermissionValue = (data, onChangeKey, index) => {
+  setShowPermission(prevPermissions => {
+    return prevPermissions.map((permission, idx) => {
+      if (idx === index) {
+        if(onChangeKey == "detele"){
+          return {
+            ...permission,
+            "delete" : true
+          }
+        }
+        else{
+          // Toggle only the clicked permission
+          return {
+            ...permission,
+            [onChangeKey]: !permission[onChangeKey]
+          };
+        }
+      } else {
+        return permission;
+      }
+    });
+  });
+};
 
 
 
@@ -80,7 +103,7 @@ setShowPermission(permissionsToShow);
 
   // @ts-ignore
   const onSubmit = (data: AddRoleFormType) => {
-    let rolePermissions = permissions?.map((element) => {
+    let rolePermissions = showPermissions?.map((element) => {
       return {
         module_id: element?.key,
         is_create: element?.create ? 1 : 0,
@@ -176,7 +199,9 @@ setShowPermission(permissionsToShow);
                     key={index}
                     data={element}
                     // onChange={(data, onChangeKey) => onChangePermissions(data, onChangeKey,)}
-                    onChange={(data, onChangeKey) => onChange(data, onChangeKey)}
+                    onChange={(data, onChangeKey) => {
+                      // onChange(data, onChangeKey),
+                       updatePermissionValue(data, onChangeKey, index) }}
                   />
                 );
               })}

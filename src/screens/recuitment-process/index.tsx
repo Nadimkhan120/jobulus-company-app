@@ -16,6 +16,8 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
 import { useTheme } from "@shopify/restyle";
+import { showErrorMessage, showSuccessMessage } from "@/utils";
+import { queryClient } from "@/services/api/api-provider";
 
 const data3 = [
   {
@@ -71,19 +73,25 @@ export const RecruitmentProcess = () => {
 
   // Function to handle deletion of a process
 const handleDeleteProcess = (processId:  number) => {
-  
-  try {
-    // Call the delete API
     deleteProcessApi({
       id: processId,
-    });
-    // After successful deletion, refetch the data
-    handleDismissOptionsModalPress()
-    refetch();
-  } catch (error) {
-    console.error("Error deleting process:", error);
-    // Handle error appropriately
-  }
+    },
+    {
+      onSuccess: (response) => {
+        if (response?.response?.status === 200) {
+          showSuccessMessage(response?.response?.message);
+          queryClient.invalidateQueries(useRecruitMentProcess.getKey());
+          handleDismissOptionsModalPress()
+        } else {
+          showErrorMessage(response?.response?.message);
+        }
+      },
+      onError: (error) => {
+        //@ts-ignore
+        showErrorMessage(error?.response?.data?.message);
+      },
+    }
+    );
 };
 
   const renderOptionItem = useCallback(({ item }) => {

@@ -114,6 +114,14 @@ type Response2 = {
   };
 };
 
+type DeleteResponse2 = {
+  response : {
+    status: number;
+    message: string;
+  }
+};
+
+
 type DeleteResponse = {
   status: number;
   message: string;
@@ -166,7 +174,7 @@ export const useUpdateProcess = createMutation<Response2, UpdateProcessBody, Axi
     }).then((response) => response?.data),
 });
 
-export const useDeleteProcess = createMutation<Response2, DeleteProcess, AxiosError>({  
+export const useDeleteProcess = createMutation<DeleteResponse2, DeleteProcess, AxiosError>({  
   mutationFn: async (variables) =>
     NetWorkService.Delete({
       url: `company/company_recruitment_processes/${variables?.id}`,
