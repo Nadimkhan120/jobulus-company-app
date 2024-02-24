@@ -10,21 +10,22 @@ import { useUser } from "@/store/user";
 import type { Theme } from "@/theme";
 import { Screen, Text, View } from "@/ui";
 import { StepItem } from "./step-item";
-import { useSteps } from "@/services/api/recruitment-process";
+import { useDeleteStep, useSteps } from "@/services/api/recruitment-process";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
 import { useTheme } from "@shopify/restyle";
+import { showErrorMessage, showSuccessMessage } from "@/utils";
 
 const data3 = [
   {
     icon: "pencl",
-    title: "Edit Process",
+    title: "Edit Step",
   },
   {
     icon: "delete",
-    title: "Delete Process",
+    title: "Delete Step",
   },
 ];
 
@@ -35,44 +36,86 @@ export const Steps = () => {
 
   const bottomSheetOptionsModalRef = useRef<BottomSheetModal>(null);
   const snapPoints2 = useMemo(() => ["25%"], []);
+  
+  const [selectedStep, setSelectedStep] = useState(null)
 
   const company = useUser((state) => state?.company);
 
-  const { data, isLoading } = useSteps({
+  const { mutate : deleteStepApi } = useDeleteStep()
+
+  const { data, isLoading, refetch } = useSteps({
     variables: {
       companyId: company?.id,
       processId: route?.params?.id,
     },
   });
 
-  // show bottom modal
-  const handlePresentOptionsModalPress = useCallback(() => {
-    bottomSheetOptionsModalRef?.current?.present();
-  }, []);
 
+  
+  // show bottom modal
+  const handlePresentOptionsModalPress = useCallback((item) => {
+    bottomSheetOptionsModalRef?.current?.present();
+    setSelectedStep(item);
+  }, []);
+  
   // dismiss bottom modal
   const handleDismissOptionsModalPress = useCallback(() => {
     bottomSheetOptionsModalRef?.current?.dismiss();
   }, []);
+
+  const handleDeletePress = () => {
+    deleteStepApi(
+      {
+        id: parseInt(selectedStep?.id)
+      },
+      {
+        onSuccess: (responseData) => {
+          if (responseData?.status === 200) {
+            showSuccessMessage(responseData?.message);
+            refetch()
+            handleDismissOptionsModalPress()
+          } else {
+            showErrorMessage(responseData?.message);
+          }
+        },
+        onError: (error) => {
+          //@ts-ignore
+          showErrorMessage(error?.response?.data?.message);
+        },
+      }
+    );
+  }
+
+  const handleEditPress = () => {
+    
+    navigate("AddStep", {
+      processId: route?.params?.id,
+      stepsCount: data?.response?.data?.length -1,
+      isUpdate : true, 
+      data : selectedStep
+    })
+    handleDismissOptionsModalPress()
+  } 
 
   const renderOptionItem = useCallback(({ item }: any) => {
     return (
       <SelectModalItem
         title={item?.title}
         icon={item?.icon}
-        onPress={(data) => {
-          handleDismissOptionsModalPress();
+        onPress={() => {
+          item?.title =="Edit Step" ? handleEditPress(): handleDeletePress()
         }}
       />
     );
-  }, []);
+  }, [selectedStep]);
 
   const renderItem = useCallback(({ item }: any) => {
     return (
       <StepItem
         data={item}
         onPress={(data) => console.log("hello", data)}
-        onOptionPress={handlePresentOptionsModalPress}
+        onOptionPress={() =>handlePresentOptionsModalPress(item)}
+        // onOptionPress={(data) => {handlePresentOptionsModalPress(), setSelectedStep(data)}}
       />
     );
   }, []);

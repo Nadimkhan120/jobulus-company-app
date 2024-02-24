@@ -38,6 +38,19 @@ type AddStepBody = {
   responsible_person_id: number;
 };
 
+type UpdateStepBody = {
+  id:number;
+  step_name: string;
+  sort_order: number;
+  company_recruitment_process_id: number;
+  description: string;
+  responsible_person_id: number;
+};
+
+type DeleteStepBody = {
+  id:number;
+};
+
 export type User = {
   company_name: string;
   short_description: string;
@@ -100,6 +113,12 @@ type Response2 = {
     message: string;
   };
 };
+
+type DeleteResponse = {
+  status: number;
+  message: string;
+};
+
 
 type Response3 = {
   response: {
@@ -175,3 +194,24 @@ export const useAddStep = createMutation<Response2, AddStepBody, AxiosError>({
       // @ts-ignore
     }).then((response) => response?.data),
 });
+
+
+export const useUpdateStep = createMutation<Response2, UpdateStepBody, AxiosError>({
+  mutationFn: async (variables) =>
+    NetWorkService.Patch({
+      url: `company/company_recruitment_process_steps/${variables?.id}`,
+      body: variables,
+      // @ts-ignore
+    }).then((response) => response?.data),
+});
+
+
+export const useDeleteStep = createMutation<DeleteResponse, DeleteStepBody, AxiosError>({
+  mutationFn: async (variables) =>
+    NetWorkService.Delete({
+      url: `company/company_recruitment_process_steps/${variables?.id}`,
+      body: {},
+      // @ts-ignore
+    }).then((response) => response?.data),
+});
+
