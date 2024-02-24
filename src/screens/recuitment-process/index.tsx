@@ -71,7 +71,6 @@ export const RecruitmentProcess = () => {
 
   // Function to handle deletion of a process
 const handleDeleteProcess = (processId:  number) => {
-  console.log(processId);
   
   try {
     // Call the delete API

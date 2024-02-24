@@ -13,7 +13,7 @@ import { ScreenHeader } from "@/components/screen-header";
 import { ScrollMenu } from "@/components/scroll-menu";
 import { SearchField } from "@/components/search-field";
 import { SelectModalItem } from "@/components/select-modal-item";
-import { useGetRoles } from "@/services/api/roles";
+import { useGetRoles, useDeleteRole } from "@/services/api/roles";
 import { useUser } from "@/store/user";
 import type { Theme } from "@/theme";
 import { Screen, Text, View } from "@/ui";
@@ -38,10 +38,13 @@ export const Roles = () => {
   const bottomSheetOptionsModalRef = useRef<BottomSheetModal>(null);
 
   const snapPoints2 = useMemo(() => ["25%"], []);
+  const [selectedRole, setSelectedRole] = useState(null)
 
   const company = useUser((state) => state?.company);
 
-  const { data, isLoading } = useGetRoles({
+  const { mutate: deleteRoleApi } = useDeleteRole();
+
+  const { data, isLoading, refetch } = useGetRoles({
     variables: {
       id: company?.id,
     },
@@ -66,26 +69,59 @@ export const Roles = () => {
   }, [data, selectedIndex, setSelectedIndex]);
 
   // show bottom modal
-  const handlePresentOptionsModalPress = useCallback(() => {
+  const handlePresentOptionsModalPress = useCallback((item) => {
+    
+    // Save or use the item data here
+    setSelectedRole(item)
     bottomSheetOptionsModalRef.current?.present();
   }, []);
+
+  const handleNavigateToAddRole = () => {
+    
+    navigate("AddRole", {isUpdate: true, data : selectedRole})
+    handleDismissOptionsModalPress();
+  }
+
 
   // dismiss bottom modal
   const handleDismissOptionsModalPress = useCallback(() => {
     bottomSheetOptionsModalRef.current?.dismiss();
   }, []);
 
+
+// delete Role
+  const handleDeleteRole = (roleID:  number) => {
+    console.log(selectedRole?.id);
+  
+    try {
+      // Call the delete API
+      deleteRoleApi({
+        role_id: selectedRole?.id,
+      });
+      // After successful deletion, refetch the data
+      console.log("SUCCESS");
+      refetch();
+      handleDismissOptionsModalPress()
+      
+    } catch (error) {
+      console.error("Error deleting process:", error);
+      // Handle error appropriately
+    }
+  };
+
   const renderOptionItem = useCallback(({ item }: any) => {
     return (
       <SelectModalItem
         title={item?.title}
         icon={item?.icon}
-        onPress={(data) => {
-          handleDismissOptionsModalPress();
-        }}
+        onPress={() => item.title === "Delete Role" ? handleDeleteRole(selectedRole?.id): handleNavigateToAddRole()} // Pass item to handleNavigateToAddProcess
+
+        // onPress={(data) => {
+        //   handleDismissOptionsModalPress();
+        // }}
       />
     );
-  }, []);
+  }, [selectedRole]);
 
   const renderItem = useCallback(({ item }: any) => {
     return (
@@ -93,8 +129,8 @@ export const Roles = () => {
         onPress={() => null}
         showStatus={true}
         data={item}
-        onOptionPress={handlePresentOptionsModalPress}
-      />
+        onOptionPress={() => handlePresentOptionsModalPress(item)} // Pass item data here
+        />
     );
   }, []);
 

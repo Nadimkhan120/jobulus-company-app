@@ -14,6 +14,19 @@ type AddUserBody = {
   company_user_id: number;
 };
 
+type UpdateUserBody = {
+  name: string;
+  email: string;
+  role_id: number;
+  company_id: number;
+  user_id: number;
+  company_user_id: number;
+};
+
+type DeleteUserBody = {
+  id: number;
+};
+
 export type User = {
   company_name: string;
   short_description: string;
@@ -53,6 +66,26 @@ export const useAddUser = createMutation<Response2, AddUserBody, AxiosError>({
     NetWorkService.Post({
       url: 'company/add-user',
       body: variables,
+      // @ts-ignore
+    }).then((response) => response?.data),
+});
+
+
+export const useUpdateUser = createMutation<Response2, UpdateUserBody, AxiosError>({
+  mutationFn: async (variables) =>
+    NetWorkService.Post({
+      url: 'company/add-user',
+      body: variables,
+      // @ts-ignore
+    }).then((response) => response?.data),
+});
+
+
+export const useDeleteUser = createMutation<Response2, DeleteUserBody, AxiosError>({
+  mutationFn: async (variables) =>
+    NetWorkService.Delete({
+      url: `company/muser/${variables.id}`,
+      body: {},
       // @ts-ignore
     }).then((response) => response?.data),
 });

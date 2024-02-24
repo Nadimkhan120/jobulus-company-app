@@ -6,9 +6,8 @@ import { palette } from "@/theme";
 import { Text, View } from "@/ui";
 import { TextInput, TouchableWithoutFeedback } from "react-native-gesture-handler";
 
-const SelectionBox = ({ placeholder, label, data, onChange, search }: any) => {
+const SelectionBox = ({ placeholder, label, data, onChange, search, value }: any) => {
   const [isFocus, setIsFocus] = useState(false);
-
   return (
     <>
       {label && (
@@ -33,12 +32,11 @@ const SelectionBox = ({ placeholder, label, data, onChange, search }: any) => {
           valueField="id"
           dropdownPosition="auto"
           placeholder={!isFocus ? placeholder : "..."}
-          //value={value}
+          value={value}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
           onChange={(item) => {
             //@ts-ignore
-
             onChange?.(item);
             setIsFocus(false);
           }}

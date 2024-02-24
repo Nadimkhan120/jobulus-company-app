@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { useForm } from "react-hook-form";
 import { ScrollView, StyleSheet } from "react-native";
 import { scale } from "react-native-size-matters";
@@ -10,7 +10,7 @@ import * as z from "zod";
 import { ScreenHeader } from "@/components/screen-header";
 import { useSoftKeyboardEffect } from "@/hooks";
 import { queryClient } from "@/services/api/api-provider";
-import { useAddRole, useGetRoles } from "@/services/api/roles";
+import { useAddRole, useGetRoles, useUpdateRole } from "@/services/api/roles";
 import { onChange, resetData, usePermissionHandler } from "@/store/permission-handler";
 import { useUser } from "@/store/user";
 import type { Theme } from "@/theme";
@@ -27,20 +27,56 @@ const schema = z.object({
 
 export type AddRoleFormType = z.infer<typeof schema>;
 
-export const AddRole = () => {
+export const AddRole = ({route}) => {
   const { colors } = useTheme<Theme>();
   const { goBack } = useNavigation();
+  const { handleSubmit, control, setValue } = useForm<AddRoleFormType>({
+    resolver: zodResolver(schema),
+  });
 
   useSoftKeyboardEffect();
 
   const company = useUser((state) => state?.company);
   const permissions = usePermissionHandler((state) => state?.data);
+  const [showPermissions, setShowPermission] = useState([]);
+
+  const paramData = route?.params?.data;
+  const isUpdate = route?.params?.isUpdate;
+  // Set default values from route params data
+  useEffect(() => {
+    if (isUpdate && paramData) {
+      setValue("userName", paramData?.name);
+    }
+    setPerrmision()
+  }, [isUpdate, paramData]);
+
+
+const setPerrmision = () => {
+  let permissionsToShow = permissions?.map((permission) => {
+    const matchingParamPermission = paramData?.permissions?.find((paramPermission) => paramPermission?.module_id == permission?.key);
+          
+    if (matchingParamPermission) {
+      return {
+        ...permission,
+        create: matchingParamPermission.is_create === '1', // Save '1' for true, '0' for false
+        read: matchingParamPermission.is_read === '1',
+        update: matchingParamPermission.is_update === '1',
+        delete: matchingParamPermission.is_delete === '1'
+      };
+    } else {
+      return permission;
+    }
+});
+setShowPermission(permissionsToShow);
+}
+
+
+
 
   const { mutate: AddRoleApi, isLoading } = useAddRole();
 
-  const { handleSubmit, control } = useForm<AddRoleFormType>({
-    resolver: zodResolver(schema),
-  });
+  const { mutate: UpdateRoleApi, isUpdateLoading } = useUpdateRole();
+  
 
   // @ts-ignore
   const onSubmit = (data: AddRoleFormType) => {
@@ -54,34 +90,64 @@ export const AddRole = () => {
       };
     });
 
-    AddRoleApi(
-      {
-        name: data?.userName,
-        company_id: company?.id,
-        permissions: rolePermissions,
-      },
-      {
-        onSuccess: (responseData) => {
-          if (responseData?.status === 200) {
-            showSuccessMessage(responseData?.message);
-            queryClient.invalidateQueries(useGetRoles.getKey());
-            goBack();
-            resetData();
-          } else {
-            showErrorMessage(responseData?.message);
-          }
+    if(isUpdate){
+      UpdateRoleApi(
+        {
+          role_id: paramData?.id,
+          name: data?.userName,
+          company_id: company?.id,
+          permissions: rolePermissions,
         },
-        onError: (error) => {
-          //@ts-ignore
-          showErrorMessage(error?.response?.data?.message);
+        {
+          onSuccess: (responseData) => {
+            if (responseData?.status === 200) {
+              showSuccessMessage(responseData?.message);
+              queryClient.invalidateQueries(useGetRoles.getKey());
+              goBack();
+              resetData();
+            } else {
+              showErrorMessage(responseData?.message);
+            }
+          },
+          onError: (error) => {
+            //@ts-ignore
+            showErrorMessage(error?.response?.data?.message);
+          },
+        }
+      );
+    }
+    else {
+      AddRoleApi(
+        {
+          name: data?.userName,
+          company_id: company?.id,
+          permissions: rolePermissions,
         },
-      }
-    );
+        {
+          onSuccess: (responseData) => {
+            if (responseData?.status === 200) {
+              showSuccessMessage(responseData?.message);
+              queryClient.invalidateQueries(useGetRoles.getKey());
+              goBack();
+              resetData();
+            } else {
+              showErrorMessage(responseData?.message);
+            }
+          },
+          onError: (error) => {
+            //@ts-ignore
+            showErrorMessage(error?.response?.data?.message);
+          },
+        }
+      );
+    }
+
+    
   };
 
   return (
     <Screen backgroundColor={colors.white}>
-      <ScreenHeader title="Add Role" showBorder={true} />
+      <ScreenHeader title={isUpdate ? "Edit Role":"Add Role"} showBorder={true} />
 
       <ScrollView
         contentContainerStyle={styles.container}
@@ -104,11 +170,12 @@ export const AddRole = () => {
               Set Permissions
             </Text>
             <View gap={"small"}>
-              {permissions?.map((element, index) => {
+              {showPermissions?.map((element, index) => {
                 return (
                   <PermissionManager
                     key={index}
                     data={element}
+                    // onChange={(data, onChangeKey) => onChangePermissions(data, onChangeKey,)}
                     onChange={(data, onChangeKey) => onChange(data, onChangeKey)}
                   />
                 );
@@ -120,9 +187,9 @@ export const AddRole = () => {
 
       <View paddingVertical={"large"} borderTopWidth={1} borderTopColor={"grey400"}>
         <Button
-          label="Save Role"
+          label={isUpdate ? "Update Role":"Save Role"}
           marginHorizontal={"large"}
-          loading={isLoading}
+          loading={isUpdate ? isUpdateLoading: isLoading}
           onPress={handleSubmit(onSubmit)}
         />
       </View>

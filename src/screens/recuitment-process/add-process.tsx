@@ -43,7 +43,6 @@ export const AddProcess = ({route}) => {
   // Inside your AddProcess component
   const paramData = route?.params?.data;
   const isUpdate = route?.params?.isUpdate
-  console.log("PARAM",paramData);
   
   useSoftKeyboardEffect();
 
@@ -86,20 +85,20 @@ export const AddProcess = ({route}) => {
       };
     });
   }, [users]);
+  console.log("PARAM",parseInt(paramData?.process_owner));
+  console.log("mappedData",mappedData);
+
 
 
    // Set default values from route params data
    React.useEffect(() => {
     if (isUpdate && paramData) {
+      let ownerData = mappedData?.find(item => item?.id === paramData?.process_owner)
       // If it's an update and paramData exists, populate form fields
       setValue("processName", paramData?.process_name);
       setValue("description", paramData?.description);
-      // setValue("ownerName", paramData?.process_owner);
-      // const selectedOwner = mappedData?.find(user => user?.id == parseInt(paramData?.process_owner));
-      // if (selectedOwner) {
-      //   setValue("ownerName", selectedOwner); // Set the user object as the default value for ownerName
-      // }
-      // setValue("department", paramData?.department_id?.toString());
+      setValue("ownerName", ownerData?.id);
+      setValue("department", paramData?.department_id);
     }
   }, [isUpdate, paramData, mappedData]);
   
@@ -201,6 +200,8 @@ export const AddProcess = ({route}) => {
               placeholder="Select owner"
               //@ts-ignore
               data={mappedData}
+              value={mappedData?.find(item => item?.id === paramData?.process_owner)}
+              // value={mappedData[parseInt(paramData?.process_owner)]}
               onChange={(selectedUser) => {
                 setValue("ownerName", selectedUser?.id); // Set the name of the selected user as the field value
                 setError("ownerName", {
@@ -223,6 +224,7 @@ export const AddProcess = ({route}) => {
               placeholder="Select department"
               //@ts-ignore
               data={departments?.default}
+              value={departments?.default[parseInt(paramData?.department_id)]}
               onChange={(data) => {
                 setValue("department", `${data?.id}`);
                 setError("department", {

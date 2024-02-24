@@ -42,7 +42,7 @@ export const UserItem = ({ data, onOptionPress }: UserItemProps) => {
             >
               {data?.person_name}
             </Text>
-            <Status status={data?.isactive === "0" ? "Pending" : "Active"} />
+            {/* <Status status={data?.isactive === "0" ? "Pending" : "Active"} /> */}
           </View>
 
           <PressableScale onPress={() => onOptionPress?.(data)}>

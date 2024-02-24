@@ -55,7 +55,7 @@ export function AppBottomTab({ state, descriptors, navigation }: any) {
           >
             <View style={styles.tabStyle}>
               <TabBarIcon name={label.toLowerCase()} focused={isFocused} />
-              <Text variant={"regular12"} fontWeight={"400"}>
+              <Text variant={"regular12"} fontWeight={"400"} style={{color:'black'}}>
                 {label}
               </Text>
             </View>

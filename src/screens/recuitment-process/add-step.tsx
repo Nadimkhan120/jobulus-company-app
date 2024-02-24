@@ -162,6 +162,7 @@ export const AddStep = () => {
             <SelectionBox
               label="Contact Person"
               placeholder="Select person"
+              // value={data.contactPerson}
               //@ts-ignore
               data={users?.map((element) => {
                 return {

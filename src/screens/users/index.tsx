@@ -16,11 +16,12 @@ import { ScreenHeader } from "@/components/screen-header";
 import { SearchField } from "@/components/search-field";
 import { Status } from "@/components/status-info";
 import type { User } from "@/services/api/user";
-import { useGetUser } from "@/services/api/user";
+import { useGetUser, useDeleteUser } from "@/services/api/user";
 import { useUser } from "@/store/user";
 import type { Theme } from "@/theme";
 import { Button, Screen, Text, View } from "@/ui";
 import { UserItem } from "./user-item";
+import { showErrorMessage, showSuccessMessage } from "@/utils";
 
 export const Users = () => {
   const { colors } = useTheme<Theme>();
@@ -30,11 +31,13 @@ export const Users = () => {
   const company = useUser((state) => state?.company);
   const [selectUser, setSelectUser] = useState<User | null>(null);
 
-  const { data, isLoading } = useGetUser({
+  const { data, isLoading, refetch } = useGetUser({
     variables: {
       id: company?.id,
     },
   });
+
+  const { mutate: deleteUserApi } = useDeleteUser();
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   // variables
@@ -50,8 +53,35 @@ export const Users = () => {
     bottomSheetModalRef.current?.dismiss();
   }, []);
 
-  const renderItem = useCallback(
-    ({ item }) => {
+  const handleDeletePress = () => {
+    deleteUserApi(
+      {
+        id: parseInt(selectUser?.company_user_id)
+      },
+      {
+        onSuccess: (responseData) => {
+          if (responseData?.status === 200) {
+            showSuccessMessage(responseData?.message);
+            refetch()
+            handleDismissModalPress()
+          } else {
+            showErrorMessage(responseData?.message);
+          }
+        },
+        onError: (error) => {
+          //@ts-ignore
+          showErrorMessage(error?.response?.data?.message);
+        },
+      }
+    );
+  }
+
+  const handleEditPress = () => {
+    navigate("AddUser", {isUpdate : true, data : selectUser})
+    handleDismissModalPress()
+  } 
+
+  const renderItem = useCallback(({ item }) => {
       return (
         <UserItem
           data={item}
@@ -62,8 +92,7 @@ export const Users = () => {
         />
       );
     },
-    [data, bottomSheetModalRef, selectUser, setSelectUser]
-  );
+    [data, bottomSheetModalRef, selectUser, setSelectUser]);
 
   // renders
   const renderFooter = useCallback(
@@ -73,20 +102,22 @@ export const Users = () => {
           <Button
             marginHorizontal={"large"}
             label="Edit User "
-            onPress={handleDismissModalPress}
+            onPress={() => handleEditPress()}
             variant={"outline"}
           />
           <Button
             marginHorizontal={"large"}
             label="Delete "
-            onPress={handleDismissModalPress}
+            // onPress={handleDismissModalPress}
+            onPress={() => handleDeletePress()}
+
             marginTop={"small"}
             variant={"error"}
           />
         </View>
       </BottomSheetFooter>
     ),
-    []
+    [selectUser]
   );
 
   return (
