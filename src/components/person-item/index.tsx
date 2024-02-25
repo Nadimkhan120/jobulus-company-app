@@ -6,7 +6,7 @@ import { scale } from 'react-native-size-matters';
 import { BottomModal } from "@/components/bottom-modal";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { icons } from '@/assets/icons';
-import type { Candidate } from '@/services/api/candidate';
+import { useCandidateStatuses, type Candidate, useUpdateCandidateStatus } from '@/services/api/candidate';
 import { Button, PressableScale, Text, View } from '@/ui';
 import { useTheme } from "@shopify/restyle";
 import { Avatar } from '../avatar';
@@ -18,6 +18,7 @@ import { DescriptionField } from '@/ui/description-field';
 import * as z from "zod";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
+import { showErrorMessage, showSuccessMessage } from '@/utils';
 
 const schema = z.object({
   status: z.string({
@@ -46,6 +47,8 @@ type PersonItemProps = {
 };
 
 export const PersonItem = ({ data }: PersonItemProps) => {
+  // console.log(JSON.stringify(data, null, 2));
+  
   const { colors } = useTheme<Theme>();
   const bottomSheetOptionsModalRef = useRef<BottomSheetModal>(null);
   const bottomSheetOptionsModalRef2 = useRef<BottomSheetModal>(null);
@@ -59,27 +62,15 @@ export const PersonItem = ({ data }: PersonItemProps) => {
     control,
     setValue,
     setError,
+    getValues,
     formState: { errors },
   } = useForm<ChangeStatusFormType>({
     resolver: zodResolver(schema),
   });
 
-  // const [status, setStatus] = useState()
-  let dummy = [
-    {
-      id: 0,
-      name : "Pendign"
-    },
-    {
-      id: 1,
-      name : "Working"
-    },
-    {
-      id: 2,
-      name : "Done"
-    }
+  const { data: status } = useCandidateStatuses({});
 
-  ]
+  const {mutate : updateStatusApi} = useUpdateCandidateStatus(); 
 
   // show bottom modal
   const handlePresentOptionsModalPress = useCallback(() => {
@@ -112,13 +103,6 @@ export const PersonItem = ({ data }: PersonItemProps) => {
           item?.title =="View Details" ? handleViewDetails(): handleClickOnChangeStatus();
         }}
       />
-      // <SelectModalItem
-      //   title={item?.title}
-      //   icon={item?.icon}
-      //   onPress={() => {
-      //     item?.title =="Edit Step" ? handleEditPress(): handleDeletePress()
-      //   }}
-      // />
     );
   }, []);
 
@@ -137,8 +121,34 @@ export const PersonItem = ({ data }: PersonItemProps) => {
   
 
   const onSubmit = () => {
-    console.log(data);
-    handleDismissOptionsModalPress2()
+    updateStatusApi({
+      id:data?.id,
+      person_applied_jobs_id: parseInt(data.job_id),
+      comments: getValues('description'),
+      status: parseInt(getValues('status')),
+      stage_purpose: '',
+      recommendation: '',
+    },
+    {
+      onSuccess: (data) => {
+        if (data?.response?.status === 200) {
+          // goBack();
+          showSuccessMessage("Status update successfully");
+          handleDismissOptionsModalPress2()
+
+          // queryClient.invalidateQueries(useCompanies.getKey());
+          // setSelectedLocation("");
+        } else {
+          showErrorMessage(data.response.message);
+        }
+      },
+      onError: (error) => {
+        // An error happened!
+      },
+    }
+    )
+
+
   }
 
   return (
@@ -227,16 +237,13 @@ export const PersonItem = ({ data }: PersonItemProps) => {
               label="Candidate Status"
               placeholder="Select person"
               // value={status} // Set value to contactPerson state
-              data={dummy}
+              data={status}
               onChange={(data) => {
                 setValue("status", `${data?.id}`)
-                // Update contact person state
-                // setContactPerson(data);
-                // setValue("contactPerson", `${data?.id}`);
-                // setError("contactPerson", {
-                //   type: "custom",
-                //   message: "",
-                // });
+                setError("status", {
+                  type: "custom",
+                  message: "",
+                });
               }}
             />
 

@@ -26,7 +26,7 @@ export const UserItem = ({ data, onOptionPress }: UserItemProps) => {
       <View>
         <Avatar
           transition={1000}
-          source={{ uri: "https://fakeimg.pl/400x400/cccccc/cccccc" }}
+          source={{ uri: data?.profile_pic }}
           placeholder={{ uri: "https://fakeimg.pl/400x400/cccccc/cccccc" }}
         />
       </View>

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Tag } from '@/components/tag';
 import { Text, View } from '@/ui';
+import { useHisotyrDetail } from '@/services/api/candidate';
 
 const data = [
   {
@@ -33,6 +34,13 @@ const data = [
 ];
 
 const History = () => {
+
+  // company/company_recruitment_process_step_persons/person_applied_jobs_id/1
+  // const { data: historyData } = useHisotyrDetail({
+  //   unique_id:1
+  // });  
+  // console.log("historyData ",historyData);
+  
   return (
     <View paddingVertical={'2xl'}>
       {data?.map((item, index) => {

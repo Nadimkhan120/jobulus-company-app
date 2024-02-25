@@ -82,6 +82,8 @@ export const Users = () => {
   } 
 
   const renderItem = useCallback(({ item }) => {
+    console.log(item);
+    
       return (
         <UserItem
           data={item}
@@ -174,7 +176,7 @@ export const Users = () => {
           <View alignItems={"center"} justifyContent={"center"} paddingVertical={"medium"}>
             <Image
               transition={1000}
-              source={{ uri: "https://fakeimg.pl/400x400/cccccc/cccccc" }}
+              source={{ uri: selectUser?.profile_pic }}
               placeholder={{ uri: "https://fakeimg.pl/400x400/cccccc/cccccc" }}
               style={styles.image}
               contentFit="contain"

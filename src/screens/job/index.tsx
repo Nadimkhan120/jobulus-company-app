@@ -9,7 +9,7 @@ import type { Route } from "@showtime-xyz/tab-view";
 import { TabScrollView, TabView } from "@showtime-xyz/tab-view";
 import ActivityIndicator from "@/components/activity-indicator";
 import { ScreenHeader } from "@/components/screen-header";
-import { useCandidateDetail } from "@/services/api/candidate";
+import { useCandidateDetail, useHisotyrDetail } from "@/services/api/candidate";
 import type { Theme } from "@/theme";
 import { Screen, Text, View, PressableScale } from "@/ui";
 import Education from "./education";
@@ -165,7 +165,16 @@ export function Job() {
       unique_id: route?.params?.id,
     },
   });
+  console.log(JSON.stringify(candidateData, null, 2));
+  const { data: historyData } = useHisotyrDetail({
+    variables: {
+      // @ts-ignore
+      id: candidateData?.id,
+    },
+  });  
 
+  console.log(historyData);
+  
   const renderScene = useCallback(
     ({ route }: any) => {
       switch (route.key) {

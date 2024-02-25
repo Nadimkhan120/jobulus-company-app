@@ -10,6 +10,10 @@ type Profile = {
   unique_id: string;
 };
 
+type History = {
+  id: number;
+};
+
 type UpdateCandidatePaylaod = {
   job_title_id: any;
   expected_salary: any;
@@ -20,6 +24,15 @@ type UpdateCandidatePaylaod = {
   email: string;
   city_id?: string;
   country_id?: string;
+};
+
+type UpdateCandidateStatusPaylaod = {
+  id: number;
+  person_applied_jobs_id: number;
+  comments: string;
+  status: number;
+  stage_purpose: string;
+  recommendation: string;
 };
 
 type Search = {
@@ -229,6 +242,17 @@ export const useCandidateDetail = createQuery<CandidateProfile, Profile, AxiosEr
   },
 });
 
+export const useHisotyrDetail = createQuery<CandidateProfile, History, AxiosError>({
+  primaryKey: `company/company_recruitment_process_step_persons/person_applied_jobs_id/`,
+  queryFn: ({ queryKey: [primaryKey, variables] }) => {
+    return NetWorkService.Get({
+      url: `company/company_recruitment_process_step_persons/person_applied_jobs_id/${variables?.id}`,
+      body: {},
+      //@ts-ignore
+    }).then((response) => response.data);
+  },
+});
+
 export const useCandidateByJob = createQuery<Candidates, Variables3, AxiosError>({
   primaryKey: "job-candidates/",
   queryFn: ({ queryKey: [primaryKey, variables] }) => {
@@ -269,6 +293,19 @@ export const useUpdateCandidateProfile = createMutation<
   mutationFn: async (variables) =>
     NetWorkService.Post({
       url: 'person/update-basic-info',
+      body: variables,
+      // @ts-ignore
+    }).then((response) => response?.data),
+});
+
+export const useUpdateCandidateStatus = createMutation<
+  Response3,
+  UpdateCandidateStatusPaylaod,
+  AxiosError
+>({
+  mutationFn: async (variables) =>
+    NetWorkService.Post({
+      url: 'company/recruit',
       body: variables,
       // @ts-ignore
     }).then((response) => response?.data),

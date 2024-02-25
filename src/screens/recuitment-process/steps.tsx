@@ -66,16 +66,17 @@ export const Steps = () => {
   const handleDeletePress = () => {
     deleteStepApi(
       {
-        id: parseInt(selectedStep?.id)
+        id: parseInt(selectedStep?.id),
+        company_id : company.id
       },
       {
         onSuccess: (responseData) => {
-          if (responseData?.status === 200) {
-            showSuccessMessage(responseData?.message);
+          if (responseData.response?.status === 200) {
+            showSuccessMessage(responseData?.response?.message);
             refetch()
             handleDismissOptionsModalPress()
           } else {
-            showErrorMessage(responseData?.message);
+            showErrorMessage(responseData?.response?.message);
           }
         },
         onError: (error) => {

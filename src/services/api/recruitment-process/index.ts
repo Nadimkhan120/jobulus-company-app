@@ -49,6 +49,7 @@ type UpdateStepBody = {
 
 type DeleteStepBody = {
   id:number;
+  company_id:number;
 };
 
 export type User = {
@@ -123,8 +124,10 @@ type DeleteResponse2 = {
 
 
 type DeleteResponse = {
-  status: number;
-  message: string;
+  response : {
+    status: number;
+    message: string;
+  }
 };
 
 
@@ -218,7 +221,7 @@ export const useDeleteStep = createMutation<DeleteResponse, DeleteStepBody, Axio
   mutationFn: async (variables) =>
     NetWorkService.Delete({
       url: `company/company_recruitment_process_steps/${variables?.id}`,
-      body: {},
+      body: variables,
       // @ts-ignore
     }).then((response) => response?.data),
 });
