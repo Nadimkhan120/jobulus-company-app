@@ -1,22 +1,146 @@
 import { useNavigation } from '@react-navigation/native';
 import { Image } from 'expo-image';
-import React from 'react';
+import React, {useMemo, useRef, useEffect, useCallback, useState} from 'react';
 import { StyleSheet } from 'react-native';
 import { scale } from 'react-native-size-matters';
-
+import { BottomModal } from "@/components/bottom-modal";
+import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { icons } from '@/assets/icons';
 import type { Candidate } from '@/services/api/candidate';
-import { PressableScale, Text, View } from '@/ui';
-
+import { Button, PressableScale, Text, View } from '@/ui';
+import { useTheme } from "@shopify/restyle";
 import { Avatar } from '../avatar';
+import type { Theme } from "@/theme";
+import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
+import { ApplicantMenuItems } from '../applicantMenu';
+import SelectionBox from '../drop-down';
+import { DescriptionField } from '@/ui/description-field';
+import * as z from "zod";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z.object({
+  status: z.string({
+    required_error: "Status is required",
+  }),
+  description: z.string({
+    required_error: "Description is required",
+  }),
+});
+
+export type ChangeStatusFormType = z.infer<typeof schema>;
+
+const data3 = [
+  {
+    icon: "eye",
+    title: "View Details",
+  },
+  {
+    icon: "pencl",
+    title: "Change States",
+  },
+];
 
 type PersonItemProps = {
   data: Candidate;
 };
 
 export const PersonItem = ({ data }: PersonItemProps) => {
+  const { colors } = useTheme<Theme>();
+  const bottomSheetOptionsModalRef = useRef<BottomSheetModal>(null);
+  const bottomSheetOptionsModalRef2 = useRef<BottomSheetModal>(null);
+
   const navigation = useNavigation();
-    
+  const snapPoints = useMemo(() => ["25%"], []);
+  const snapPoints2 = useMemo(() => ["92%"], []);
+
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    setError,
+    formState: { errors },
+  } = useForm<ChangeStatusFormType>({
+    resolver: zodResolver(schema),
+  });
+
+  // const [status, setStatus] = useState()
+  let dummy = [
+    {
+      id: 0,
+      name : "Pendign"
+    },
+    {
+      id: 1,
+      name : "Working"
+    },
+    {
+      id: 2,
+      name : "Done"
+    }
+
+  ]
+
+  // show bottom modal
+  const handlePresentOptionsModalPress = useCallback(() => {
+    bottomSheetOptionsModalRef?.current?.present();
+  }, []);
+  
+  // dismiss bottom modal
+  const handleDismissOptionsModalPress = useCallback(() => {
+    bottomSheetOptionsModalRef?.current?.dismiss();
+  }, []);
+
+  //click on View Details
+  const handleViewDetails = () => {
+    navigation?.navigate('Job', { id: data?.unique_id });
+    handleDismissOptionsModalPress()
+  }
+
+    //click on Change status
+  const handleClickOnChangeStatus = () => {
+    handleDismissOptionsModalPress(); //close previous bottom sheet 
+    handlePresentOptionsModalPress2(); // open new bottom sheet
+  }
+
+  const renderOptionItem = useCallback(({ item }: any) => {
+    return (
+      <ApplicantMenuItems 
+        title={item?.title}
+        icon={item?.icon}
+        onPress={() => {
+          item?.title =="View Details" ? handleViewDetails(): handleClickOnChangeStatus();
+        }}
+      />
+      // <SelectModalItem
+      //   title={item?.title}
+      //   icon={item?.icon}
+      //   onPress={() => {
+      //     item?.title =="Edit Step" ? handleEditPress(): handleDeletePress()
+      //   }}
+      // />
+    );
+  }, []);
+
+
+
+
+  // show bottom modal 2
+  const handlePresentOptionsModalPress2 = useCallback(() => {
+    bottomSheetOptionsModalRef2?.current?.present();
+  }, []);
+  
+  // dismiss bottom modal 2
+  const handleDismissOptionsModalPress2 = useCallback(() => {
+    bottomSheetOptionsModalRef2?.current?.dismiss();
+  }, []);
+  
+
+  const onSubmit = () => {
+    console.log(data);
+    handleDismissOptionsModalPress2()
+  }
+
   return (
     <PressableScale
       onPress={() => {
@@ -68,7 +192,7 @@ export const PersonItem = ({ data }: PersonItemProps) => {
           </View>
         </View>
 
-        <PressableScale>
+        <PressableScale onPress={handlePresentOptionsModalPress}>
           <Image
             source={icons['more-horizontal']}
             contentFit="contain"
@@ -76,11 +200,72 @@ export const PersonItem = ({ data }: PersonItemProps) => {
           />
         </PressableScale>
       </View>
+
+      <BottomModal
+        ref={bottomSheetOptionsModalRef}
+        index={0}
+        snapPoints={snapPoints}
+        backgroundStyle={{ backgroundColor: colors.background }}
+      >
+        <BottomSheetFlatList
+          contentContainerStyle={styles.contentContainer}
+          data={data3}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderOptionItem}
+        />
+      </BottomModal>
+
+
+      <BottomModal
+        ref={bottomSheetOptionsModalRef2}
+        index={0}
+        snapPoints={snapPoints2}
+        backgroundStyle={{ backgroundColor: colors.background }}
+      >
+        <View style={{flex: 1, margin:scale(20)}}>
+          <SelectionBox
+              label="Candidate Status"
+              placeholder="Select person"
+              // value={status} // Set value to contactPerson state
+              data={dummy}
+              onChange={(data) => {
+                setValue("status", `${data?.id}`)
+                // Update contact person state
+                // setContactPerson(data);
+                // setValue("contactPerson", `${data?.id}`);
+                // setError("contactPerson", {
+                //   type: "custom",
+                //   message: "",
+                // });
+              }}
+            />
+
+          <DescriptionField
+            placeholder="Enter description"
+            label="Description"
+            control={control}
+            name="description"
+          />
+
+      <View paddingVertical={"large"} borderTopWidth={1} borderTopColor={"grey400"}>
+        <Button
+          label={"Change Status"}
+          marginHorizontal={"large"}
+          // loading={isLoading}
+          onPress={handleSubmit(onSubmit)}
+        />
+      </View>
+        </View>
+      </BottomModal>
     </PressableScale>
   );
 };
 
 const styles = StyleSheet.create({
+  contentContainer: {
+    paddingHorizontal: scale(16),
+  },
+
   image: {
     height: scale(24),
     width: scale(24),
