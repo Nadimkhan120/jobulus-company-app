@@ -165,15 +165,19 @@ export function Job() {
       unique_id: route?.params?.id,
     },
   });
-  console.log(JSON.stringify(candidateData, null, 2));
-  const { data: historyData } = useHisotyrDetail({
+  // console.log(JSON.stringify(candidateData, null, 2));
+
+
+  const { data: historyData, error } = useHisotyrDetail({
     variables: {
       // @ts-ignore
       id: candidateData?.id,
+      person_id:parseInt(candidateData?.person_id)
     },
+    enabled: candidateData?.id && candidateData?.person_id ? true: false,
   });  
 
-  console.log(historyData);
+  console.log(" historyData ",historyData);
   
   const renderScene = useCallback(
     ({ route }: any) => {

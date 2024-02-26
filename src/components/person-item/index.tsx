@@ -6,7 +6,7 @@ import { scale } from 'react-native-size-matters';
 import { BottomModal } from "@/components/bottom-modal";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { icons } from '@/assets/icons';
-import { useCandidateStatuses, type Candidate, useUpdateCandidateStatus } from '@/services/api/candidate';
+import { useCandidateStatuses, type Candidate, useUpdateCandidateStatus, useCandidates } from '@/services/api/candidate';
 import { Button, PressableScale, Text, View } from '@/ui';
 import { useTheme } from "@shopify/restyle";
 import { Avatar } from '../avatar';
@@ -19,6 +19,7 @@ import * as z from "zod";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { showErrorMessage, showSuccessMessage } from '@/utils';
+import { queryClient } from '@/services/api/api-provider';
 
 const schema = z.object({
   status: z.string({
@@ -121,25 +122,36 @@ export const PersonItem = ({ data }: PersonItemProps) => {
   
 
   const onSubmit = () => {
-    updateStatusApi({
-      id:data?.id,
-      person_applied_jobs_id: parseInt(data.job_id),
+
+    console.log("DATA ",{
+      job_id:data?.id,
+      person_id:parseInt(data.person_id),
+      person_applied_jobs_id: parseInt(data.person_applied_job_id),
+      status_id: parseInt(getValues('status')),
       comments: getValues('description'),
-      status: parseInt(getValues('status')),
-      stage_purpose: '',
-      recommendation: '',
+    });
+    
+    updateStatusApi({
+      job_id:parseInt(data?.job_id),
+      person_id:parseInt(data.person_id),
+      person_applied_jobs_id: parseInt(data.person_applied_job_id),
+      status_id: parseInt(getValues('status')),
+      comments: getValues('description'),
+      reason:getValues('description'),
     },
     {
       onSuccess: (data) => {
-        if (data?.response?.status === 200) {
+        if (data?.status === 200) {
           // goBack();
           showSuccessMessage("Status update successfully");
           handleDismissOptionsModalPress2()
 
-          // queryClient.invalidateQueries(useCompanies.getKey());
+          queryClient.invalidateQueries(useCandidates.getKey());
           // setSelectedLocation("");
         } else {
-          showErrorMessage(data.response.message);
+          console.log(data);
+          
+          showErrorMessage(data?.response?.message);
         }
       },
       onError: (error) => {
