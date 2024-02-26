@@ -244,8 +244,10 @@ export const useCandidateDetail = createQuery<CandidateProfile, Profile, AxiosEr
 });
 
 export const useHisotyrDetail = createQuery<CandidateProfile, History, AxiosError>({
-  primaryKey: `applicant/applied-job-detail`,
-  queryFn: ({ queryKey: [primaryKey, variables] }) => {    
+  primaryKey: "applicant/applied-job-detail",
+  queryFn: ({ queryKey: [primaryKey, variables] }) => { 
+    console.log(`${primaryKey}?person_id=${variables?.person_id}&job_id=${variables?.id}`);
+       
     return NetWorkService.Get({
       url:`${primaryKey}?person_id=${variables?.person_id}&job_id=${variables?.id}`,
       body: {},

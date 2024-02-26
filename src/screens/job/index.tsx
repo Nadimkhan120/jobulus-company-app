@@ -154,7 +154,8 @@ export function Job() {
     { key: "Education & Skills", title: "Education & Skills", index: 2 },
     { key: "History", title: "History", index: 3 },
   ]);
-
+  // console.log("PARAMS",route?.params?.selectedCandidate);
+  
   const [index, setIndex] = useState(0);
   const animationHeaderPosition = useSharedValue(0);
   const animationHeaderHeight = useSharedValue(0);
@@ -171,10 +172,10 @@ export function Job() {
   const { data: historyData, error } = useHisotyrDetail({
     variables: {
       // @ts-ignore
-      id: candidateData?.id,
+      id: parseInt(route?.params?.selectedCandidate?.job_id),
       person_id:parseInt(candidateData?.person_id)
     },
-    enabled: candidateData?.id && candidateData?.person_id ? true: false,
+    enabled: route?.params?.selectedCandidate?.job_id && candidateData?.person_id ? true: false,
   });  
 
   console.log(" historyData ",historyData);

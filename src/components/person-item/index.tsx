@@ -48,7 +48,7 @@ type PersonItemProps = {
 };
 
 export const PersonItem = ({ data }: PersonItemProps) => {
-  // console.log(JSON.stringify(data, null, 2));
+  // console.log("PersonItem", JSON.stringify(data, null, 2));
   
   const { colors } = useTheme<Theme>();
   const bottomSheetOptionsModalRef = useRef<BottomSheetModal>(null);
@@ -166,7 +166,7 @@ export const PersonItem = ({ data }: PersonItemProps) => {
   return (
     <PressableScale
       onPress={() => {
-        navigation?.navigate('Job', { id: data?.unique_id });
+        navigation?.navigate('Job', { id: data?.unique_id, selectedCandidate: data });
       }}
     >
       <View
