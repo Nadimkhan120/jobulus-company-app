@@ -161,11 +161,11 @@ export const Register = () => {
         </View>
 
         <View paddingVertical={"2xl"} alignSelf={"center"}>
-          <PressableScale onPress={() => navigate("RegisterOptions")}>
+          <PressableScale onPress={() => navigate("Login")}>
             <Text variant={"regular14"} color={"grey200"}>
-              Haven’t an account?{" "}
+              Have an account?{" "}
               <Text variant={"semiBold14"} color={"primary"}>
-                Register
+                Login
               </Text>
             </Text>
           </PressableScale>

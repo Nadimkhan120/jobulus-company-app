@@ -43,7 +43,8 @@ export const TabNavigator = () => {
             name={"Vacancies"}
             component={Vacancies}
             options={{
-              title: "Vacancies",
+              // title: "Vacancies",
+              title:"Job"
             }}
           />
           <Tab.Screen
@@ -57,7 +58,9 @@ export const TabNavigator = () => {
             name={"Candidates"}
             component={Candidates}
             options={{
-              title: "Candidates",
+              // title: "Candidates",
+              title: "People",
+
             }}
           />
           <Tab.Screen

@@ -136,7 +136,7 @@ export const MultiTextField = React.forwardRef<TextInput, NInputProps>((props, r
           placeholderTextColor={theme.colors.grey300}
           onBlur={onBlur}
           onFocus={onFocus}
-          style={styles.input}
+          style={[styles.input, { textAlignVertical:  'top'}]}
           secureTextEntry={showPassword}
           multiline={true}
           {...inputProps}

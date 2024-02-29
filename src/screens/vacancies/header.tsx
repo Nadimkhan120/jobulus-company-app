@@ -22,7 +22,7 @@ const Header = ({ onPress }: HeaderProps) => {
     >
       <View flexDirection={"column"}>
         <Text variant={"medium17"} fontWeight={"500"}>
-          Vacancies
+          Jobs
         </Text>
       </View>
       <AddButton label="Job" onPress={onPress} />

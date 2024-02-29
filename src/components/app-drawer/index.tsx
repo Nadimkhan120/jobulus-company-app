@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import { Drawer } from "react-native-drawer-layout";
 import { scale } from "react-native-size-matters";
 import { icons } from "@/assets/icons";
@@ -68,14 +68,16 @@ export function AppDrawer({ children }: AppDrawer) {
                   >
                     {user?.full_name} 👋
                   </Text>
-                  <Text
-                    variant={"regular14"}
-                    paddingLeft={"medium"}
-                    paddingTop={"tiny"}
-                    color={"grey200"}
-                  >
-                    View profile
-                  </Text>
+                  <TouchableOpacity onPress={() => {navigate("PersonalInformation")}}>
+                    <Text
+                      variant={"regular14"}
+                      paddingLeft={"medium"}
+                      paddingTop={"tiny"}
+                      color={"grey200"}
+                    >
+                      View profile
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
 
@@ -94,7 +96,8 @@ export function AppDrawer({ children }: AppDrawer) {
 
               {companies?.response?.data?.map((item, index) => {
                 const isSelected = item?.id === company?.id;
-
+                console.log("COMAPNY ",item);
+                
                 return (
                   <PressableScale
                     key={index}
@@ -133,7 +136,8 @@ export function AppDrawer({ children }: AppDrawer) {
                             paddingTop={"tiny"}
                             color={isSelected ? "primary" : "black"}
                           >
-                            {item?.member_since}
+                            {item?.role_name}
+                            {/* {item?.member_since} */}
                           </Text>
                         </View>
                       </View>

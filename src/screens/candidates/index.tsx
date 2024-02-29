@@ -111,7 +111,7 @@ export const Candidates = () => {
         borderBottomWidth={1}
       >
         <Text variant={"medium17"} color={"grey100"}>
-          Candidate Search
+          People Search
         </Text>
       </View>
 
@@ -143,7 +143,7 @@ export const Candidates = () => {
             }}
             ListEmptyComponent={
               <View height={scale(300)} justifyContent={"center"} alignItems={"center"}>
-                <Text>No Cadidates Found</Text>
+                <Text>No People Found</Text>
               </View>
             }
           />

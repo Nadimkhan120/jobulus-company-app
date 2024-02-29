@@ -36,7 +36,7 @@ export const SearchWithFilter = ({
         />
       </View>
 
-      <ImageButton icon="filter" backgroundColor={"black"} onPress={onFilter} />
+      {/* <ImageButton icon="filter" backgroundColor={"black"} onPress={onFilter} /> */}
       {onSwap ? <ImageButton icon="swap" backgroundColor={"black"} onPress={onSwap} /> : null}
     </View>
   );

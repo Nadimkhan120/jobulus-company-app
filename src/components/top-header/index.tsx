@@ -12,7 +12,9 @@ export const TopHeader = () => {
   const { navigate } = useNavigation();
 
   const profile = useUser((state) => state.profile);
-
+  const company = useUser((state) => state?.company);
+  // console.log("COMPANY ",company.pic);
+  
   return (
     <View
       height={scale(72)}
@@ -27,7 +29,7 @@ export const TopHeader = () => {
           size={scale(40)}
           imageSize={scale(40)}
           backgroundColor={"error"}
-          source={profile?.profile_pic}
+          source={company?.pic}
           onPress={openDrawer}
         />
         <View flex={1} marginHorizontal={"medium"}>
