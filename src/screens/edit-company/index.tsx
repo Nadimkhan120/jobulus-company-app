@@ -109,9 +109,9 @@ export const EditCompany = () => {
         address: data?.location?.address_1,
         city: data?.location?.city_name,
         country: data?.location?.country_name,
-        facebook: data?.facebook_link,
-        instgram: data?.instagram_link,
-        whatsapp: data?.twitter_link,
+        facebook: data?.facebook_link? data?.facebook_link: '',
+        instgram: data?.instagram_link? data?.instagram_link: '',
+        whatsapp: data?.twitter_link ? data?.twitter_link: '',
       },
     });
 

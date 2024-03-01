@@ -96,7 +96,6 @@ export function AppDrawer({ children }: AppDrawer) {
 
               {companies?.response?.data?.map((item, index) => {
                 const isSelected = item?.id === company?.id;
-                console.log("COMAPNY ",item);
                 
                 return (
                   <PressableScale

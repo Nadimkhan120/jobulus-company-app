@@ -2,9 +2,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
 import { Image } from "expo-image";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { scale } from "react-native-size-matters";
 import * as z from "zod";
 import { icons } from "@/assets/icons";
@@ -36,9 +36,28 @@ export const VerifyCode = () => {
 
   const { mutate: verifyEmailApi, isLoading } = useVerifyEmail();
 
-  const { handleSubmit, control } = useForm<VerifyCodeFormType>({
+  const { handleSubmit, control, reset } = useForm<VerifyCodeFormType>({
     resolver: zodResolver(schema),
   });
+
+  // Timer state and effect
+  const [timer, setTimer] = useState(30);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+    if (timer > 0) {
+      intervalId = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    }
+    return () => clearInterval(intervalId);
+  }, [timer]);
+
+  const resendCode = () => {
+    // Reset timer and resend code logic
+    setTimer(30);
+    // Add logic to resend verification code here
+  };
 
   const onSubmit = (data: VerifyCodeFormType) => {
     verifyEmailApi(
@@ -107,8 +126,25 @@ export const VerifyCode = () => {
           />
           <View height={scale(8)} />
         </View>
-        <View height={scale(24)} />
+        <View height={scale(14)} />
         <Button label="Verify" onPress={handleSubmit(onSubmit)} loading={isLoading} />
+          
+          
+          {/* Resend button and timer display */}
+          {timer === 0 ? (
+            // <Button label="Resend" onPress={resendCode} />
+            <TouchableOpacity
+            style={{ width:'100%',alignItems:'flex-end'}}
+            onPress={resendCode}>
+              <Text style={styles.timerText}>Resend</Text>
+            </TouchableOpacity>
+          ) : (
+            <View
+              style={{ width:'100%',alignItems:'flex-end'}}>
+              <Text style={styles.timerText}>Resend in {timer} seconds</Text>
+            </View>
+          )}
+        
       </View>
     </Screen>
   );
@@ -119,5 +155,9 @@ const styles = StyleSheet.create({
     height: scale(17),
     width: scale(98),
   },
+  timerText: {
+    textAlign: "center",
+    marginTop: 10,
+    fontSize: 16,
+  },
 });
-
