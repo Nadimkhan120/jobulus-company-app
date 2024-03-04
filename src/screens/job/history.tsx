@@ -3,6 +3,7 @@ import React from 'react';
 import { Tag } from '@/components/tag';
 import { Text, View } from '@/ui';
 import { useHisotyrDetail } from '@/services/api/candidate';
+import moment from 'moment';
 
 const data = [
   {
@@ -33,7 +34,7 @@ const data = [
   },
 ];
 
-const History = () => {
+const History = ({data}) => {
 
   // company/company_recruitment_process_step_persons/person_applied_jobs_id/1
   // const { data: historyData } = useHisotyrDetail({
@@ -53,10 +54,11 @@ const History = () => {
           >
             <View paddingVertical={'large'}>
               <Text variant={'regular12'} color={'black'}>
-                {item.date}
+                {moment(item?.updated_at).format('DD MMM')}
               </Text>
               <Text variant={'regular12'} color={'black'}>
-                {item.time}
+              {moment(item?.updated_at).format('h:mm A')}
+                {/* {item.time} */}
               </Text>
             </View>
             <View
@@ -66,7 +68,8 @@ const History = () => {
             />
             <View paddingVertical={'large'} marginLeft={'medium'}>
               <Text variant={'medium14'} color={'black'}>
-                {item.status}
+                {/* {item.status} */}
+                {item?.step_name}
               </Text>
               <Text
                 variant="regular12"
@@ -76,7 +79,8 @@ const History = () => {
               >
                 For{' '}
                 <Text variant="regular12" color={'grey100'}>
-                  {item?.job}
+                  {/* {item?.job} */}
+                  {item?.description}
                 </Text>
               </Text>
 

@@ -23,8 +23,6 @@ const PendingList = ({ index }: PendingListProps) => {
   });
 
   const renderItem = useCallback(({ item }) => {
-    console.log("RENDER ITEM",item);
-    
     return <PersonItem data={item} />;
   }, []);
 

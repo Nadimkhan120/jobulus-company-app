@@ -9,12 +9,12 @@ import { scale } from "react-native-size-matters";
 import * as z from "zod";
 import { icons } from "@/assets/icons";
 import { ScreenHeader } from "@/components/screen-header";
-import { useVerifyEmail } from "@/services/api/auth/verify-email";
+import { useResendCode, useVerifyEmail } from "@/services/api/auth/verify-email";
 import { useApp } from "@/store/app";
 import { setUserToken } from "@/store/auth";
 import type { Theme } from "@/theme";
 import { Button, ControlledInput, Screen, Text, View } from "@/ui";
-import { showErrorMessage } from "@/utils";
+import { showErrorMessage, showSuccessMessage } from "@/utils";
 import { setUserWithProfile } from "@/store/user";
 
 const schema = z.object({
@@ -35,6 +35,9 @@ export const VerifyCode = () => {
   const companyType = useApp((state) => state.companyType);
 
   const { mutate: verifyEmailApi, isLoading } = useVerifyEmail();
+
+  const { mutate: resendApi } = useResendCode();
+
 
   const { handleSubmit, control, reset } = useForm<VerifyCodeFormType>({
     resolver: zodResolver(schema),
@@ -57,6 +60,27 @@ export const VerifyCode = () => {
     // Reset timer and resend code logic
     setTimer(30);
     // Add logic to resend verification code here
+
+    resendApi(
+      {
+        email: route?.params?.email,
+      },
+      {
+        onSuccess: (data) => {
+          console.log('RES',data);
+          
+          if (data?.response?.status === 200) {
+            showSuccessMessage(data?.response?.message)
+          } else {
+            showErrorMessage(data.response.message);
+          }
+        },
+        onError: (error) => {
+          // An error happened!
+          console.log(`rolling back optimistic update with id ${error}`);
+        },
+      }
+    );
   };
 
   const onSubmit = (data: VerifyCodeFormType) => {

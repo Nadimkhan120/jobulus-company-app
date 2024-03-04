@@ -4,6 +4,8 @@ import { createMutation } from 'react-query-kit';
 import { NetWorkService } from '@/services/apinetworkservice';
 
 type Variables = { email: string; password: string };
+type FCMVariables = { fcm_token: string;};
+
 
 type Response = {
   response: {
@@ -19,6 +21,16 @@ export const useLogin = createMutation<Response, Variables, AxiosError>({
   mutationFn: async (variables) =>
     NetWorkService.Post({
       url: 'company/login',
+      body: variables,
+      // @ts-ignore
+    }).then((response) => response?.data),
+});
+
+
+export const useFCMToken = createMutation<Response, FCMVariables, AxiosError>({
+  mutationFn: async (variables) =>
+    NetWorkService.Post({
+      url: 'person/fcm',
       body: variables,
       // @ts-ignore
     }).then((response) => response?.data),

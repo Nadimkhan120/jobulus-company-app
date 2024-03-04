@@ -102,10 +102,10 @@ const ExperienceTab = ({ route, data }: any) => {
   );
 };
 
-const HistoryTab = ({ route }: any) => {
+const HistoryTab = ({ route, data }: any) => {
   return (
     <TabScrollView index={route?.index}>
-      <History />
+      <History data={data} />
     </TabScrollView>
   );
 };
@@ -178,7 +178,6 @@ export function Job() {
     enabled: route?.params?.selectedCandidate?.job_id && candidateData?.person_id ? true: false,
   });  
 
-  console.log(" historyData ",historyData);
   
   const renderScene = useCallback(
     ({ route }: any) => {
@@ -192,13 +191,13 @@ export function Job() {
         case "Education & Skills":
           return <EducationTab route={route} index={2} data={candidateData} />;
         case "History":
-          return <HistoryTab route={route} index={2} />;
+          return <HistoryTab route={route} index={3} data={historyData?.response?.data[0]?.recruitment_process} />;
 
         default:
           return null;
       }
     },
-    [candidateData]
+    [candidateData, historyData]
   );
 
   const onStartRefresh = async () => {
