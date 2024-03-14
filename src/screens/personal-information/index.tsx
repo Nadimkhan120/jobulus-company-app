@@ -39,9 +39,6 @@ export const PersonalInformation = () => {
   const user = useUser((state) => state?.user);
   const profile = useUser((state) => state?.profile);
   const company = useUser((state) => state?.company);
-  console.log("User",user);
-  console.log("PROFILE",profile);
-  
   
   const roles = useUser((state) => state?.roles);
   const { mutate: updateProfile, isLoading: updating } = useUpdateCandidateProfile();
@@ -53,7 +50,6 @@ export const PersonalInformation = () => {
   const onSubmit = (data: PersonalInformationFormType) => {
 
 
-    console.log("data", data);
     let newProfile = {
       ...profile,
       full_name: data?.fullName,
@@ -152,9 +148,10 @@ export const PersonalInformation = () => {
           />
           <View height={scale(8)} />
           <ControlledInput
-            placeholder="Enter password"
+            placeholder="Enter phone number"
             label="Phone Number"
             control={control}
+            keyboardType="phone-pad"
             name="phone"
             icon={
               user?.phone  != ''? 

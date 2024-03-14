@@ -10,12 +10,14 @@ import * as z from "zod";
 
 import { icons } from "@/assets/icons";
 import { IconButton } from "@/components";
-import { useLogin } from "@/services/api/auth/login";
+import { useLogin, useSocialLogin } from "@/services/api/auth/login";
 import { login } from "@/store/auth";
 import { setUserData } from "@/store/user";
 import type { Theme } from "@/theme";
 import { Button, ControlledInput, PressableScale, Screen, Text, View } from "@/ui";
-import { showErrorMessage } from "@/utils";
+import { showErrorMessage, showSuccessMessage } from "@/utils";
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { setShowLoading } from '@/store/loader';
 
 const schema = z.object({
   email: z
@@ -37,6 +39,7 @@ export const Login = () => {
   const { navigate } = useNavigation();
 
   const { mutate: loginApi, isLoading } = useLogin();
+  const { mutate: socialApi, isLoading: isLoadingSocial } = useSocialLogin();
 
   const { handleSubmit, control } = useForm<FormType>({
     resolver: zodResolver(schema),
@@ -61,6 +64,60 @@ export const Login = () => {
       }
     );
   };
+
+  const googleLogin = async () => {
+    setShowLoading(true);
+
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log('userInfo', JSON.stringify(userInfo, null, 2));
+
+      socialApi(
+        {
+          email: userInfo?.user?.email,
+          provider: 'google',
+          token: userInfo?.user?.id,
+          user_type: '1',
+          full_name: userInfo?.user?.name,
+        },
+        {
+          onSuccess: (data) => {
+            console.log('data', JSON.stringify(data?.response?.data, null, 2));
+
+            if (data?.response?.status === 200) {
+              setShowLoading(false);
+              //setTimeout(()=>{},)
+              login(data?.response?.data?.token);
+              setUserData(data?.response?.data);
+            } else {
+              showErrorMessage(data?.response?.message);
+            }
+          },
+          onError: (error) => {
+            console.log('error', error?.response);
+
+            // An error happened!
+            console.log(`error`, error?.response?.data);
+            setShowLoading(false);
+          },
+        }
+      );
+    } catch (error) {
+      console.log('error', error);
+      setShowLoading(false);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
+  };
+
 
   return (
     <Screen backgroundColor={colors.white}>
@@ -115,7 +172,7 @@ export const Login = () => {
           marginVertical={"large"}
         >
           {/* <IconButton icon="apple" onPress={() => null} color={"grey500"} /> */}
-          <IconButton icon="google" onPress={() => null} color={"grey500"} />
+          <IconButton icon="google" onPress={googleLogin} color={"grey500"} />
           {/* <IconButton icon="facebook" onPress={() => null} color={"grey500"} /> */}
         </View>
 

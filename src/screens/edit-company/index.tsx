@@ -93,7 +93,7 @@ export const EditCompany = () => {
     ImagePicker.useCameraPermissions();
   const [galleryPermission, requestGallaryPermission] =
     ImagePicker.useMediaLibraryPermissions();
-    // console.log("COMPANY DATA ",JSON.stringify(data, null, 2));
+    console.log("COMPANY DATA ",JSON.stringify(data, null, 2));
 
   const { handleSubmit, control, setValue, watch, trigger } =
     useForm<EditCompanyFormType>({      
@@ -116,6 +116,21 @@ export const EditCompany = () => {
     });
 
   const watchLocation = watch("location");
+
+  function formatErrorMessage(errors) {
+    let errorMessage = "";
+
+    // Check if errors exist
+    if (errors && typeof errors === "object") {
+        // Loop through each error
+        Object.keys(errors).forEach(key => {
+            // Concatenate error messages
+            errorMessage += `${key}: ${errors[key].join(", ")}\n`;
+        });
+    }
+
+    return errorMessage;
+  }
 
   const onSubmit = (data: EditCompanyFormType) => {
     const body = {
@@ -158,7 +173,28 @@ export const EditCompany = () => {
           queryClient.invalidateQueries(useGetCompanyDetails.getKey());
           goBack();
         } else {
-          showErrorMessage(responseData?.message ?? "");
+          console.log("RESSS",responseData?.message);
+          const errorMessage = formatErrorMessage(responseData.message);
+            // Extracting all messages  as a string
+            // const extractedMessages = [];
+            // const message: any = responseData?.message;
+
+            // // Iterate over the keys in the "message" object
+            // for (const key in message) {
+            //   if (
+            //     Array.isArray(message[key]) &&
+            //     message[key].length > 0 &&
+            //     typeof message[key][0] === "string"
+            //   ) {
+            //     extractedMessages.push(message[key][0]);
+            //   }
+            // }
+
+            // // Concatenate the message into a single string
+            // const concatenatedMessages = extractedMessages.join(", ");
+
+            // showErrorMessage(concatenatedMessages ?? "Something went wrong");
+          showErrorMessage(errorMessage ?? "");
         }
       },
       onError: (error) => {
@@ -168,11 +204,22 @@ export const EditCompany = () => {
     });
   };
 
-  useEffect(() => {
-    setValue("bio", data?.short_description);
+  // useEffect(() => {
+  //   setValue("bio", data?.short_description);
     
-  }, []);
-  console.log("BIOS", data?.short_description);
+  // }, []);
+
+  useEffect(() => {
+    if (data) {
+      setValue("bio", data?.short_description);
+      setValue("address", data?.location?.address_1);
+      setValue("city", data?.location?.city_name);
+      setValue("country", data?.location?.country_name);
+      setValue("postalCode", ""); // You need to fetch postal code if available
+      setValue("location", data?.location?.google_location); // or any other location data you want to set
+    }
+  }, [data]);
+  
 
   useEffect(() => {
     if (selectedLocation) {
@@ -206,12 +253,17 @@ export const EditCompany = () => {
     console.log({ picType });
 
     let fileName;
-    if (asset.fileName === null) {
-      const uriParts = asset.uri.split("/");
-      fileName = uriParts[uriParts.length - 1];
-    } else {
-      fileName = asset.fileName;
-    }
+
+
+    const uriParts = asset?.uri?.split('/');
+    fileName = uriParts[uriParts?.length - 1];
+
+    // if (asset.fileName === null) {
+    //   const uriParts = asset.uri.split("/");
+    //   fileName = uriParts[uriParts.length - 1];
+    // } else {
+    //   fileName = asset.fileName;
+    // }
 
     data.append("file", {
       name: fileName,
@@ -221,7 +273,6 @@ export const EditCompany = () => {
 
     data?.append("company_id", route?.params?.data?.id); // check 
     data?.append("image_type", picType);
-    console.log("company_id", route?.params?.data?.id);
     
     // @ts-ignore
     updateProfilePic(data, {

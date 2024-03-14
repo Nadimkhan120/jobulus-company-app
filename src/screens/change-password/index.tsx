@@ -23,7 +23,7 @@ export const ChangePassword = () => {
 
   const onSubmit = (data) => {
     // Check old password and new password are not same
-    if (data?.password === data?.password) {
+    if (data?.password === data?.newPasswors) {
       showErrorMessage('Please enter a different password, the new password cannot be the same as the old one');
       return;
     }

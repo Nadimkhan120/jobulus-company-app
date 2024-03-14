@@ -3,7 +3,7 @@ import { formatDistanceStrict } from "date-fns";
 import * as WebBrowser from "expo-web-browser";
 import { Linking, Platform } from "react-native";
 import { showMessage } from "react-native-flash-message";
-
+import Toast from 'react-native-toast-message';
 import { theme } from "@/theme";
 
 const ALLOWED_EXTERNAL_URI_SCHEMES = ["http://", "https://"];
@@ -26,19 +26,33 @@ export const showError = (error: AxiosError) => {
 };
 
 export const showErrorMessage = (message: string = "Something went wrong ") => {
-  showMessage({
-    message,
-    type: "danger",
-    duration: 4000,
+  Toast.show({
+    type: 'error',
+    // text1: "",
+    text2: message,
+    text2Style:{fontSize:15},
+    bottomOffset:0,
   });
+  // showMessage({
+  //   message,
+  //   type: "danger",
+  //   duration: 4000,
+  // });
 };
 
 export const showSuccessMessage = (message: string = "Something went wrong ") => {
-  showMessage({
-    message,
-    type: "success",
-    duration: 4000,
+  Toast.show({
+    type: 'success',
+    // text1: "",
+    text2: message,
+    text2Style:{fontSize:15},
+    bottomOffset:0,
   });
+  // showMessage({
+  //   message,
+  //   type: "success",
+  //   duration: 4000,
+  // });
 };
 
 export const extractError = (data: unknown): string => {

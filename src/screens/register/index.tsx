@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import { scale } from "react-native-size-matters";
 import * as z from "zod";
 import { icons } from "@/assets/icons";
@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
 import { Image } from "expo-image";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const schema = z.object({
   fullName: z
@@ -64,7 +65,7 @@ export const Register = () => {
       {
         onSuccess: (responseData) => {
           console.log("data", JSON.stringify(responseData, null, 2));
-
+          
           if (responseData?.response?.status === 200) {
             navigate("VerifyCode", {
               email: data?.email,
@@ -95,15 +96,15 @@ export const Register = () => {
         onError: (error) => {
           //@ts-ignore
           showErrorMessage(error?.response?.data?.message);
-        },
+        },  
       }
     );
   };
 
   return (
-    <Screen backgroundColor={colors.white}>
+    <Screen backgroundColor={colors.white} edges={["top"]}>
       <ScreenHeader />
-
+      <KeyboardAwareScrollView style={{flex:1}}>
       <View flex={1} paddingHorizontal={"large"}>
         <View height={scale(24)} />
         <Image source={icons.logo} contentFit="contain" style={styles.logo} />
@@ -171,6 +172,7 @@ export const Register = () => {
           </PressableScale>
         </View>
       </View>
+      </KeyboardAwareScrollView>
     </Screen>
   );
 };
@@ -179,5 +181,8 @@ const styles = StyleSheet.create({
   logo: {
     height: scale(17),
     width: scale(98),
+  },
+  scrollContainer: {
+    paddingBottom: scale(160),
   },
 });

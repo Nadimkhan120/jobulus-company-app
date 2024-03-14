@@ -2,7 +2,7 @@ import React from "react";
 import { scale } from "react-native-size-matters";
 import { ImageButton } from "@/components/image-button";
 import { openDrawer } from "@/store/app";
-import { View } from "@/ui";
+import { View , Text} from "@/ui";
 import { CompanyButton } from "../company-button";
 import { SearchField } from "../search-field";
 import { useNavigation } from "@react-navigation/native";
@@ -13,7 +13,7 @@ export const TopHeader = () => {
 
   const profile = useUser((state) => state.profile);
   const company = useUser((state) => state?.company);
-  // console.log("COMPANY ",company.pic);
+  // console.log("COMPANY ",company.name);
   
   return (
     <View
@@ -33,7 +33,8 @@ export const TopHeader = () => {
           onPress={openDrawer}
         />
         <View flex={1} marginHorizontal={"medium"}>
-          <SearchField placeholder="Start search here" />
+          <Text style={{fontWeight:'800'}} variant={'medium14'} color={'white'}>{company?.name}</Text>
+          {/* <SearchField placeholder="Start search here" /> */}
         </View>
 
         <ImageButton

@@ -2558,6 +2558,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-19.0.0.tgz#f949dd100e1c391bc0949729e18a83ef03a94276"
   integrity sha512-KeGQHLhnDThCZZqWm67Qf4NI7qMsUF9eNbrJ39OFeqbinJK2TSQcTZcRPNwfwreCZfkkBdeV3sk0YNPoddlx/w==
 
+"@react-native-google-signin/google-signin@^10.1.1":
+  version "10.1.1"
+  resolved "https://registry.yarnpkg.com/@react-native-google-signin/google-signin/-/google-signin-10.1.1.tgz#1306aac8c32cb5deb994a1bfb05bed8172defed1"
+  integrity sha512-o6VufmUpdP174WY7r+ojVccyVHrTMjZEzCBJVa52r/wGJBzbxe8eD9MXdAYClkS2f4AGOdH6epNkySow89HRrA==
+
 "@react-native/assets-registry@^0.72.0":
   version "0.72.0"
   resolved "https://registry.yarnpkg.com/@react-native/assets-registry/-/assets-registry-0.72.0.tgz#c82a76a1d86ec0c3907be76f7faf97a32bbed05d"
@@ -9712,6 +9717,11 @@ react-native-tab-view@^3.5.1, react-native-tab-view@^3.5.2:
   integrity sha512-nE5WqjbeEPsWQx4mtz81QGVvgHRhujTNIIZiMCx3Bj6CBFDafbk7XZp9ocmtzXUQaZ4bhtVS43R4FIiR4LboJw==
   dependencies:
     use-latest-callback "^0.1.5"
+
+react-native-toast-message@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-2.2.0.tgz#c53a4746b15616858a7d61c4386b92cbe9fbf911"
+  integrity sha512-AFti8VzUk6JvyGAlLm9/BknTNDXrrhqnUk7ak/pM7uCTxDPveAu2ekszU0on6vnUPFnG04H/QfYE2IlETqeaWw==
 
 react-native-webview@^13.6.0:
   version "13.6.0"
