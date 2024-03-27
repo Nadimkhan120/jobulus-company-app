@@ -19,7 +19,7 @@ export const Settings = () => {
 
   const company = useUser((state) => state?.company);
   const profile = useUser((state) => state?.profile);
-  console.log("profile ",company.id);
+  // console.log("profile ",company.id);
   
   const { data } = useGetCompanyDetails({
     variables: {
@@ -98,11 +98,11 @@ export const Settings = () => {
               title="My Account"
               onPress={() => navigation.navigate("MyAccount")}
             />
-            <SettingsItem
+            {/* <SettingsItem
               icon="credit-card"
               title="Payments"
               onPress={() => navigation.navigate("Payments")}
-            />
+            /> */}
             {/* <SettingsItem
               icon="settings"
               title="Settings"
