@@ -6,10 +6,47 @@ import SettingsItem from "@/components/settings-item";
 import type { Theme } from "@/theme";
 import { PressableScale, Screen, Text, View } from "@/ui";
 import { scale } from "react-native-size-matters";
+import { closeDrawer } from "@/store/app";
+import { removeUserData, useUser } from "@/store/user";
+import { logOut } from "@/store/auth";
+import { showSuccessMessage } from "@/utils";
+import { useDeleteAccount } from "@/services/api/company";
+import { Alert } from "react-native";
 
 export const MyAccount = () => {
   const { colors } = useTheme<Theme>();
   const { navigate } = useNavigation();
+
+  const user = useUser((state) => state?.user);
+
+  const { mutate: deleteAccountApi, isLoading } = useDeleteAccount();
+
+  const deleteUserAccount = () => {
+    const data = {
+      //@ts-ignore
+      person_id: user?.id,
+    };
+
+    deleteAccountApi(data, {
+      onSuccess: (response) => {
+        console.log("response", response);
+
+        if (response?.response?.status === 200) {
+          closeDrawer();
+          removeUserData();
+          logOut();
+
+          showSuccessMessage("Account deleted successfully");
+        } else {
+        }
+      },
+      onError: (error) => {
+        // An error happened!
+        // @ts-ignore
+        console.log(`error`, error?.response.data?.message);
+      },
+    });
+  };
 
   return (
     <Screen backgroundColor={colors.white}>
@@ -30,7 +67,22 @@ export const MyAccount = () => {
         </View>
 
         <View flex={1} justifyContent={"flex-end"} marginBottom={"large"}>
-          <PressableScale>
+          <PressableScale
+            onPress={() => {
+              Alert.alert(
+                "Confirmation",
+                "Are you sure to delete you account permanently?",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  { text: "Delete", onPress: () => deleteUserAccount() },
+                ]
+              );
+            }}
+          >
             <View
               height={scale(56)}
               backgroundColor={"grey500"}
@@ -40,7 +92,7 @@ export const MyAccount = () => {
               borderRadius={scale(8)}
             >
               <Text variant={"medium16"} color={"error"}>
-                Delete Account
+                {isLoading ? "Deleting" : "Delete Account"}
               </Text>
             </View>
           </PressableScale>
@@ -49,4 +101,3 @@ export const MyAccount = () => {
     </Screen>
   );
 };
-

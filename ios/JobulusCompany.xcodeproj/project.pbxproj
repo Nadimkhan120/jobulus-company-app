@@ -17,6 +17,7 @@
 		82826F1D303EA91F2AF82032 /* Pods_JobulusCompany.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6016075D35E7A1EFF825AA8 /* Pods_JobulusCompany.framework */; };
 		C53E7EDAA9C8748612545EC4 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886E594D73F6290E36B1F979 /* ExpoModulesProvider.swift */; };
 		FAAE44612AD93AB300749D5E /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAAE44602AD93AB300749D5E /* BootSplash.storyboard */; };
+		FAC259352BA5A7F400F09981 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAC259342BA5A7F400F09981 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,8 @@
 		BF3B74F08F03D7BC283315BF /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-JobulusCompany/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAAE44602AD93AB300749D5E /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = JobulusCompany/BootSplash.storyboard; sourceTree = "<group>"; };
+		FAC259312BA5A5DD00F09981 /* JobulusCompany.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = JobulusCompany.entitlements; path = JobulusCompany/JobulusCompany.entitlements; sourceTree = "<group>"; };
+		FAC259342BA5A7F400F09981 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +112,8 @@
 		13B07FAE1A68108700A75B9A /* JobulusCompany */ = {
 			isa = PBXGroup;
 			children = (
+				FAC259342BA5A7F400F09981 /* GoogleService-Info.plist */,
+				FAC259312BA5A5DD00F09981 /* JobulusCompany.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				FAAE44602AD93AB300749D5E /* BootSplash.storyboard */,
@@ -280,6 +285,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAAE44612AD93AB300749D5E /* BootSplash.storyboard in Resources */,
+				FAC259352BA5A7F400F09981 /* GoogleService-Info.plist in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);
@@ -580,9 +586,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CODE_SIGN_ENTITLEMENTS = JobulusCompany/JobulusCompany.entitlements;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 4Y34VJ367J;
 				ENABLE_BITCODE = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = JobulusCompany/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -609,8 +617,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CODE_SIGN_ENTITLEMENTS = JobulusCompany/JobulusCompany.entitlements;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 4Y34VJ367J;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = JobulusCompany/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

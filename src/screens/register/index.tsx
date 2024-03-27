@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@shopify/restyle";
 import { Image } from "expo-image";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const schema = z.object({
   fullName: z
@@ -65,7 +65,7 @@ export const Register = () => {
       {
         onSuccess: (responseData) => {
           console.log("data", JSON.stringify(responseData, null, 2));
-          
+
           if (responseData?.response?.status === 200) {
             navigate("VerifyCode", {
               email: data?.email,
@@ -96,7 +96,7 @@ export const Register = () => {
         onError: (error) => {
           //@ts-ignore
           showErrorMessage(error?.response?.data?.message);
-        },  
+        },
       }
     );
   };
@@ -104,74 +104,74 @@ export const Register = () => {
   return (
     <Screen backgroundColor={colors.white} edges={["top"]}>
       <ScreenHeader />
-      <KeyboardAwareScrollView style={{flex:1}}>
-      <View flex={1} paddingHorizontal={"large"}>
-        <View height={scale(24)} />
-        <Image source={icons.logo} contentFit="contain" style={styles.logo} />
-        <View paddingTop={"large"}>
-          <Text variant={"semiBold24"} color={"black"}>
-            Registration 👍
-          </Text>
-          <Text variant={"regular14"} paddingTop={"small"} color={"grey100"}>
-            Let’s Register. Apply to jobs!
-          </Text>
-        </View>
-
-        <View paddingTop={"large"}>
-          <ControlledInput
-            placeholder="Enter full name"
-            label="Full Name"
-            control={control}
-            name="fullName"
-          />
-          <View height={scale(8)} />
-          <ControlledInput
-            placeholder="Enter email address"
-            label="Email"
-            control={control}
-            name="email"
-          />
-          <View height={scale(8)} />
-          <ControlledInput
-            placeholder="Enter password"
-            label="Password"
-            isSecure={true}
-            control={control}
-            name="password"
-          />
-        </View>
-        <View height={scale(24)} />
-        <Button label="Register" onPress={handleSubmit(onSubmit)} loading={isLoading} />
-
-        <Image
-          source={icons.continue}
-          style={{ height: scale(24), width: "100%", marginTop: scale(24) }}
-          contentFit="contain"
-        />
-
-        <View
-          flexDirection={"row"}
-          alignItems={"center"}
-          justifyContent={"center"}
-          gap={"medium"}
-          marginVertical={"large"}
-        >
-          <IconButton icon="apple" onPress={() => null} color={"grey500"} />
-          <IconButton icon="google" onPress={() => null} color={"grey500"} />
-          <IconButton icon="facebook" onPress={() => null} color={"grey500"} />
-        </View>
-
-        <View paddingVertical={"2xl"} alignSelf={"center"}>
-          <PressableScale onPress={() => navigate("Login")}>
-            <Text variant={"regular14"} color={"grey200"}>
-              Have an account?{" "}
-              <Text variant={"semiBold14"} color={"primary"}>
-                Login
-              </Text>
+      <KeyboardAwareScrollView style={{ flex: 1 }}>
+        <View flex={1} paddingHorizontal={"large"}>
+          <View height={scale(24)} />
+          <Image source={icons.logo} contentFit="contain" style={styles.logo} />
+          <View paddingTop={"large"}>
+            <Text variant={"semiBold24"} color={"black"}>
+              Registration 👍
             </Text>
-          </PressableScale>
+            <Text variant={"regular14"} paddingTop={"small"} color={"grey100"}>
+              Let’s Register. Apply to jobs!
+            </Text>
+          </View>
+
+          <View paddingTop={"large"}>
+            <ControlledInput
+              placeholder="Enter full name"
+              label="Full Name"
+              control={control}
+              name="fullName"
+            />
+            <View height={scale(8)} />
+            <ControlledInput
+              placeholder="Enter email address"
+              label="Email"
+              control={control}
+              name="email"
+            />
+            <View height={scale(8)} />
+            <ControlledInput
+              placeholder="Enter password"
+              label="Password"
+              isSecure={true}
+              control={control}
+              name="password"
+            />
+          </View>
+          <View height={scale(24)} />
+          <Button label="Register" onPress={handleSubmit(onSubmit)} loading={isLoading} />
+
+          <Image
+            source={icons.continue}
+            style={{ height: scale(24), width: "100%", marginTop: scale(24) }}
+            contentFit="contain"
+          />
+
+          <View
+            flexDirection={"row"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            gap={"medium"}
+            marginVertical={"large"}
+          >
+            <IconButton icon="apple" onPress={() => null} color={"grey500"} />
+            <IconButton icon="google" onPress={() => null} color={"grey500"} />
+            {/* <IconButton icon="facebook" onPress={() => null} color={"grey500"} /> */}
+          </View>
+
+          <View paddingVertical={"2xl"} alignSelf={"center"}>
+            <PressableScale onPress={() => navigate("Login")}>
+              <Text variant={"regular14"} color={"grey200"}>
+                Have an account?{" "}
+                <Text variant={"semiBold14"} color={"primary"}>
+                  Login
+                </Text>
+              </Text>
+            </PressableScale>
+          </View>
         </View>
-      </View>
       </KeyboardAwareScrollView>
     </Screen>
   );

@@ -13,19 +13,13 @@ import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { ThemeProvider } from "@shopify/restyle";
 import { StripeProvider } from "@stripe/stripe-react-native";
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import Toast from 'react-native-toast-message';
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import Toast from "react-native-toast-message";
 
 GoogleSignin.configure({
-  offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-  hostedDomain: '', // specifies a hosted domain restriction
-  forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
-  accountName: '', // [Android] specifies an account name on the device that should be used
-  iosClientId:
-    '1056415638644-vu2fbrmnkgcmki8toton39h2pqfj23jd.apps.googleusercontent.com', // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
-  
-  openIdRealm: '', // [iOS] The OpenID2 realm of the home web server. This allows Google to include the user's OpenID Identifier in the OpenID Connect ID token.
-  profileImageSize: 120, // [iOS] The desired height (and width) of the profile image. Defaults to 120px
+  // webClientId:
+  //   "1056415638644-k402ue7fdihbgui3sdnace1dsh3g877m.apps.googleusercontent.com", //"225407803373-k7hufmcv49tl3577eb8r6hk9oh294fu0.apps.googleusercontent.com",
+  // offlineAccess: false,
 });
 
 const App = () => {
@@ -57,13 +51,14 @@ const App = () => {
             <APIProvider>
               <BottomSheetModalProvider>
                 <StripeProvider
-                  publishableKey={
-                    "pk_test_51OLJsBLNk4NTWnZrnYmBAM0WTJ9T3RHOKWY2eXQJ6BZ31BKf9gJm36R2aYhDrE5ZR0i9hY2sbOKxEwmJNIXKl3Q400qGJegeQP"
-                  }
+                  publishableKey="pk_test_51OrztbFDn735berjksvaQ6oyIDDuneWRJGewGHQauD1nsvXUyVqn2p3VjoMHBCwZOb5m6Gi9RrXZ71cXpN4nJJpV00lutFhZJR"
+                  // publishableKey={
+                  //   "pk_test_51OLJsBLNk4NTWnZrnYmBAM0WTJ9T3RHOKWY2eXQJ6BZ31BKf9gJm36R2aYhDrE5ZR0i9hY2sbOKxEwmJNIXKl3Q400qGJegeQP"
+                  // }
                 >
                   <Root />
                 </StripeProvider>
-                <Toast position='top' />
+                <Toast position="top" />
                 <FlashMessage position="bottom" />
               </BottomSheetModalProvider>
             </APIProvider>

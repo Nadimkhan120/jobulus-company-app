@@ -8,6 +8,10 @@ type CompanyVariables = { id: number };
 
 type UpdateProfile = { company_id: string; image_type: "pic" | "cover"; file: any };
 
+type DeleteAccount = {
+  person_id: any;
+};
+
 type EditCompanyVariables = {
   name: string;
   email: string;
@@ -136,6 +140,8 @@ type Response = {
   status: number;
 };
 
+type Response2 = any;
+
 export const useCompanies = createQuery<Response, Variables, AxiosError>({
   primaryKey: "company/user",
   queryFn: ({ queryKey: [primaryKey] }) => {
@@ -182,6 +188,17 @@ export const useUpdatePicture = createMutation<Response, UpdateProfile, AxiosErr
       url: "company/update-profile-images",
       body: variables,
       headers: headers,
+      // @ts-ignore
+    }).then((response) => response?.data);
+  },
+});
+
+export const useDeleteAccount = createMutation<Response2, DeleteAccount, AxiosError>({
+  mutationFn: async (variables) => {
+    return NetWorkService.Delete({
+      url: `person/delete/${variables?.person_id}`,
+      body: {},
+
       // @ts-ignore
     }).then((response) => response?.data);
   },

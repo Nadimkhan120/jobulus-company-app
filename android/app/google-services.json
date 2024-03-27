@@ -1,45 +1,79 @@
 {
   "project_info": {
-    "project_number": "797038419658",
-    "project_id": "candidate-2edd6",
-    "storage_bucket": "candidate-2edd6.appspot.com"
+    "project_number": "1056415638644",
+    "project_id": "jobolus",
+    "storage_bucket": "jobolus.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:797038419658:android:6ee3388b8f81a5c17f5e33",
+        "mobilesdk_app_id": "1:1056415638644:android:0630818e2d9b3b8e629d21",
         "android_client_info": {
           "package_name": "com.jobuluscompany"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1056415638644-gue6qun71aak4ij92pqp9q2pkried2t2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCqXVgr2ka03PcAZ2EnxSxruhXU-hen6WI"
+          "current_key": "AIzaSyAC90K3Xg9N6wjglksnxD5r_2XM6c7T1Z8"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1056415638644-gue6qun71aak4ij92pqp9q2pkried2t2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1056415638644-vu2fbrmnkgcmki8toton39h2pqfj23jd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jubulus.candidate"
+              }
+            }
+          ]
         }
       }
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:797038419658:android:91adbaf44772e5197f5e33",
+        "mobilesdk_app_id": "1:1056415638644:android:72548230fd71bf47629d21",
         "android_client_info": {
           "package_name": "com.jubulus.candidate"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1056415638644-gue6qun71aak4ij92pqp9q2pkried2t2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCqXVgr2ka03PcAZ2EnxSxruhXU-hen6WI"
+          "current_key": "AIzaSyAC90K3Xg9N6wjglksnxD5r_2XM6c7T1Z8"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1056415638644-gue6qun71aak4ij92pqp9q2pkried2t2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1056415638644-vu2fbrmnkgcmki8toton39h2pqfj23jd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jubulus.candidate"
+              }
+            }
+          ]
         }
       }
     }

@@ -4,10 +4,9 @@ import { useTheme } from "@shopify/restyle";
 import { Image } from "expo-image";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { scale } from "react-native-size-matters";
 import * as z from "zod";
-
 import { icons } from "@/assets/icons";
 import { IconButton } from "@/components";
 import { useLogin, useSocialLogin } from "@/services/api/auth/login";
@@ -16,8 +15,9 @@ import { setUserData } from "@/store/user";
 import type { Theme } from "@/theme";
 import { Button, ControlledInput, PressableScale, Screen, Text, View } from "@/ui";
 import { showErrorMessage, showSuccessMessage } from "@/utils";
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-import { setShowLoading } from '@/store/loader';
+import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
+import { setShowLoading } from "@/store/loader";
+import { appleAuth } from "@invertase/react-native-apple-authentication";
 
 const schema = z.object({
   email: z
@@ -71,19 +71,19 @@ export const Login = () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log('userInfo', JSON.stringify(userInfo, null, 2));
+      console.log("userInfo", JSON.stringify(userInfo, null, 2));
 
       socialApi(
         {
           email: userInfo?.user?.email,
-          provider: 'google',
+          provider: "google",
           token: userInfo?.user?.id,
-          user_type: '1',
+          user_type: "1",
           full_name: userInfo?.user?.name,
         },
         {
           onSuccess: (data) => {
-            console.log('data', JSON.stringify(data?.response?.data, null, 2));
+            console.log("data", JSON.stringify(data?.response?.data, null, 2));
 
             if (data?.response?.status === 200) {
               setShowLoading(false);
@@ -95,7 +95,7 @@ export const Login = () => {
             }
           },
           onError: (error) => {
-            console.log('error', error?.response);
+            console.log("error", error?.response);
 
             // An error happened!
             console.log(`error`, error?.response?.data);
@@ -104,7 +104,8 @@ export const Login = () => {
         }
       );
     } catch (error) {
-      console.log('error', error);
+      console.log("error", error);
+      console.log("error code", error.code);
       setShowLoading(false);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -118,6 +119,65 @@ export const Login = () => {
     }
   };
 
+  async function onAppleButtonPress() {
+    setShowLoading(true);
+
+    // performs login request
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      // Note: it appears putting FULL_NAME first is important, see issue #293
+      requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+    });
+
+    // get current authentication state for user
+    // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+    const credentialState = await appleAuth.getCredentialStateForUser(
+      appleAuthRequestResponse.user
+    );
+
+    // use credentialState response to ensure the user is authenticated
+    if (credentialState === appleAuth.State.AUTHORIZED) {
+      // user is authenticated
+
+      console.log(
+        "appleAuthRequestResponse",
+        JSON.stringify(appleAuthRequestResponse, null, 2)
+      );
+
+      let body = {
+        email: appleAuthRequestResponse?.email,
+        provider: "apple",
+        token: appleAuthRequestResponse?.user,
+        user_type: "1",
+        full_name: appleAuthRequestResponse?.fullName?.givenName,
+      };
+
+      //@ts-ignore
+      socialApi(body, {
+        onSuccess: (data) => {
+          // console.log('data', JSON.stringify(data, null, 2));
+
+          if (data?.response?.status === 200) {
+            setShowLoading(false);
+            //setTimeout(()=>{},)
+            login(data?.response?.data?.token);
+            setUserData(data?.response?.data);
+          } else {
+            showErrorMessage(data?.response?.message);
+          }
+        },
+        onError: (error) => {
+          console.log("error", error?.response);
+
+          // An error happened!
+          console.log(`error`, error?.response?.data);
+          setShowLoading(false);
+        },
+      });
+    } else {
+      setShowLoading(true);
+    }
+  }
 
   return (
     <Screen backgroundColor={colors.white}>
@@ -171,7 +231,10 @@ export const Login = () => {
           gap={"medium"}
           marginVertical={"large"}
         >
-          {/* <IconButton icon="apple" onPress={() => null} color={"grey500"} /> */}
+          {Platform.OS === "ios" ? (
+            <IconButton icon="apple" onPress={onAppleButtonPress} color={"grey500"} />
+          ) : null}
+
           <IconButton icon="google" onPress={googleLogin} color={"grey500"} />
           {/* <IconButton icon="facebook" onPress={() => null} color={"grey500"} /> */}
         </View>
